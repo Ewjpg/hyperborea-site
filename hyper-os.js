@@ -94,15 +94,15 @@
   };
 
   // 1. Power.
-  let powered = false, powerTimer = 0, splashAbort = null;
+  let powered = false, powerTimer = 0, splashAbort = null, skipped = false; // skipped: HyperOS.boot() went straight in
   const wait = ms => new Promise(r => setTimeout(r, ms));
   async function powerOn() {
     if (powered) return; powered = true;
     show('dark');
     if (audio()) { try { await Promise.race([ctx.resume(), wait(300)]); } catch {} await Promise.race([startHum(), wait(1500)]); }
-    if (os.dataset.state !== 'dark') return;
+    if (skipped || os.dataset.state !== 'dark') return;
     // The screen stays dark while the switch clicks and the fan spins up.
-    powerTimer = setTimeout(() => { window.CrtPower?.(); splash(openMenu); }, motion.matches ? 200 : 2000);
+    powerTimer = setTimeout(() => { if (skipped) return; window.CrtPower?.(); splash(openMenu); }, motion.matches ? 200 : 2000);
   }
   async function boot() {
     if (!audio()) { powerOn(); return; }
@@ -294,8 +294,8 @@
     for (const el of document.querySelectorAll('[data-hos-net]')) el.textContent = netLine();
     const row = document.getElementById('openPoll'), p = window.HyperNet?.poll;
     if (row) row.querySelector('.db-card-description').textContent = p?.open ? 'Идёт опрос: ' + p.q : 'Голосование для всех';
-    const people = document.getElementById('openOnline'), net = window.HyperNet;
-    if (people) people.querySelector('.db-card-description').textContent = net?.status === 'online' ? 'Сейчас в сети: ' + net.count : 'Кто сейчас в сети';
+    const people = document.getElementById('openMembers'), net = window.HyperNet;
+    if (people) people.querySelector('.db-card-description').textContent = net?.status === 'online' ? 'В сети: ' + net.count + ' · всего: ' + net.people.length : 'Все гости и их роли';
     const idea = document.getElementById('openIdea');
     if (idea) {
       idea.querySelector('.db-card-name').textContent = profile === 'admin' ? 'ИДЕИ' : 'ИДЕЯ';
@@ -339,9 +339,9 @@
     openTactics: () => ['TACTICS', 'Тактическая доска: схемы, составы 5×5 и 11×11, симуляция и матч с ИИ.', 'Форматы: 5×5 · 11×11'],
     openVersus: () => ['VERSUS', 'Арена: выбери двух игроков и сравни их параметры.', 'Режим: 1 на 1'],
     openProfile: () => ['ПРОФИЛЬ', 'Твой ник, аватар с компьютера, пара слов о себе, любимый игрок и цвет консоли. Хранится только на этом компьютере.', 'Команда: profile'],
-    openOnline: () => ['В СЕТИ', 'Все, кто сейчас в сети: аватар, ник, пара слов о себе и любимый игрок.', 'Команда: online'],
+    openMembers: () => ['УЧАСТНИКИ', 'Все, кто заходил на сайт, по ролям — как на сервере Discord: кто в сети, кто нет, аватар, ник и пара слов о себе.' + (profile === 'admin' ? ' Роли создаёшь и выдаёшь ты.' : ''), 'Команды: members · roles'],
     openIdea: () => profile === 'admin' ? ['ИДЕИ', 'Карточки идей, которые прислали гости. Видишь только ты.', 'Команда: ideas']
-      : ['ИДЕЯ', 'Карточка идеи для ADMIN: новый игрок, глава, событие, функция сайта. Её прочитает только он.', 'Команда: idea'],
+      : ['ИДЕЯ', 'Шаблоны идей для ADMIN: новый игрок (анкета, рейтинги, портрет), глава, событие, функция сайта. Можно приложить картинку; ответ ADMIN придёт в «Мои идеи».', 'Команда: idea'],
     openPoll: () => {
       const p = window.HyperNet?.poll;
       return ['ОПРОС', p ? (p.open ? 'Идёт опрос: ' : 'Последний опрос (закрыт): ') + p.q : 'Голосования от ADMIN. Когда откроется новый опрос, все в сети увидят сообщение.', 'Команда: vote'];
@@ -352,8 +352,9 @@
     if (!help) return; helpFor = id;
     const [title, text, extra] = (HELP[id] || HELP.openPlayers)();
     const about = profile === 'admin' ? '' : window.HyperGuest?.card.about || '';
+    const role = profile === 'admin' ? null : window.HyperNet?.myRole;
     help.innerHTML = `<h3>Справка</h3><b>${escape(title)}</b><p>${escape(text)}</p><p class="hos-dim">${escape(extra)}</p><hr>`
-      + `<div class="hos-who"><span data-guest-avatar></span><p><b class="hos-profile-tag">${escape(profile === 'admin' ? 'admin' : guestName())}</b><br><span class="hos-dim">${escape(profileName())}${about ? ' · ' + escape(about) : ''}</span></p></div>`
+      + `<div class="hos-who"><span data-guest-avatar></span><p><b class="hos-profile-tag">${escape(profile === 'admin' ? 'admin' : guestName())}</b><br><span class="hos-dim">${role ? `<span class="hos-role" style="color:${escape(role.color)}">${escape(role.name)}</span>` : escape(profileName())}${about ? ' · ' + escape(about) : ''}</span></p></div>`
       + `<p class="hos-dim" data-hos-net>${escape(netLine())}</p><p class="hos-dim">HYPERBOREA OS ${VERSION}</p>`;
     const ava = help.querySelector('[data-guest-avatar]'); if (window.HyperGuest) window.HyperGuest.fillAvatar(ava); else ava.remove();
   }
@@ -370,7 +371,7 @@
     };
     addRow('openProfile', '05', 'ПРОФИЛЬ', 'Ник, аватар и цвет консоли', row => window.HyperGuest?.open(row));
     addRow('openPoll', '06', 'ОПРОС', 'Голосование для всех', row => window.HyperNet?.openPoll(row));
-    addRow('openOnline', '07', 'В СЕТИ', 'Кто сейчас в сети', row => window.HyperNet?.openOnline(row));
+    addRow('openMembers', '07', 'УЧАСТНИКИ', 'Все гости и их роли', row => window.HyperNet?.openMembers(row));
     addRow('openIdea', '08', 'ИДЕЯ', 'Отправить идею ADMIN', row => profile === 'admin' ? window.HyperNet?.openInbox(row) : window.HyperNet?.openIdea(row));
     help = document.createElement('aside'); help.className = 'hos-help'; help.setAttribute('aria-live', 'polite');
     const keys = document.createElement('p'); keys.className = 'hos-legend';
@@ -389,15 +390,19 @@
     const p = document.createElement('p'); p.textContent = text; if (kind) p.className = 'is-' + kind; outEl.append(p);
     while (outEl.childElementCount > 9) outEl.firstElementChild.remove();
   }
-  const SECTIONS = {players: 'openPlayers', игроки: 'openPlayers', lore: 'openLore', лор: 'openLore', tactics: 'openTactics', тактика: 'openTactics', versus: 'openVersus', версус: 'openVersus', profile: 'openProfile', профиль: 'openProfile', poll: 'openPoll', опрос: 'openPoll', online: 'openOnline', idea: 'openIdea', идея: 'openIdea'};
+  const SECTIONS = {players: 'openPlayers', игроки: 'openPlayers', lore: 'openLore', лор: 'openLore', tactics: 'openTactics', тактика: 'openTactics', versus: 'openVersus', версус: 'openVersus', profile: 'openProfile', профиль: 'openProfile', poll: 'openPoll', опрос: 'openPoll', members: 'openMembers', участники: 'openMembers', idea: 'openIdea', идея: 'openIdea'};
   const history = []; let back = 0;
   const COMMANDS = {
     help() {
-      print('help · ls · open <раздел> · profile · vote · online · who · idea · net · whoami · date · ver · cls · logout · exit');
+      print('help · ls · open <раздел> · profile · members · roles · vote · who · idea · net · whoami · date · ver · cls · logout · exit');
       print('Разделы: players, lore, tactics, versus — можно просто набрать имя раздела.', 'dim');
       if (profile === 'admin') {
         print('ADMIN: say <текст> — эфир всем · event <имя> — событие у всех · ideas — входящие идеи', 'admin');
         print('ADMIN: poll Вопрос? | Вариант 1 | Вариант 2 · poll close · sysupdate · reboot', 'admin');
+        print('ADMIN: role new Название #цвет · role give ник Роль · role take ник · role del Роль', 'admin');
+      } else {
+        const net = window.HyperNet, mine = [['say', 'say <текст> — эфир'], ['event', 'event <имя> — событие'], ['poll', 'poll Вопрос? | А | Б — опрос']].filter(([p]) => net?.can(p));
+        if (mine.length) print('Твоя роль «' + net.myRole?.name + '» может: ' + mine.map(([, t]) => t).join(' · '), 'admin');
       }
     },
     ls() { for (const r of rows()) print((r.querySelector('.db-card-number')?.textContent || '').trim() + '  ' + r.querySelector('.db-card-name')?.textContent.trim().padEnd(9) + ' ' + (r.querySelector('.db-card-description')?.textContent || '').trim()); },
@@ -418,7 +423,36 @@
       if (net?.status !== 'online') { print('Счётчик недоступен: ' + (net ? net.statusText : 'нет модуля сети') + '.', 'err'); return; }
       print('В сети: ' + net.count + ' — ' + (net.online.map(u => u.nick + (u.me ? ' (ты)' : '')).join(', ') || '—'), 'ok');
     },
-    online() { print('Открываю список «в сети»…'); window.HyperNet?.openOnline(input); },
+    members(arg) { print('Открываю участников…'); window.HyperNet?.openMembers(input, arg || ''); },
+    roles() {
+      const net = window.HyperNet, list = net?.roleList || [];
+      if (!list.length) { print(net?.status === 'online' ? 'Ролей пока нет.' : 'Роли недоступны: ' + (net ? net.statusText : '—') + '.'); if (profile === 'admin') print('Создать: role new Название #цвет — или в окне 07 УЧАСТНИКИ → Роли.', 'admin'); return; }
+      const count = id => net.people.filter(p => p.role?.id === id).length;
+      for (const r of list) print('  ' + r.name.padEnd(16) + Object.keys(net.PERMS).filter(k => r.perms?.[k]).map(k => net.PERMS[k]).join(', ').padEnd(24) + count(r.id) + ' уч.', 'dim');
+    },
+    role(arg) {
+      if (needAdmin()) return;
+      const net = window.HyperNet, [sub = '', ...rest] = (arg || '').split(/\s+/).filter(Boolean), tail = rest.join(' ');
+      const done = r => print(r, /^(Роль создана|Роль «.*» выдана|Роль убрана|Роль удалена)/.test(r) ? 'admin' : 'err');
+      const key = sub.toLowerCase();
+      if (key === 'new' || key === 'создать') {
+        const m = tail.match(/^(.*?)\s*(#[0-9a-fA-F]{6})?$/), name = (m?.[1] || '').trim();
+        if (!name) { print('Формат: role new Название #цвет (цвет можно не писать)', 'err'); return; }
+        net.createRole(name, m?.[2] || '').then(r => { done(r); if (r.startsWith('Роль создана')) print('Права роли включаются в окне 07 УЧАСТНИКИ → Роли.', 'dim'); });
+      } else if (key === 'give' || key === 'выдать') {
+        if (rest.length < 2) { print('Формат: role give ник Название роли', 'err'); return; }
+        net.giveRole(rest[0], rest.slice(1).join(' ')).then(done);
+      } else if (key === 'take' || key === 'снять') {
+        if (!rest[0]) { print('Формат: role take ник', 'err'); return; }
+        net.takeRole(rest[0]).then(done);
+      } else if (key === 'del' || key === 'удалить') {
+        if (!tail) { print('Формат: role del Название роли', 'err'); return; }
+        net.deleteRole(tail).then(done);
+      } else {
+        print('role new Название #цвет · role give ник Роль · role take ник · role del Роль', 'admin');
+        print('Права ролей (эфир, опросы, события) — в окне 07 УЧАСТНИКИ → Роли.', 'dim');
+      }
+    },
     idea() { print('Открываю карточку идеи…'); window.HyperNet?.openIdea(input); },
     ideas() { if (needAdmin()) return; print('Открываю входящие идеи…', 'admin'); window.HyperNet?.openInbox(input); },
     vote(arg) {
@@ -438,7 +472,7 @@
         p.options.forEach((o, i) => print('  ' + (i + 1) + '. ' + o + (r ? ' — ' + (r.counts[i] || 0) : ''), 'dim'));
         return;
       }
-      if (needAdmin()) return;
+      if (needPerm('poll')) return;
       const report = r => print(r === 'ok' ? 'Готово.' : r, r === 'ok' ? 'admin' : 'err');
       if (/^(close|закрыть)$/i.test(arg)) { net.closePoll().then(report); return; }
       const [q, ...options] = arg.split('|').map(x => x.trim()).filter(Boolean);
@@ -446,12 +480,12 @@
       net.openNewPoll(q.slice(0, 140), options.map(o => o.slice(0, 60))).then(r => print(r === 'ok' ? 'Опрос открыт — его увидят все в сети.' : r, r === 'ok' ? 'admin' : 'err'));
     },
     say(arg) {
-      if (needAdmin()) return;
+      if (needPerm('say')) return;
       if (!arg) { print('Формат: say <текст> — сообщение всем, кто в сети.', 'err'); return; }
       window.HyperNet?.say(arg.slice(0, 300)).then(r => print(r === 'ok' ? 'Эфир отправлен всем, кто в сети.' : r, r === 'ok' ? 'admin' : 'err'));
     },
     event(arg) {
-      if (needAdmin()) return;
+      if (needPerm('event')) return;
       const net = window.HyperNet, events = net?.EVENTS || {};
       const [name, where] = (arg || '').toLowerCase().split(/\s+/);
       if (!name) { print('event <имя> — у всех в сети · event <имя> here — только у тебя', 'admin'); for (const [k, v] of Object.entries(events)) print('  ' + k.padEnd(10) + v, 'dim'); return; }
@@ -467,8 +501,13 @@
     sysupdate() { if (needAdmin()) return; print('Запуск экрана обновления…', 'admin'); window.SystemUpdate?.simulate(VERSION); },
     reboot() { if (needAdmin()) return; print('Перезагрузка…', 'admin'); setTimeout(() => location.reload(), 400); }
   };
-  Object.assign(COMMANDS, {dir: COMMANDS.ls, cd: COMMANDS.open, clear: COMMANDS.cls, '?': COMMANDS.help, профиль: COMMANDS.profile, онлайн: COMMANDS.online, идея: COMMANDS.idea, идеи: COMMANDS.ideas,
+  Object.assign(COMMANDS, {dir: COMMANDS.ls, cd: COMMANDS.open, clear: COMMANDS.cls, '?': COMMANDS.help, профиль: COMMANDS.profile, онлайн: COMMANDS.members, online: COMMANDS.members, участники: COMMANDS.members, роли: COMMANDS.roles, роль: COMMANDS.role, идея: COMMANDS.idea, идеи: COMMANDS.ideas,
     голос: COMMANDS.vote, опрос: COMMANDS.poll, эфир: COMMANDS.say, событие: COMMANDS.event});
+  // A command for ADMIN — or for a guest whose role has this right (07 УЧАСТНИКИ → Роли).
+  function needPerm(perm) {
+    if (profile === 'admin' || window.HyperNet?.can(perm)) return false;
+    beep(196, .2, .05); print('Отказано в доступе: нужна роль с правом «' + (window.HyperNet?.PERMS[perm] || perm) + '» или профиль ADMIN.', 'err'); return true;
+  }
   function needAdmin() { if (profile === 'admin') return false; beep(196, .2, .05); print('Отказано в доступе: команда только для профиля ADMIN.', 'err'); return true; }
   cli?.addEventListener('submit', event => {
     event.preventDefault();
@@ -499,13 +538,16 @@
   });
 
   window.HyperGuest?.onChange(() => { if (profile) applyProfile(); });
-  if (window.HyperNet) for (const type of ['status', 'online', 'poll', 'ideas']) window.HyperNet.on(type, renderNet);
+  if (window.HyperNet) {
+    for (const type of ['status', 'online', 'members', 'poll', 'ideas', 'roles']) window.HyperNet.on(type, renderNet);
+    window.HyperNet.on('roles', () => renderHelp());
+  }
   window.HyperOS = {
     get profile() { return profile; }, get isAdmin() { return profile === 'admin'; }, get state() { return os.dataset.state; },
     // What the hum is doing (for checking by hand): context state, whether it plays, where the loop starts.
     get audio() { return {state: ctx?.state || 'none', playing: !!humSource, loopStart: humSource?.loopStart || 0, duration: humSource?.buffer?.duration || 0, gain: out?.gain.value || 0}; },
     // Straight to the guest profile (for tests and the game's terminal): skips the splash and the menu.
-    boot(asGuest = true) { if (!asGuest || profile) return; clearTimeout(powerTimer); splashAbort?.(); stopTimer(); if (!powered) { powered = true; audio(); ctx?.resume().catch(() => {}); startHum(); } onChosen = finishBoot; done('guest'); },
+    boot(asGuest = true) { if (!asGuest || profile) return; skipped = true; clearTimeout(powerTimer); splashAbort?.(); stopTimer(); if (!powered) { powered = true; audio(); ctx?.resume().catch(() => {}); startHum(); } onChosen = finishBoot; done('guest'); },
     logout: () => COMMANDS.logout(), run: cmd => { if (input) { input.value = cmd; cli.requestSubmit(); } }
   };
   show('dark');

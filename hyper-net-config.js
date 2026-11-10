@@ -15,5 +15,7 @@ window.HYPER_NET = {
     appId: '1:567633466396:web:3cdae51bd3a7b120077bd9'
   },
   // ADMIN signs in as <name>@<adminEmailDomain> (a made-up address; nothing is ever mailed to it).
-  adminEmailDomain: 'example.com'
+  adminEmailDomain: 'example.com',
+  // ADMIN's account (Firebase Authentication → Users → User UID): the ADMIN role in the member list is this profile's.
+  adminUid: 'FfL5CekBUEhveAXDrD6XQW1zJzm2'
 };
