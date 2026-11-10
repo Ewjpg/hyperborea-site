@@ -1,0 +1,117 @@
+/* HYPERBOREA OS (hyper-os.js): the power gate, the splash, the profile menu in the style of a boot options screen,
+   then the old way in restyled for programmers — the connection and the landing as a command line, the BIOS lines,
+   and the main menu as a BIOS setup screen with a console. Only the menu (#dbHome) turns BIOS blue; every
+   section (players, lore, tactics, versus) keeps its own look. */
+:root{--hos-mono:'Cascadia Mono',Consolas,'Lucida Console','Courier New',monospace;--hos-grey:#c0c0c0;--hos-dim:#808080;--hos-blue:#0b1a86;--hos-ink:#c8d2ff}
+.hos{position:absolute;inset:0;z-index:2147482000;background:#000;color:var(--hos-grey);font:16px/1.5 var(--hos-mono);overflow:hidden}
+.hos[data-state="off"]{display:none}
+.hos [hidden]{display:none!important}
+.hos-dim{color:var(--hos-dim)}
+
+/* Power gate (only when a browser blocks sound). */
+.hos-gate{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:18px;border:0;background:#000;color:var(--hos-grey);font:15px/1.5 var(--hos-mono);cursor:pointer}
+.hos-gate-icon{font-size:46px;line-height:1;color:#7fe0b0;text-shadow:0 0 18px #19d17a88;animation:hos-blink 1.6s steps(1) infinite}
+.hos-gate:focus-visible{outline:none}
+
+/* Splash: the lights are drawn on the canvas; the words fade in under them. */
+.hos-splash{position:absolute;inset:0;background:#000}
+.hos-splash canvas{position:absolute;inset:0;width:100%;height:100%}
+.hos-starting{position:absolute;left:0;right:0;top:66%;margin:0;text-align:center;font:400 clamp(17px,1.7vw,26px)/1.3 'Segoe UI',Arial,sans-serif;color:#eef4fb;letter-spacing:.02em;opacity:0;animation:hos-fade .9s .5s ease-out forwards}
+.hos-splash small{position:absolute;left:0;right:0;bottom:5%;text-align:center;font:12px 'Segoe UI',Arial,sans-serif;color:#6f7a86;opacity:0;animation:hos-fade .9s 1.2s ease-out forwards}
+@keyframes hos-fade{to{opacity:1}}
+
+/* Profile menu: grey on black, a grey title bar, the chosen line inverted, keys along the bottom. */
+.hos-menu{position:absolute;inset:0;display:flex;flex-direction:column;padding:clamp(22px,4vh,48px) clamp(18px,6vw,120px) 0}
+.hos-menu p{margin:0 0 .35em}
+.hos-bar{margin:0 0 1.6em;padding:.2em 1em;background:var(--hos-grey);color:#000;font:inherit;font-weight:400;text-align:center}
+.hos-list{display:flex;flex-direction:column;margin:1.4em 0 1.4em;max-width:760px}
+.hos-list button{padding:.15em 4ch;border:0;background:none;color:var(--hos-grey);font:inherit;text-align:left;cursor:pointer}
+.hos-list button.is-on{background:var(--hos-grey);color:#000}
+.hos-list button:focus-visible{outline:none}
+.hos-login{max-width:620px;margin:1.2em 0;padding:1em 1.4em;border:3px double var(--hos-grey)}
+.hos-login-title{color:#fff}
+.hos-login label{display:grid;grid-template-columns:20ch minmax(0,1fr);align-items:center;margin:.5em 0}
+.hos-login input{width:100%;padding:.15em .4ch;border:0;border-bottom:1px solid var(--hos-grey);background:#111;color:#fff;font:inherit;caret-color:#fff;outline:none}
+.hos-login input:focus{background:#1d1d1d;border-bottom-color:#fff}
+.hos-login-msg{min-height:1.5em;margin-top:.6em!important;color:#ffff55}
+.hos-desc{margin-top:auto!important;max-width:900px}
+.hos-timer{min-height:1.5em;color:var(--hos-dim)}
+.hos-keys{display:flex;justify-content:space-between;margin:1.4em calc(clamp(18px,6vw,120px) * -1) 0;padding:.25em clamp(18px,6vw,120px);background:var(--hos-grey);color:#000}
+
+/* Connection: one line of what is happening and a bar of blocks. */
+.connection{background:#000;font-family:var(--hos-mono);place-items:start;padding:clamp(24px,6vh,70px) clamp(18px,6vw,120px)}
+.connection::before{content:attr(data-profile);display:block;font:15px/1.6 var(--hos-mono);color:#fff}
+.connection .connection-start{align-items:flex-start;width:auto;padding:0;gap:.5em;color:var(--hos-grey);font:15px/1.6 var(--hos-mono);cursor:default}
+.connection .connection-emblem{display:none}
+.connection .connection-wordmark{display:none}
+.connection .connection-status{order:-1;font:inherit;letter-spacing:0;text-transform:none}
+.connection .connection-status::before{content:'> ПОДКЛЮЧЕНИЕ К СЕТИ BLUE LOCK… ';color:var(--hos-grey)}
+.connection .connection-meter{width:min(36ch,80vw);height:1.1em;padding:2px;border:1px solid var(--hos-grey);background:#000}
+.connection .connection-fill{background:repeating-linear-gradient(90deg,var(--hos-grey) 0 .7em,transparent .7em .9em);box-shadow:none}
+.connection .connection-hint{display:none}
+
+/* Landing: a terminal page with a block-letter banner and a prompt. */
+#landing{align-items:flex-start;justify-content:center;text-align:left;padding:clamp(24px,5vh,60px) clamp(18px,8vw,150px);font-family:var(--hos-mono);color:#c8d0d8}
+#landing h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0;padding:0}
+#landing .divider{display:none}
+#landing .subtitle{font:clamp(11px,1vw,14px)/1.6 var(--hos-mono);letter-spacing:.32em;padding:0;color:#7fa6d8;text-shadow:none;margin:0 0 1.2em}
+.hos-banner{margin:0 0 1.1em;font:clamp(6px,1.05vw,15px)/1.04 var(--hos-mono);color:#e8f2ff;text-shadow:0 0 12px #2f8cff88,.18em .18em 0 #1d4dff66;white-space:pre}
+.hos-term{font:clamp(12px,1.05vw,16px)/1.7 var(--hos-mono)}
+.hos-term p{margin:0}
+.hos-term b{color:#fff;font-weight:400}
+.hos-cmdline{display:flex;align-items:center;flex-wrap:wrap;gap:.7ch;margin-top:1.4em;font:clamp(14px,1.25vw,19px)/1.6 var(--hos-mono)}
+.hos-prompt{color:#7fe0b0}
+html[data-profile="admin"] .hos-prompt{color:#ff8a8a}
+#landing .hos-cmdline .enter{min-width:0;width:auto;min-height:0;margin:0;padding:0 .4ch;border:0;background:none;color:#fff;font:inherit;letter-spacing:0;text-shadow:none;box-shadow:none;transform:none}
+#landing .hos-cmdline .enter::before{content:none}
+#landing .hos-cmdline .enter:hover,#landing .hos-cmdline .enter:focus-visible{background:#c8d0d8;color:#000;outline:none}
+.hos-cursor{display:inline-block;width:.62em;height:1.15em;background:#c8d0d8;animation:hos-blink 1s steps(1) infinite}
+@keyframes hos-blink{50%{opacity:0}}
+.top{font-family:var(--hos-mono);text-shadow:none;color:#8fa0b4}
+
+/* BIOS lines at the top left, like a real POST screen. */
+#bootWrap{align-items:flex-start;justify-content:flex-start;text-align:left;padding:clamp(24px,6vh,70px) clamp(18px,6vw,120px);transform:none}
+#bootWrap .boot{min-width:0;font:clamp(13px,1.15vw,17px)/1.85 var(--hos-mono)}
+
+/* Main menu: BIOS setup. */
+.database:has(> #dbHome:not([hidden])){background:var(--hos-blue);color:var(--hos-ink);font-family:var(--hos-mono)}
+.database:has(> #dbHome:not([hidden])) .db-header{border-bottom:0;padding-bottom:10px}
+.database:has(> #dbHome:not([hidden])) .db-path{font:13px/1.6 var(--hos-mono);color:var(--hos-ink);letter-spacing:.06em}
+.database:has(> #dbHome:not([hidden])) .db-back{font:13px/1 var(--hos-mono);color:var(--hos-ink);border-color:var(--hos-ink);background:none}
+.database:has(> #dbHome:not([hidden])) .db-back:hover,.database:has(> #dbHome:not([hidden])) .db-back:focus-visible{background:var(--hos-ink);color:var(--hos-blue);outline:none}
+#dbHome.hos-bios{width:min(1100px,100%);margin:auto;padding:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px);grid-template-areas:"kicker kicker" "title title" "caption caption" "list help" "legend legend" "cli cli";border:3px double var(--hos-ink);background:var(--hos-blue);font:15px/1.5 var(--hos-mono)}
+#dbHome.hos-bios .db-kicker{grid-area:kicker;margin:0;padding:.25em 1em;background:var(--hos-ink);color:var(--hos-blue);font:13px/1.6 var(--hos-mono);letter-spacing:.12em;text-align:center}
+#dbHome.hos-bios .db-title{grid-area:title;margin:.7em 1rem .1em;font:22px/1.3 var(--hos-mono);letter-spacing:.2em;color:#ffe46b;text-shadow:none}
+#dbHome.hos-bios .db-caption{grid-area:caption;margin:0 1rem .9em;font:13px/1.5 var(--hos-mono);letter-spacing:.1em;color:#8fa5ff}
+#dbHome.hos-bios .db-grid{grid-area:list;display:flex;flex-direction:column;gap:2px;padding:.6em .6em 1em;border-top:1px solid #c8d2ff55;border-right:1px solid #c8d2ff55}
+#dbHome.hos-bios .db-card,#dbHome.hos-bios .db-card.tactic-directory{grid-column:auto;display:grid;grid-template-columns:4ch 11ch minmax(0,1fr);align-items:baseline;gap:0 1.2ch;min-height:0;padding:.45em .8em;border:0;background:none;box-shadow:none;color:var(--hos-ink);font:inherit;text-align:left}
+#dbHome.hos-bios .db-card-top{display:contents}
+#dbHome.hos-bios .db-icon,#dbHome.hos-bios .db-card-open,#dbHome.hos-bios .db-card::after{display:none}
+#dbHome.hos-bios .db-card-number{font:inherit;letter-spacing:0;color:#8fa5ff}
+#dbHome.hos-bios .db-card-name{font:inherit;letter-spacing:.1em;color:#fff}
+#dbHome.hos-bios .db-card-description{font:inherit;color:var(--hos-ink);align-self:baseline}
+#dbHome.hos-bios .db-card:hover,#dbHome.hos-bios .db-card:focus-visible,#dbHome.hos-bios .db-card:focus{background:var(--hos-ink);outline:none}
+#dbHome.hos-bios .db-card:hover *,#dbHome.hos-bios .db-card:focus-visible *,#dbHome.hos-bios .db-card:focus *{color:var(--hos-blue)}
+.hos-help{grid-area:help;min-width:0;overflow-wrap:anywhere;padding:.6em 1em 1em;border-top:1px solid #c8d2ff55;font:14px/1.55 var(--hos-mono);color:var(--hos-ink)}
+.hos-help h3{margin:0 0 .6em;padding-bottom:.3em;border-bottom:1px solid #c8d2ff55;font:inherit;text-align:center;letter-spacing:.14em;color:#8fa5ff}
+.hos-help b{color:#fff;font-weight:400}
+.hos-help p{margin:.3em 0}
+.hos-help .hos-dim{color:#8fa5ff}
+.hos-help hr{border:0;border-top:1px dashed #c8d2ff44;margin:.8em 0}
+.hos-profile-tag{color:#7fe0b0!important}
+html[data-profile="admin"] .hos-profile-tag{color:#ffe46b!important}
+.hos-legend{grid-area:legend;display:flex;flex-wrap:wrap;gap:.4em 2.4ch;margin:0;padding:.3em 1em;background:var(--hos-ink);color:var(--hos-blue);font:13px/1.5 var(--hos-mono)}
+.hos-cli{grid-area:cli;padding:.5em 1em .7em;background:#000;color:#c8d0d8;font:14px/1.55 var(--hos-mono)}
+.hos-out p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.hos-out .is-err{color:#ff7b7b}.hos-out .is-dim{color:#7a8796}.hos-out .is-cmd{color:#fff}.hos-out .is-admin{color:#ffe46b}.hos-out .is-ok{color:#7fe0b0}
+.hos-cli label{display:flex;align-items:center;gap:1ch;margin-top:.2em}
+.hos-cli input{flex:1;min-width:0;padding:0;border:0;background:none;color:#fff;font:inherit;caret-color:#fff;outline:none}
+@media(max-width:760px){
+  #dbHome.hos-bios{grid-template-columns:minmax(0,1fr);grid-template-areas:"kicker" "title" "caption" "list" "help" "legend" "cli";font-size:14px}
+  #dbHome.hos-bios .db-grid{border-right:0}
+  #dbHome.hos-bios .db-card,#dbHome.hos-bios .db-card.tactic-directory{grid-template-columns:3ch minmax(0,1fr)}
+  #dbHome.hos-bios .db-card-description{grid-column:2}
+  .hos-menu{font-size:14px}
+  .hos-login label{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.hos-gate-icon,.hos-cursor,.hos-starting,.hos-splash small{animation:none;opacity:1}}

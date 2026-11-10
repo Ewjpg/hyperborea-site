@@ -1,0 +1,42 @@
+@font-face {
+  font-family: 'Fira Sans Extra Condensed';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./assets/fonts/fira-extra-condensed-italic-700.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Fira Sans Extra Condensed';
+  font-style: italic;
+  font-weight: 800;
+  font-display: swap;
+  src: url(./assets/fonts/fira-extra-condensed-italic-800.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Fira Sans Extra Condensed';
+  font-style: italic;
+  font-weight: 900;
+  font-display: swap;
+  src: url(./assets/fonts/fira-extra-condensed-italic-900.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Fira Sans Extra Condensed';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./assets/fonts/fira-extra-condensed-normal-700.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Fira Sans Extra Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(./assets/fonts/fira-extra-condensed-normal-800.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Fira Sans Extra Condensed';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(./assets/fonts/fira-extra-condensed-normal-900.ttf) format('truetype');
+}

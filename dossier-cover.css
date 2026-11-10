@@ -1,0 +1,74 @@
+/* Dossier 2.0 (dossier-cover.js): a cover with the portrait in a circle and the stat ring, beside the name and facts.
+   It sits over each dossier's own styles, so layout rules here are firm (!important) where the old ones fight back.
+   Each player keeps their own colours through --dc-bg (the cover), --dc-glow and --dc-ink. */
+.dc-fear{--dc-bg:linear-gradient(100deg,#2b2b2b,#8a8a8a 18%,#3a3a3a 34%,#bdbdbd 52%,#2a2a2a 70%,#0b0b0b);--dc-glow:#ffffff55;--dc-ink:#9a9a9a}
+.dc-wah{--dc-bg:radial-gradient(circle at 30% 18%,#7fb0ff,#2665d7 32%,#0c2257 66%,#050b1c);--dc-glow:#5c9bff88;--dc-ink:#2665d7}
+.dc-frog{--dc-bg:linear-gradient(145deg,#f6dc93,#b8892f 26%,#5a3d10 52%,#c9a046 72%,#1d1306);--dc-glow:#e8c56f88;--dc-ink:#d5b66e}
+.dc-swarggy{--dc-bg:radial-gradient(ellipse at 50% 110%,#ff3b53,#b3122b 30%,#4a0815 62%,#0e0205);--dc-glow:#ff4b6088;--dc-ink:#ff6b7c}
+.dc-emiliano{--dc-bg:conic-gradient(from 210deg at 70% 25%,#ff7ad9,#8a5cc7,#3b1d66,#c7a4ef,#ff7ad9);--dc-glow:#ff7ad988;--dc-ink:#c7a4ef}
+.dc-yoru{--dc-bg:radial-gradient(circle at 80% 15%,#cfe2ff 0 1.5%,transparent 2%),linear-gradient(180deg,#0a1630,#1f3d70 45%,#36588e 70%,#0b1222);--dc-glow:#8fbaf388;--dc-ink:#8fbaf3}
+
+/* The hero: cover on the left, words on the right. */
+.dc-hero{display:grid!important;grid-template-columns:minmax(0,440px) minmax(0,1fr)!important;gap:clamp(28px,5vw,64px)!important;align-items:center!important;min-height:0!important;padding-top:10px;border:0!important}
+.dc-cover{position:relative;height:580px;border-radius:6px;overflow:hidden;isolation:isolate;background:var(--dc-bg);box-shadow:0 30px 70px #000c,0 0 0 1px #ffffff1f}
+.dc-cover::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(135deg,#ffffff0a 0 2px,transparent 2px 10px),radial-gradient(circle at 50% 46%,transparent 34%,#0007 82%)}
+.dc-mast{position:absolute;z-index:1;left:0;right:0;top:22px;text-align:center;font:900 42px/1 Arial,sans-serif;letter-spacing:.18em;color:#fff;opacity:.85;mix-blend-mode:overlay;pointer-events:none}
+/* The portrait block, whatever it is for this player, shown through a circle. */
+.dc-disc{position:absolute;z-index:2;left:50%;top:50%;width:284px;height:284px;translate:-50% -46%;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 40%,#1c1c1fcc,#000000e6 72%);box-shadow:0 0 0 1px #ffffff66,0 0 60px var(--dc-glow)}
+.dc-disc>figure{position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;width:var(--dc-w,440px)!important;height:var(--dc-h,500px)!important;min-height:0!important;max-width:none!important;margin:0!important;transform:none!important;translate:-50% var(--dc-y,-40%);scale:var(--dc-s,1);pointer-events:none}
+.dc-disc>figure :is(.fear-look,.minami-look,figcaption,.swarggy-art-index,.minami-kanji,.fear-portrait-echo,.fear-portrait-frame){display:none!important}
+/* Per-player framing of the portrait inside the circle: small enough to show the head and shoulders. */
+.dc-dossier{--dc-w:300px;--dc-h:330px;--dc-y:-48%}
+.dc-swarggy{--dc-w:320px;--dc-h:340px;--dc-y:-47%}
+/* Klaus's world dossier pins his portrait to the right; inside the circle every portrait is centred. */
+.dc-disc .fear-hero-art>img{left:50%!important;right:auto!important;top:auto!important;bottom:0!important;width:100%!important;height:100%!important;max-width:none!important;translate:-50% 0;object-fit:contain!important;object-position:50% 100%!important}
+/* The ring of stats. */
+.dc-ring{position:absolute;z-index:3;left:50%;top:50%;width:400px;height:400px;translate:-50% -46%;overflow:visible;pointer-events:none}
+.dc-track{fill:none;stroke:#0000004d;stroke-width:12;stroke-linecap:round}
+.dc-arc{fill:none;stroke:#fff;stroke-width:12;stroke-linecap:round;filter:drop-shadow(0 0 5px var(--dc-glow));stroke-dasharray:var(--len) 999}
+.dc-cover.is-in .dc-arc{animation:dc-arc 1.2s cubic-bezier(.2,1,.3,1) both}
+@keyframes dc-arc{from{stroke-dasharray:0 999}}
+.dc-axis{fill:#ffffffcc;font:700 10px Arial,sans-serif;letter-spacing:.16em}
+.dc-value{fill:#fff;font:900 14px Arial,sans-serif}
+.dc-ovr{position:absolute;z-index:4;left:24px;bottom:20px;margin:0;font:900 62px/.9 Arial,sans-serif;letter-spacing:-.05em;color:#fff;text-shadow:0 4px 0 #0006}
+.dc-ovr small{display:block;font:700 9px/1.6 Arial,sans-serif;letter-spacing:.3em;opacity:.8}
+/* Look switches move onto the cover, bottom right. */
+.dc-cover :is(.fear-look,.minami-look){position:absolute!important;z-index:5!important;left:auto!important;right:16px!important;bottom:18px!important;top:auto!important;pointer-events:auto}
+/* Words: a terminal line, the name with a flag instead of the country's name, then the facts. */
+.dc-prompt{margin:0 0 14px;font:13px/1.4 'Courier New',monospace;color:var(--dc-ink)}
+.dc-prompt::after{content:'▌';animation:dc-blink 1s steps(1) infinite}
+@keyframes dc-blink{50%{opacity:0}}
+.dc-hero .player-country-line>span:not(.country-flag),.dc-hero .player-country-line>:not(.country-flag):not(.np-flag){display:none!important}
+.dc-hero .player-country-line{font-size:0!important;min-height:0!important;padding:0!important;margin:10px 0 16px!important;border:0!important}
+/* Scaled rather than resized: some flags (Japan) draw their emblem in pixels. */
+.dc-hero .player-country-line :is(.country-flag,.np-flag){scale:1.7;transform-origin:0 50%;margin-right:20px;box-shadow:0 0 0 1px #ffffff40,0 4px 10px #0008}
+.dc-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin:4px 0 22px;font:700 10px/1.6 Arial,sans-serif;letter-spacing:.18em;color:var(--dc-ink)}
+.dc-facts dt{opacity:.85}
+.dc-facts dd{margin:0;font-size:14px;letter-spacing:.06em;color:#fff}
+.dc-wah .dc-facts dd{color:#121722}
+.dc-club{display:inline-flex;align-items:center;gap:8px}
+.dc-club::before{content:'';width:22px;height:22px;border-radius:4px;background:url(./assets/club-qiqi.png?v=1) center/cover}
+/* What the cover and facts now show once: quick facts, the old "open dossier" links, the old radar and overall. */
+.dc-hero :is(.profile-quick-facts,.swarggy-hero-link,.wah-hero-link,.frog-hero-link,.np-hero-link){display:none!important}
+.dc-dossier :is(.fear-radar,.wah-radar,.frog-radar,.swarggy-radar,.np-radar,.player-overall,.overall-scale){display:none!important}
+/* Klaus: a new title font — Fira Sans Extra Condensed Black, upright and tight, instead of Creepster. */
+.dc-fear .fear-title{font-family:'Fira Sans Extra Condensed',Arial,sans-serif!important;font-style:normal!important;font-weight:900!important;font-size:clamp(52px,6.2vw,104px)!important;line-height:.9!important;overflow-wrap:anywhere;max-width:100%;letter-spacing:-.01em!important;text-transform:uppercase;color:#e4e4e4!important;text-shadow:3px 0 0 #ffffff14,-3px 0 0 #00000080}
+.dc-fear .fear-title span{color:#8d8d8d}
+@media(max-width:900px){.dc-hero{grid-template-columns:1fr!important}.dc-cover{width:min(440px,100%);margin:0 auto;height:560px}}
+@media(max-width:480px){.dc-cover{height:500px}.dc-ring{width:340px;height:340px}.dc-disc{width:240px;height:240px}.dc-mast{font-size:32px}}
+/* Ratings as an equaliser: each value a column that fills from below in the player's colour, the input under it. */
+.dc-stats{display:flex!important;flex-direction:column!important}
+.dc-stats .profile-ratings{flex:1;display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:clamp(6px,1vw,12px)!important;min-height:260px;margin-top:6px}
+.dc-stats .profile-ratings label{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:10px!important;height:100%;text-align:center}
+.dc-level{order:1;flex:1;position:relative;min-height:110px;border-radius:5px;overflow:hidden;background:color-mix(in srgb,currentColor 8%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,currentColor 16%,transparent)}
+.dc-level::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 calc(25% - 1px),color-mix(in srgb,currentColor 12%,transparent) calc(25% - 1px) 25%)}
+.dc-level b{position:absolute;left:0;right:0;bottom:0;height:var(--v,0%);background:linear-gradient(0deg,var(--dc-ink),color-mix(in srgb,var(--dc-ink) 45%,#fff));box-shadow:0 0 16px var(--dc-glow);transition:height .6s cubic-bezier(.2,1.4,.4,1)}
+.dc-stats .profile-ratings input{order:2}
+@media(max-width:600px){.dc-stats .profile-ratings{min-height:200px;gap:5px!important}.dc-level{min-height:80px}}
+/* A thin, quiet scrollbar everywhere in the database, in the page's own colour (no arrow buttons). */
+.database{scrollbar-width:auto!important;scrollbar-color:auto!important}
+.database::-webkit-scrollbar{width:6px;height:6px}
+.database::-webkit-scrollbar-track{background:transparent}
+.database::-webkit-scrollbar-thumb{border-radius:6px;background:color-mix(in srgb,currentColor 26%,transparent)}
+.database::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,currentColor 50%,transparent)}
+.database::-webkit-scrollbar-button{display:none;width:0;height:0}

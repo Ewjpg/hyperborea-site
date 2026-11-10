@@ -1,0 +1,52 @@
+import {STAT_AXES,parseRating} from './rating-model.mjs?v=36';
+import {createProfileRadar} from './player-ratings.mjs?v=36';
+import {createNewPlayersCinematic} from './new-players-cinematic.js?v=52';
+
+(() => {
+  const $=id=>document.getElementById(id);
+  const screen=$('screen'),database=$('database'),section=$('dbSection'),roster=$('playersRoster');
+  const people={emiliano:{name:'Эмилиано Санчес',path:'EMILIANO'},yoru:{name:'Нишимура Йору',path:'YORU'}};
+  if(!screen||!database||!section||!roster||Object.keys(people).some(id=>!$(id+'Card')||!$(id+'Dossier')))return;
+  const motion=matchMedia('(prefers-reduced-motion: reduce)');
+  const overlay=document.createElement('section');overlay.id='newPlayersTransition';overlay.className='np-transition';overlay.hidden=true;overlay.tabIndex=-1;
+  overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Переход к досье игрока');
+  overlay.innerHTML='<div id="newPlayersStage" class="np-transition-stage" aria-hidden="true" hidden></div><div class="np-transition-fallback" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="np-comic-overlay" aria-hidden="true"><i class="comic-speedlines"></i><i class="comic-print"></i><i class="comic-gutter gutter-one"></i><i class="comic-gutter gutter-two"></i></div><div class="np-transition-label"><span id="newPlayersTransitionName"></span></div><button id="newPlayersTransitionSkip" type="button">ПРОПУСТИТЬ ↗</button>';
+  screen.append(overlay);
+  const stage=$('newPlayersStage'),skip=$('newPlayersTransitionSkip');
+  let selected=null,opened=false,busy=false,phase='idle',swapping=false,epoch=0,timers=[],animations=[],finishCurrent=null,renderer=null,tiltFrame=0;
+  const later=(fn,delay)=>{const token=epoch;const timer=setTimeout(()=>{if(token===epoch)fn();},delay);timers.push(timer);return timer;};
+  const ambient=()=>window.HyperboreaAmbience?.refresh();
+  function stopTilt(){cancelAnimationFrame(tiltFrame);tiltFrame=0;for(const id of Object.keys(people)){$(id+'Dossier').style.setProperty('--np-rx','0deg');$(id+'Dossier').style.setProperty('--np-ry','0deg');}}
+  function cleanup(){epoch++;timers.forEach(clearTimeout);timers=[];animations.forEach(a=>a.cancel());animations=[];finishCurrent=null;renderer?.stop();stage.hidden=true;overlay.hidden=true;overlay.classList.remove('is-revealing','is-exiting');skip.hidden=false;database.inert=false;roster.classList.remove('space-suspended');screen.classList.remove('np-cinematic');phase='idle';busy=false;}
+  function theme(active){database.classList.toggle('new-player-theme',active);database.classList.toggle('emiliano-theme',active&&selected==='emiliano');database.classList.toggle('yoru-theme',active&&selected==='yoru');screen.classList.toggle('new-player-active',active);ambient();}
+  function reveal(){opened=true;section.hidden=true;roster.hidden=true;for(const id of Object.keys(people))$(id+'Dossier').hidden=id!==selected;theme(true);$('dbPath').textContent='HYPERBOREA / PLAYERS / '+people[selected].path;$('dbNetworkStatus').textContent='CONNECTION STABLE';database.scrollTop=0;}
+  function deactivate(restore){window.EmilianoAudio?.exit();opened=false;for(const id of Object.keys(people))$(id+'Dossier').hidden=true;theme(false);stopTilt();if(restore){section.hidden=false;roster.hidden=false;$('dbPath').textContent='HYPERBOREA / PLAYERS';database.scrollTop=0;window.PlayersSpace?.refresh?.();}}
+  function scene(direction){stage.hidden=false;try{renderer??=createNewPlayersCinematic(stage);if(renderer.start(selected,direction)===false){renderer.dispose();renderer=null;stage.hidden=false;stage.classList.remove('has-3d');}}catch{renderer?.stop();renderer=null;stage.classList.remove('has-3d');stage.hidden=false;}}
+  function finishIntro(immediate=false){if(!busy||phase!=='intro')return;phase='reveal';reveal();const finish=()=>{if(phase!=='reveal')return;cleanup();if(opened&&!document.hidden)$(selected+'Title').focus({preventScroll:true});};finishCurrent=finish;if(immediate||motion.matches||document.hidden){finish();return;}overlay.classList.add('is-revealing');later(finish,420);}
+  function open(value){const id=String(value||'').replace(/Card$/,'');if(!people[id]||opened||busy||window.HyperboreaTransitions?.busy||window.SwarggyArchive?.busy||window.SwarggyArchive?.isOpen||window.FrogArchive?.busy||window.FrogArchive?.isOpen||window.FrogCoin?.active||window.WahArchive?.busy||window.WahArchive?.isOpen||window.FearArchive?.isOpen||!database.classList.contains('active')||section.hidden||roster.hidden)return false;
+    window.FearArchive?.silence();window.WahAudio?.exit();window.FrogAudio?.exit();cleanup();selected=id;busy=true;phase='intro';if(id==='emiliano')window.EmilianoAudio?.enter();else window.EmilianoAudio?.exit();ambient();if(motion.matches||document.hidden){finishIntro(true);return true;}database.inert=true;roster.classList.add('space-suspended');screen.classList.add('np-cinematic');overlay.dataset.player=id;$('newPlayersTransitionName').textContent=id==='emiliano'?'':people[id].name;overlay.hidden=false;skip.hidden=false;scene('enter');skip.focus({preventScroll:true});finishCurrent=()=>finishIntro(true);later(()=>finishIntro(),id==='emiliano'?2100:1800);return true;
+  }
+  function iris(swap,done){window.EmilianoAudio?.exit();cleanup();busy=true;phase='iris';database.inert=true;roster.classList.add('space-suspended');screen.classList.add('np-cinematic');let changed=false;const change=()=>{if(changed)return;changed=true;swapping=true;try{swap();}finally{swapping=false;}};const finish=()=>{if(phase!=='iris')return;change();cleanup();done?.();};finishCurrent=finish;if(motion.matches||document.hidden){finish();return;}overlay.dataset.player=selected;overlay.hidden=false;overlay.classList.add('is-exiting');skip.hidden=true;scene('exit');overlay.focus({preventScroll:true});animations.push(overlay.animate([{opacity:0},{opacity:1,offset:.34},{opacity:1,offset:.6},{opacity:0}],{duration:880,easing:'ease-in-out',fill:'both'}));later(change,350);later(finish,920);}
+  function close(){if(busy&&(phase==='intro'||phase==='reveal')){reset();if(database.classList.contains('active'))$(selected+'Card').focus({preventScroll:true});return;}if(!opened||busy)return;iris(()=>deactivate(true),()=>{if(database.classList.contains('active'))$(selected+'Card').focus({preventScroll:true});});}
+  function exitTo(swap,done){if(!opened||busy)return false;iris(()=>{deactivate(false);swap();},done);return true;}
+  function reset(){if(swapping){deactivate(false);return;}const restore=opened||busy;cleanup();deactivate(restore);}
+  for(const id of Object.keys(people)){
+    $(id+'Card').addEventListener('click',()=>open(id));$(id+'Return').addEventListener('click',close);
+    const dossier=$(id+'Dossier'),art=dossier.querySelector('.np-art');
+    dossier.querySelectorAll('[data-np-scroll]').forEach(button=>button.addEventListener('click',()=>{const target=$(button.dataset.npScroll);target?.focus({preventScroll:true});target?.scrollIntoView({behavior:motion.matches?'auto':'smooth',block:'start'});}));
+    art.addEventListener('pointermove',event=>{if(!opened||busy||selected!==id||motion.matches||event.pointerType==='touch')return;cancelAnimationFrame(tiltFrame);tiltFrame=requestAnimationFrame(()=>{const r=art.getBoundingClientRect(),x=Math.max(-.5,Math.min(.5,(event.clientX-r.left)/r.width-.5)),y=Math.max(-.5,Math.min(.5,(event.clientY-r.top)/r.height-.5));dossier.style.setProperty('--np-rx',(-y*9).toFixed(2)+'deg');dossier.style.setProperty('--np-ry',(x*13).toFixed(2)+'deg');});},{passive:true});art.addEventListener('pointerleave',stopTilt,{passive:true});
+    const inputs=STAT_AXES.map(axis=>$(id+'Stat'+axis)),position=$(id+'Position'),description=$(id+'Description'),weapon=$(id+'Weapon'),key='hyperborea_'+id+'_profile_v1',radar=createProfileRadar(id);
+    const draw=()=>{const ratings=inputs.map(input=>parseRating(input.value));radar(ratings);$(id+'DescriptionCount').textContent=description.value.length+' / 12000';$(id+'WeaponCount').textContent=weapon.value.length+' / 6000';return ratings;};
+    const save=()=>{const profile={ratings:draw(),position:position.value,description:description.value,weapon:weapon.value};try{localStorage.setItem(key,JSON.stringify(profile));$(id+'SaveState').textContent='Сохранено на этом устройстве';}catch{$(id+'SaveState').textContent='Изменения доступны до закрытия страницы';}};
+    try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved&&typeof saved==='object'&&!Array.isArray(saved)){if(Array.isArray(saved.ratings))inputs.forEach((input,index)=>{input.value=parseRating(saved.ratings[index])??'';});if(typeof saved.position==='string')position.value=saved.position.slice(0,40);if(typeof saved.description==='string')description.value=saved.description.slice(0,12000);if(typeof saved.weapon==='string')weapon.value=saved.weapon.slice(0,6000);}}catch{}
+    if(id==='yoru'){try{if(localStorage.getItem('hyperborea_yoru_analytics_v1')!=='1'){weapon.value='Absolute analytics';save();localStorage.setItem('hyperborea_yoru_analytics_v1','1');}}catch{weapon.value='Absolute analytics';}}
+    inputs.forEach(input=>input.addEventListener('input',()=>{input.value=parseRating(input.value)??'';save();}));for(const input of [position,description,weapon])input.addEventListener('input',save);draw();
+  }
+  skip.addEventListener('click',()=>finishIntro());
+  overlay.addEventListener('keydown',event=>{if(event.key==='Escape'&&(phase==='intro'||phase==='reveal')){event.preventDefault();event.stopPropagation();close();}if(event.key==='Tab'){event.preventDefault();(skip.hidden?overlay:skip).focus({preventScroll:true});}});
+  window.addEventListener('resize',()=>{finishCurrent?.();stopTilt();},{passive:true});
+  document.addEventListener('visibilitychange',()=>{screen.classList.toggle('np-paused',document.hidden);if(document.hidden){finishCurrent?.();stopTilt();}});
+  motion.addEventListener('change',()=>{finishCurrent?.();stopTilt();});window.addEventListener('pagehide',reset);
+  new MutationObserver(()=>{if((opened||busy)&&phase!=='iris'&&!database.classList.contains('active'))reset();}).observe(database,{attributes:true,attributeFilter:['class']});
+  window.NewPlayersArchive={open,close,reset,exitTo,get isOpen(){return opened;},get busy(){return busy;},get state(){return phase;},get id(){return selected;},get cinematic(){return renderer?.state??null;}};
+})();

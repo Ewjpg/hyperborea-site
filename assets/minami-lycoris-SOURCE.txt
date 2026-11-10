@@ -1,0 +1,9 @@
+Модель хиганбаны для раздела «04 ХИГАНБАНА» в досье Минами Сина.
+
+Файлы:
+  minami-lycoris.bin  — сетка модели, переведённая из LycorisRadiatafbx.fbx (Blender 3.2.2)
+  minami-lycoris.webp — текстура Lycoris.RadiataTexture_Base_Color.png, уменьшена до 2048 px
+
+Исходник: папка spider-lily-lycoris-radiata (source/LycorisRadiatafbx.fbx, textures/), скачана 2026-11-05.
+Автор и лицензия: УТОЧНИТЬ (ссылка на страницу модели). Если лицензия требует указать автора (например CC BY),
+подпись нужно показать на сайте рядом с цветком.

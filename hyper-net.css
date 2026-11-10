@@ -1,0 +1,127 @@
+/* HYPERBOREA OS windows (hyper-guest.js, hyper-net.js): the guest's profile, the poll and ADMIN's «эфир» open as
+   BIOS dialog boxes over the terminal — blue, a double border, a light title bar and keys along the bottom.
+   Also the avatar box, the profile card in the menu's help column and the «помехи» event. */
+.hwin{position:absolute;inset:0;z-index:2147481500;display:grid;place-items:center;padding:16px;background:#00041fcc;font:15px/1.5 var(--hos-mono);color:var(--hos-ink)}
+.hwin[hidden]{display:none}
+.hwin [hidden]{display:none!important}
+.hwin-box{display:flex;flex-direction:column;width:min(660px,100%);max-height:100%;margin:0;border:3px double var(--hos-ink);background:var(--hos-blue);box-shadow:12px 12px 0 #0009}
+.hwin:not([hidden]) .hwin-box{animation:hwin-in .2s steps(4) both}
+@keyframes hwin-in{from{clip-path:inset(48% 0)}to{clip-path:inset(0)}}
+.hwin-bar{margin:0;padding:.25em 1em;background:var(--hos-ink);color:var(--hos-blue);font:13px/1.6 var(--hos-mono);letter-spacing:.12em;text-align:center;text-transform:uppercase}
+.hwin-body{min-height:0;overflow:auto;padding:1em 1.2em}
+.hwin-body p{margin:.25em 0}
+.hwin-dim,.hwin-hint{color:#8fa5ff}
+.hwin-row .hwin-hint{grid-column:2;margin-top:-.1em;font-size:12px}
+.hwin-row{display:grid;grid-template-columns:15ch minmax(0,1fr);align-items:center;gap:1.2ch;margin:.45em 0}
+.hwin-row>span{color:#8fa5ff}
+.hwin input,.hwin select{width:100%;min-width:0;padding:.2em .6ch;border:0;border-bottom:1px solid var(--hos-ink);border-radius:0;background:#06106e;color:#fff;font:inherit;outline:none}
+.hwin input::placeholder{color:#8fa5ff99}
+.hwin input:focus,.hwin select:focus{background:var(--hos-ink);color:var(--hos-blue)}
+.hwin select option{background:var(--hos-blue);color:#fff}
+.hwin-msg{min-height:1.5em;margin-top:.6em!important;color:#ffe46b}
+.hwin-msg.is-err{color:#ffa0a0}
+.hwin-msg.is-ok{color:#7fe0b0}
+.hwin-keys{display:flex;flex-wrap:wrap;align-items:center;gap:.3em 1.6ch;padding:.35em 1em;background:var(--hos-ink);color:var(--hos-blue);font-size:14px}
+.hwin-keys button,.hwin-btn{padding:.05em .4ch;border:0;background:none;color:inherit;font:inherit;cursor:pointer}
+.hwin-keys button:hover,.hwin-keys button:focus-visible{background:var(--hos-blue);color:#fff;outline:none}
+.hwin-btn{color:#fff}
+.hwin-btn:hover,.hwin-btn:focus-visible{background:var(--hos-ink);color:var(--hos-blue);outline:none}
+.hwin-btn:disabled{opacity:.4;cursor:default;background:none;color:#fff}
+.hwin-legend{margin-right:auto;font-size:13px}
+
+/* The avatar box: the picture in its look, or the nick's first letter. */
+.hg-ava{position:relative;display:inline-grid;flex:none;place-items:center;width:52px;height:52px;overflow:hidden;border:1px solid var(--hos-ink);background:#000;color:var(--hos-accent,#7fe0b0);font:700 24px/1 var(--hos-mono);vertical-align:middle}
+.hg-ava.is-empty::before{content:attr(data-letter)}
+.hg-ava img{display:block;width:100%;height:100%;object-fit:cover}
+.hg-ava[data-look="pixel"] img{image-rendering:pixelated}
+.hg-ava[data-look="crt"] img{filter:grayscale(1) sepia(1) hue-rotate(62deg) saturate(3.2) brightness(.92) contrast(1.15)}
+.hg-ava[data-look="crt"]::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,#0008 0 1px,transparent 1px 3px)}
+
+/* Profile window. */
+.hg-top{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1.3em;align-items:start;margin-bottom:.9em}
+.hg-big.hg-ava{width:120px;height:120px;font-size:56px}
+.hg-name{font-size:17px;overflow-wrap:anywhere}
+.hg-buttons{display:flex;flex-wrap:wrap;gap:.2em 1.2ch;margin:.6em 0 .3em}
+.hg-side .hwin-dim{font-size:13px;overflow-wrap:anywhere}
+.hg-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.3em 1.6em;margin:1em 0 0;padding-top:.8em;border-top:1px dashed #c8d2ff44;font-size:14px}
+.hg-stats div{display:flex;justify-content:space-between;gap:1ch}
+.hg-stats dt{color:#8fa5ff}
+.hg-stats dd{margin:0;color:#fff;text-align:right}
+
+/* The profile card in the menu's help column. */
+.hos-who{display:flex;align-items:center;gap:1.2ch;margin:.3em 0 .5em}
+.hos-who .hg-ava{width:44px;height:44px;font-size:20px}
+.hos-who p{margin:0!important;min-width:0;overflow-wrap:anywhere}
+.hos-profile-tag{color:var(--hos-accent,#7fe0b0)!important}
+.hos-prompt{color:var(--hos-accent,#7fe0b0)}
+.hos-out .is-ok{color:var(--hos-accent,#7fe0b0)}
+#dbHome.hos-bios .hos-extra .db-card-name{color:#ffe46b}
+
+/* Wider boxes, a textarea, the online cards, the idea cards. */
+.hwin-box.hwin-wide{width:min(820px,100%)}
+.hwin textarea{width:100%;min-width:0;padding:.4em .6ch;border:1px solid #c8d2ff55;border-radius:0;background:#06106e;color:#fff;font:inherit;line-height:1.5;resize:vertical;outline:none}
+.hwin textarea:focus{border-color:var(--hos-ink)}
+.hwin-row-top{align-items:start}
+.hnet-people-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:.6em}
+.hnet-person{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1.2ch;align-items:start;padding:.6em;border:1px solid #c8d2ff44;background:#06106e}
+.hnet-person.is-me{border-color:var(--hos-accent,#7fe0b0)}
+.hnet-person .hg-ava{width:56px;height:56px;font-size:26px}
+.hnet-person b{display:block;color:#fff;font-weight:400;overflow-wrap:anywhere}
+.hnet-person p{margin:.15em 0;font-size:13px;overflow-wrap:anywhere}
+.hnet-idea-sent{margin-top:.5em;font-size:13px}
+.hnet-inbox-list{display:flex;flex-direction:column;gap:10px;margin-top:.6em}
+.hnet-idea{padding:.7em .8em;border:1px solid #c8d2ff44;background:#06106e}
+.hnet-idea.is-new{border-color:#ffe46b}
+.hnet-idea header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.2em 1.5ch}
+.hnet-idea header b{color:#fff;font-weight:400;overflow-wrap:anywhere}
+.hnet-idea.is-new header b{color:#ffe46b}
+.hnet-idea header span{font-size:13px}
+.hnet-idea-text{margin:.5em 0!important;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--hos-ink)}
+.hnet-idea-fav{font-size:13px}
+.hnet-idea-actions{display:flex;flex-wrap:wrap;gap:.2em 1.5ch;margin-top:.3em}
+
+/* Poll window. */
+.hnet-q{margin:0 0 .9em!important;font-size:17px;color:#fff;overflow-wrap:anywhere}
+.hnet-opts{display:flex;flex-direction:column;gap:2px}
+.hnet-opt{display:grid;grid-template-columns:4ch minmax(0,1fr) auto auto;align-items:baseline;gap:0 1.2ch;padding:.35em .6em;border:0;background:none;color:var(--hos-ink);font:inherit;text-align:left;cursor:pointer}
+.hnet-opt:hover,.hnet-opt:focus{background:var(--hos-ink);outline:none}
+.hnet-opt:hover *,.hnet-opt:focus *{color:var(--hos-blue)!important}
+.hnet-opt[aria-disabled="true"]{cursor:default}
+.hnet-mark{color:#8fa5ff}
+.hnet-name{color:#fff;overflow-wrap:anywhere}
+.hnet-opt.is-mine .hnet-name,.hnet-opt.is-mine .hnet-mark{color:#ffe46b}
+.hnet-bar{color:#7fd8ff;white-space:pre;letter-spacing:-.04em}
+.hnet-pct{color:#8fa5ff;white-space:nowrap}
+.hnet-poll-meta{margin-top:.9em!important;font-size:13px}
+
+/* «Эфир»: ADMIN's message, in warning yellow. */
+.hnet-msg .hwin-box{width:min(560px,100%);border-color:#ffe46b;box-shadow:0 0 0 1px #ffe46b44,12px 12px 0 #0009}
+.hnet-msg .hwin-bar,.hnet-msg .hwin-keys{background:#ffe46b;color:#1a1500}
+.hnet-msg .hwin-keys{justify-content:flex-end}
+.hnet-msg .hwin-keys button:hover,.hnet-msg .hwin-keys button:focus-visible{background:#1a1500;color:#ffe46b}
+.hnet-msg-text{margin:0 0 .8em!important;font-size:19px;line-height:1.5;color:#fff;white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* Event «glitch»: the picture tears and changes colour for a moment, under rolling static. */
+.screen.hnet-glitch{animation:hnet-glitch 1.3s steps(1) both}
+@keyframes hnet-glitch{
+  0%,24%,60%,100%{filter:none;transform:none}
+  8%{filter:hue-rotate(90deg) saturate(3) contrast(1.6);transform:translate(-6px,2px) skewX(4deg)}
+  16%{filter:invert(.85) contrast(2);transform:translate(5px,-3px)}
+  36%{filter:hue-rotate(-120deg) contrast(1.8);transform:translate(0,6px) skewX(-6deg)}
+  48%{filter:brightness(1.8) saturate(0);transform:translate(-3px,0)}
+  72%{filter:hue-rotate(160deg) saturate(4);transform:translate(4px,2px) skewX(3deg)}
+  84%{filter:contrast(2.2) brightness(.6);transform:translate(-2px,-4px)}
+}
+.hnet-noise{position:absolute;inset:-8px;z-index:2147481800;pointer-events:none;opacity:.5;mix-blend-mode:screen;background:repeating-linear-gradient(0deg,#ffffff2a 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,#00ffff14 0 2px,#ff00ff14 2px 4px,transparent 4px 9px);animation:hnet-roll .12s steps(2) infinite}
+@keyframes hnet-roll{50%{transform:translateY(-6px) scaleY(1.04)}}
+
+@media(max-width:760px){
+  .hwin{padding:10px;font-size:14px}
+  .hwin-row{grid-template-columns:minmax(0,1fr);gap:.15em}
+  .hwin-row .hwin-hint{grid-column:1}
+  .hg-top{grid-template-columns:minmax(0,1fr)}
+  .hg-big.hg-ava{width:96px;height:96px;font-size:44px}
+  .hnet-opt{grid-template-columns:4ch minmax(0,1fr)}
+  .hnet-bar,.hnet-pct{grid-column:2}
+}
+@media(prefers-reduced-motion:reduce){.hwin:not([hidden]) .hwin-box,.hnet-noise{animation:none}}

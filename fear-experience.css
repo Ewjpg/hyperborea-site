@@ -1,0 +1,80 @@
+/* FEAR: the threads, the title of the fear, and the search in the dark. Monochrome like the dossier. */
+.screen.fear-xp-active{background:#000;border-radius:0;box-shadow:none}
+.screen.fear-xp-active::before,.screen.fear-xp-active::after,.screen.fear-xp-active>.noise,.screen.fear-xp-active>.tracking{display:none!important}
+.fear-xp{position:absolute;inset:0;z-index:41;isolation:isolate;overflow:hidden;background:#000;color:#c9d0da;font:10px/1.8 Arial,Helvetica,sans-serif;letter-spacing:.14em;touch-action:none;user-select:none;-webkit-user-select:none;outline:none}
+.fear-xp[hidden],.fear-xp [hidden]{display:none!important}
+.fear-xp-stage{position:absolute;inset:0;z-index:1;touch-action:none}
+.fear-xp-canvas{display:block;width:100%;height:100%;touch-action:none}
+.fear-xp[data-phase="explore"] .fear-xp-stage{cursor:crosshair}
+.fear-xp.fear-xp-locked .fear-xp-stage{cursor:none}
+.fear-xp-shade{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 18%,rgba(0,0,0,.2) 58%,rgba(0,0,0,.8) 100%)}
+.fear-xp-shade::after{content:'';position:absolute;inset:0;opacity:.055;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.6' filter='url(%23n)'/%3E%3C/svg%3E")}
+.fear-xp-bars i{position:absolute;left:0;right:0;z-index:3;height:0;background:#000;transition:height 1s ease;pointer-events:none}
+.fear-xp-bars i:first-child{top:0}.fear-xp-bars i:last-child{bottom:0}
+.fear-xp[data-phase="opening"] .fear-xp-bars i{height:9%}
+.fear-xp-veil{position:absolute;inset:0;z-index:6;background:#000;opacity:1;pointer-events:none}
+
+.fear-xp-header{position:absolute;z-index:9;inset:max(22px,env(safe-area-inset-top)) 26px auto;display:flex;justify-content:space-between;gap:18px;pointer-events:none}
+.fear-xp button{min-height:44px;padding:11px 16px;border:1px solid #6f7b8c44;border-radius:0;background:#04070b99;color:#a4afbf;font:9px/1.6 Arial,sans-serif;letter-spacing:.13em;cursor:pointer;touch-action:manipulation;pointer-events:auto;transition:border-color .2s,color .2s,opacity .3s}
+.fear-xp button:hover:not(:disabled){border-color:#acb4c2;color:#fff}
+.fear-xp button:focus-visible{outline:2px solid #e8edf4;outline-offset:4px}
+.fear-xp button:disabled{opacity:.4;cursor:default}
+
+/* The name of the fear surfaces out of the black. */
+.fear-xp-title{position:absolute;inset:0;z-index:8;display:grid;place-content:center;text-align:center;pointer-events:none;animation:fear-xp-title 2.8s ease both}
+.fear-xp-title p{margin:0;color:#7d8899;font-size:10px;letter-spacing:.42em}
+.fear-xp-title h2{margin:18px 0 22px;font:400 clamp(72px,13vw,168px)/.9 'FearCreepster','Chiller',fantasy;letter-spacing:.04em;color:#e3e8ef;text-shadow:0 0 40px #b8c9e522}
+@keyframes fear-xp-title{0%{opacity:0;filter:blur(8px)}22%,72%{opacity:1;filter:blur(0)}100%{opacity:0;filter:blur(4px)}}
+
+.fear-xp-hud{position:absolute;inset:0;z-index:7;pointer-events:none}
+.fear-xp-objective,.fear-xp-caption{position:absolute;left:0;right:0;top:18%;margin:0;text-align:center;color:#c6cfdb;letter-spacing:.32em;opacity:0;transition:opacity 1.4s}
+.fear-xp-caption{top:24%;font-size:12px;color:#e2e7ee;letter-spacing:.38em;text-shadow:0 0 18px #000}
+.fear-xp-objective.shown,.fear-xp-caption.shown{opacity:1}
+.fear-xp-reticle{position:absolute;left:50%;top:50%;width:5px;height:5px;margin:-2px;border-radius:50%;background:#eaf3ff99;box-shadow:0 0 10px #c0d7ff40}
+.fear-xp-hint{position:absolute;left:30px;bottom:28px;margin:0;color:#8a98ab;font-size:10px;letter-spacing:.04em}
+.fear-xp-hint span{display:block;color:#5d6b7d;font-size:9px}
+.fear-xp-thumbs{display:none}
+.fear-xp-lock{position:absolute;left:0;right:0;bottom:96px;margin:0;text-align:center;color:#6f7d90;font-size:9px;letter-spacing:.24em;animation:fear-xp-breathe 3.2s ease-in-out infinite}
+.fear-xp.fear-xp-locked .fear-xp-lock,.fear-xp.fear-xp-coarse .fear-xp-lock{display:none}
+@keyframes fear-xp-breathe{0%,100%{opacity:.35}50%{opacity:.85}}
+.fear-xp .fear-xp-listen{position:absolute;right:30px;bottom:28px;padding:15px 20px;background:linear-gradient(90deg,#c5d2e21c calc(var(--cooldown,1)*100%),#02040999 0)}
+.fear-xp-listen b{font-weight:400;color:#7f8b9c}
+/* The flashlight button doubles as its battery gauge. */
+.fear-xp .fear-xp-torch{position:absolute;right:30px;bottom:86px;display:flex;align-items:center;gap:10px;padding:11px 16px}
+.fear-xp-torch em{font-style:normal}
+.fear-xp-torch i{position:relative;display:block;width:42px;height:6px;border:1px solid #8b98aa88}
+.fear-xp-torch i b{position:absolute;left:1px;top:1px;bottom:1px;width:calc(var(--battery,1)*(100% - 2px));background:#c9d3e0}
+.fear-xp-torch[data-state="off"] i b{background:#6c7889}
+.fear-xp .fear-xp-torch[data-state="dead"]{color:#c98a8a;border-color:#c98a8a55}
+.fear-xp-torch[data-state="dead"] i b{background:#a85b5b}
+.fear-xp .fear-xp-touch{position:absolute;left:50%;bottom:20%;transform:translateX(-50%);padding:17px 26px;background:#dfe9f111;color:#ecf2ff;border-color:#e2edfa70;font-size:10px;white-space:nowrap;backdrop-filter:blur(8px);animation:fear-xp-breathe 2.4s ease-in-out infinite}
+.fear-xp-stick{position:absolute;width:104px;height:104px;margin:-52px;border:1px solid #8b98aa55;border-radius:50%;opacity:0;transition:opacity .2s;pointer-events:none}
+.fear-xp-stick.active{opacity:1}
+.fear-xp-stick i{position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px;border-radius:50%;background:#c8d3e233;border:1px solid #c8d3e277}
+
+.fear-xp-pause{position:absolute;inset:0;z-index:12;display:grid;place-items:center;padding:30px;background:#020305cc;backdrop-filter:blur(12px);text-align:center}
+.fear-xp-pause p{margin:0 0 26px;color:#94a1b2;letter-spacing:.38em}
+.fear-xp-pause h2{margin:0 0 30px;font:400 clamp(40px,6vw,64px)/1 Georgia,'Times New Roman',serif;letter-spacing:-.03em;color:#e8ecf2}
+.fear-xp-pause button{display:block;width:min(280px,80vw);margin:10px auto 0}
+.fear-xp .fear-xp-primary{background:#e4e9f0;color:#11151c;border-color:#e4e9f0;padding:17px}
+.fear-xp .fear-xp-primary:hover{background:#fff;color:#000}
+
+/* Leaving: the white flash fades away over the dossier. */
+.fear-xp.fear-xp-leaving{pointer-events:none;opacity:0;transition:opacity .95s ease .05s}
+.fear-xp.fear-xp-leaving .fear-xp-header,.fear-xp.fear-xp-leaving .fear-xp-hud{display:none}
+
+.fear-xp.fear-xp-coarse .fear-xp-keys,.fear-xp.fear-xp-coarse .fear-xp-listen span,.fear-xp.fear-xp-coarse .fear-xp-touch span,.fear-xp.fear-xp-coarse .fear-xp-torch span{display:none}
+.fear-xp.fear-xp-coarse .fear-xp-thumbs{display:block;left:20px;bottom:24px;font-size:9px}
+@media(max-width:700px){
+  .fear-xp-header{inset:max(15px,env(safe-area-inset-top)) 16px auto;gap:12px}
+  .fear-xp button{padding:9px 12px;font-size:8px}
+  .fear-xp .fear-xp-listen{right:18px;bottom:max(20px,env(safe-area-inset-bottom));padding:15px}
+  .fear-xp .fear-xp-torch{right:18px;bottom:calc(max(20px,env(safe-area-inset-bottom)) + 58px)}
+  .fear-xp .fear-xp-touch{bottom:32%;max-width:90%}
+  .fear-xp-hint{left:20px;bottom:max(24px,env(safe-area-inset-bottom))}
+  .fear-xp-objective{top:15%;letter-spacing:.22em}.fear-xp-caption{top:21%;letter-spacing:.24em}
+}
+@media(prefers-reduced-motion:reduce){
+  .fear-xp-title{animation:none}.fear-xp-lock,.fear-xp .fear-xp-touch{animation:none}
+  .fear-xp-bars i,.fear-xp.fear-xp-leaving{transition:none}
+}

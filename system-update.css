@@ -1,0 +1,29 @@
+/* SYSTEM UPDATE (system-update.js): the download panel, the ready screen, and the CRT switching off. */
+.sysupd-panel{position:absolute;z-index:2147482000;right:22px;bottom:22px;display:flex;align-items:center;gap:12px;min-width:260px;padding:12px 16px;border:1px solid #2f6fbf;background:#050c18ee;color:#cfe3ff;font:9px/1.6 'Press Start 2P',monospace;box-shadow:0 0 24px #1d73ff33;cursor:default}
+.sysupd-panel[hidden]{display:none}
+.sysupd-panel.is-ready{cursor:pointer;border-color:#9fd4ff}
+.sysupd-panel b{display:block;font-weight:400;color:#fff}
+.sysupd-panel small{display:block;margin:4px 0 7px;font-size:7px;color:#7fa6d4;letter-spacing:.08em}
+.sysupd-dot{width:8px;height:8px;background:#2f8cff;box-shadow:0 0 10px #2f8cff;animation:sysupd-blink 1s steps(1) infinite}
+.sysupd-bar{position:relative;display:block;height:4px;background:#13233d;overflow:hidden}
+.sysupd-bar>i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#1d73ff,#9fd4ff);box-shadow:0 0 10px #2f8cff;transition:width .3s}
+.sysupd{position:absolute;inset:0;z-index:2147482500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(ellipse at center,#071326,#010308 72%);color:#cfe3ff;font-family:'Press Start 2P',monospace;text-align:center}
+.sysupd[hidden]{display:none}
+.sysupd-mark{width:90px;filter:drop-shadow(0 0 18px #2f8cff);animation:sysupd-pulse 2s ease-in-out infinite}
+.sysupd-kicker{margin:6px 0 0;font-size:9px;letter-spacing:.3em;color:#7fa6d4}
+.sysupd h2{margin:0;font-size:clamp(14px,2.2vw,24px);font-weight:400;color:#fff;text-shadow:0 0 12px #2f8cff}
+.sysupd-log{min-height:66px;font-size:9px;line-height:2.2;color:#9fc2e8;text-align:left}
+.sysupd-bar.big{width:min(420px,70vw);height:6px}
+.sysupd-actions{display:flex;gap:12px;margin-top:8px}
+.sysupd-actions button{padding:12px 16px;border:1px solid #9fd4ff;background:transparent;color:#cfe3ff;font:9px/1 'Press Start 2P',monospace;cursor:pointer}
+.sysupd-actions button[data-install]{background:#1d73ff;border-color:#1d73ff;color:#fff;box-shadow:0 0 18px #1d73ff88}
+.sysupd-actions button:hover,.sysupd-actions button:focus-visible{outline:1px solid #fff;outline-offset:3px}
+/* The CRT switching off: the picture squeezes into a line, the line into a dot, then nothing. */
+.crt-off{position:absolute;inset:0;z-index:2147483200;pointer-events:none;background:#000;animation:crt-off-bg 1s cubic-bezier(.7,0,.3,1) both}
+.crt-off[hidden]{display:none}
+.crt-off::before{content:'';position:absolute;left:50%;top:50%;width:100%;height:100%;translate:-50% -50%;background:#eaf6ff;box-shadow:0 0 30px #bfe3ff;animation:crt-off-line 1s cubic-bezier(.7,0,.3,1) both}
+.crt-off.is-instant,.crt-off.is-instant::before{animation-duration:.01s}
+@keyframes crt-off-bg{0%{background:#0000}20%{background:#000}100%{background:#000}}
+@keyframes crt-off-line{0%{scale:1 1;opacity:0}15%{scale:1 1;opacity:.9}45%{scale:1 .004;opacity:1}75%{scale:.004 .004;opacity:1;border-radius:50%}100%{scale:0 0;opacity:0}}
+@keyframes sysupd-blink{50%{opacity:.2}}
+@keyframes sysupd-pulse{50%{filter:drop-shadow(0 0 30px #2f8cff);scale:1.04}}

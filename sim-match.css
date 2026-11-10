@@ -1,0 +1,17 @@
+/* The AI match (sim-match.js): start button, scoreboard, help line and calls. */
+.sim-match-start{align-self:flex-end;min-height:38px;padding:9px 14px;border:1px solid #3dd2a0;background:#0d3b30;color:#d9fff2;font:700 10px/1 Arial,sans-serif;letter-spacing:.14em;cursor:pointer;box-shadow:0 0 16px #3dd2a033}
+.sim-match-start:hover,.sim-match-start:focus-visible{background:#14574a;outline:none}
+.sim-match-start:disabled{opacity:.5;cursor:default}
+.sim-match-hud{position:absolute;inset:0;z-index:6;pointer-events:none}
+.sim-match-hud[hidden]{display:none}
+.sim-match-score{position:absolute;left:50%;top:12px;translate:-50% 0;display:flex;align-items:center;gap:12px;padding:8px 16px;border:1px solid #ffffff2b;background:#020a0dd9;color:#fff;font:800 14px/1 Arial,sans-serif;letter-spacing:.08em}
+.sim-match-score b{font-size:22px;min-width:70px;text-align:center}
+.sim-match-score .team-a{color:#59b7ff}.sim-match-score .team-b{color:#ff6b6b}
+.sim-match-score output{margin-left:6px;padding-left:12px;border-left:1px solid #ffffff2b;color:#bfe6dc;font-variant-numeric:tabular-nums}
+.sim-match-help{position:absolute;left:50%;bottom:10px;translate:-50% 0;margin:0;padding:6px 12px;background:#020a0dcc;color:#bcd9d3;font:700 9px/1.6 Arial,sans-serif;letter-spacing:.1em;white-space:nowrap}
+.sim-match-call{position:absolute;left:50%;top:42%;translate:-50% -50%;margin:0;color:#fff;font:900 clamp(26px,4vw,52px)/1 Arial,sans-serif;letter-spacing:.06em;text-shadow:0 4px 0 #0008,0 0 24px #3dd2a088;opacity:0;scale:.8;transition:opacity .2s,scale .25s cubic-bezier(.2,1.6,.4,1)}
+.sim-match-call.is-on{opacity:1;scale:1}
+.sim-match-stop{position:absolute;right:12px;top:12px;pointer-events:auto;padding:8px 12px;border:1px solid #ffffff40;background:#020a0dd9;color:#fff;font:700 9px/1 Arial,sans-serif;letter-spacing:.14em;cursor:pointer}
+/* During a match the drawing tools and the plan are out of the way. */
+#simulationView.is-match :is(#simTools,.sim-sidebar,.sim-transport,#simHint){opacity:.25;pointer-events:none}
+#simulationView.is-match #simViewport{outline:2px solid #3dd2a066;outline-offset:-2px}

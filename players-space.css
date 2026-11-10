@@ -1,0 +1,93 @@
+/* One connected volume; the character buttons keep their original listeners. */
+#dbSection[data-directory="players"]{width:min(1240px,100%)}
+#playersRoster.players-space{position:relative;display:block;width:100%;max-width:none;min-width:0;height:clamp(570px,65vh,790px);margin:12px 0 0;padding:0;isolation:isolate;overflow:hidden;border:1px solid #1d2b3d;background:radial-gradient(ellipse at 48% 45%,#0b1421 0,#04070d 55%,#020304 100%);touch-action:pan-y;contain:layout paint}
+#playersRoster.players-space[hidden]{display:none!important}
+.space-backdrop{position:absolute;inset:0;z-index:0;pointer-events:none}
+.space-backdrop canvas{display:block;width:100%;height:100%;pointer-events:none}
+.players-space::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,#07101b00 49.9%,#31548a10 50%,#07101b00 50.1%),linear-gradient(#07101b00 49.9%,#31548a10 50%,#07101b00 50.1%);background-size:80px 80px;opacity:.55}
+.space-hud{position:absolute;top:20px;left:22px;z-index:3;display:flex;gap:9px;align-items:center;pointer-events:none;color:#6683ab;font:8px/1.8 Arial,sans-serif;letter-spacing:.2em}
+.space-hud::before{content:"";display:block;width:5px;height:5px;background:#2d73d8;box-shadow:0 0 13px #1d73ffa3;transform:rotate(45deg)}
+.database .space-shuffle{position:absolute;top:13px;right:15px;z-index:6;min-width:39px;min-height:38px;padding:8px 11px;border:1px solid #345077;background:#08111ce6;color:#adc5e9;font:18px/1 Arial,sans-serif;cursor:pointer;touch-action:manipulation}
+.database .space-shuffle:hover,.database .space-shuffle:focus-visible{border-color:#79a8ef;color:#fff;outline:1px solid #79a8ef;outline-offset:3px;background:#0b1a2e}
+.space-node{--space-card-width:150px;--space-card-height:194px;position:absolute;top:0;left:0;width:var(--space-card-width);height:var(--space-card-height);z-index:2;will-change:transform;transform-origin:50% 50%;pointer-events:auto}
+.space-node:has(button:is(:hover,:focus-visible)){z-index:5}
+#playersRoster.space-ready .space-node>button{position:relative;display:flex;flex-direction:column;align-self:auto;width:100%;height:100%;min-height:0;margin:0;padding:0;text-align:left;overflow:visible;cursor:pointer;border:1px solid #68778578;outline:none;transform:none;box-shadow:0 13px 30px #0009;font-family:Arial,sans-serif;transition:border-color .3s,box-shadow .3s;touch-action:manipulation}
+#playersRoster.space-ready .space-node>button:hover,#playersRoster.space-ready .space-node>button:focus-visible{transform:none;border-color:#b5d3ff;box-shadow:0 0 0 1px #4076ba66,0 20px 38px #000b;outline:1px solid #a5c9ff;outline-offset:5px}
+#playersRoster.space-ready :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art){position:relative;display:block;flex:0 0 140px;height:140px;width:100%;overflow:visible;isolation:isolate}
+#playersRoster.space-ready :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art) img{position:relative;display:block;z-index:3;width:100%;height:100%;object-fit:contain;object-position:50% 100%;transform:scale(1.05);transform-origin:50% 85%;pointer-events:none;transition:transform .55s cubic-bezier(.16,.75,.17,1),filter .55s ease}
+#playersRoster.space-ready .space-node>button:is(:hover,:focus-visible) :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art) img{transform:translateY(-10px) scale(1.25)}
+#playersRoster.space-ready :is(.fear-card-body,.wah-card-body,.frog-card-body,.swarggy-card-body,.new-card-body){position:relative;z-index:4;display:flex;flex:1;min-height:0;flex-direction:column;justify-content:center;gap:5px;width:100%;padding:9px 12px 10px;border-top:1px solid #64779542}
+#playersRoster.space-ready :is(.fear-card-action,.wah-card-action,.frog-card-action,.swarggy-card-action,.new-card-action){display:block;font:7px/1.6 Arial,sans-serif;letter-spacing:.12em;color:#7a8797;white-space:nowrap}
+#playersRoster.space-ready .fear-card-name{font-size:26px;line-height:1.05;letter-spacing:.06em;color:#e1e1e1}
+#playersRoster.space-ready #fearCard,#playersRoster.space-ready .fear-card-body{background:#020203}
+#playersRoster.space-ready .fear-thumbnail{background:#000}
+#playersRoster.space-ready .fear-card-eye{inset:10% -16% 6%;opacity:.48}
+#playersRoster.space-ready #fearCard:is(:hover,:focus-visible) .fear-card-eye{opacity:.9;transform:scale(1.12)}
+#playersRoster.space-ready .fear-thumbnail::after{box-shadow:none;background:linear-gradient(0deg,#020203,transparent 18%)}
+#playersRoster.space-ready .wah-card-name{font:900 20px/1.1 Arial,sans-serif;letter-spacing:-.05em;color:#17191c}
+#playersRoster.space-ready #wahCard,#playersRoster.space-ready .wah-card-body{background:#f2f3f5;color:#17191c}
+#playersRoster.space-ready .wah-card-art{background:radial-gradient(circle at 50% 40%,#fff,#dddfe6)}
+#playersRoster.space-ready .wah-card-art::before{inset:20%;background-size:25px 25px}
+#playersRoster.space-ready .wah-card-index{top:6px;left:7px;font-size:5px;letter-spacing:.1em;color:#656970}
+#playersRoster.space-ready .wah-card-symbol{right:6px;bottom:7px;width:15px;height:15px;color:#30343a}
+#playersRoster.space-ready .wah-card-action{font-size:6px;letter-spacing:.08em;color:#5f646c}
+#playersRoster.space-ready #frogCard,#playersRoster.space-ready .frog-card-body{background:#0c0a07;color:#eadbba}
+#playersRoster.space-ready .frog-card-art{background:radial-gradient(ellipse at 50% 80%,#44321a,#070807 72%)}
+#playersRoster.space-ready .frog-card-art::before{content:"♠";position:absolute;right:5px;top:4px;z-index:1;color:#d3b6765c;font:24px/1 Georgia,serif}
+#playersRoster.space-ready .frog-card-name{font:700 25px/1 Georgia,serif;letter-spacing:.04em;color:#e8d3a2}
+#playersRoster.space-ready .frog-card-action{color:#a79268;font-size:6px;letter-spacing:.15em}
+/* Fallback retains every dossier, even when a device cannot create WebGL. */
+#playersRoster.space-fallback{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));height:auto;min-height:350px;gap:30px;padding:85px 35px 45px;overflow:visible;background:radial-gradient(ellipse at top,#10223e,#02050b)}
+#playersRoster.space-fallback .space-node{position:relative;top:auto;left:auto;justify-self:center;transform:none!important}
+#playersRoster.space-fallback .space-node>button{display:flex;flex-direction:column;width:100%;height:100%;padding:0;overflow:visible}
+#playersRoster.space-fallback :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art){height:140px;min-height:140px}
+#playersRoster.space-fallback :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art) img{width:100%;height:100%;object-fit:contain}
+#playersRoster.space-fallback :is(.fear-card-body,.wah-card-body,.frog-card-body,.swarggy-card-body,.new-card-body){padding:12px}
+#playersRoster.space-fallback :is(.fear-card-name,.wah-card-name,.frog-card-name,.swarggy-card-name,.new-card-name){font-size:21px}
+@media(max-width:760px){
+ #playersRoster.players-space{height:clamp(520px,68vh,660px);margin-top:8px}
+ .space-node{--space-card-width:120px;--space-card-height:161px}
+ #playersRoster.space-ready :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art){height:112px;flex-basis:112px}
+ #playersRoster.space-ready :is(.fear-card-body,.wah-card-body,.frog-card-body,.swarggy-card-body,.new-card-body){padding:8px 9px;gap:5px}
+ #playersRoster.space-ready .fear-card-name{font-size:23px}
+ #playersRoster.space-ready .wah-card-name{font-size:17px}
+ #playersRoster.space-ready .frog-card-name{font-size:22px}
+ #playersRoster.space-ready :is(.fear-card-action,.wah-card-action,.frog-card-action,.swarggy-card-action,.new-card-action){font-size:5px;letter-spacing:.06em}
+ .space-hud{top:16px;left:14px;font-size:6px;letter-spacing:.16em}
+ .database .space-shuffle{top:10px;right:10px;min-height:36px;min-width:36px;font-size:17px}
+ #playersRoster.space-fallback{grid-template-columns:repeat(2,minmax(0,1fr));padding:75px 12px 30px;gap:32px 12px;height:auto}
+ #playersRoster.space-fallback .space-node:last-of-type:nth-of-type(odd){grid-column:1/-1}
+}
+@media(max-width:370px){.space-node{--space-card-width:108px;--space-card-height:151px}#playersRoster.space-ready :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art){height:104px;flex-basis:104px}}
+@media(prefers-reduced-motion:reduce){.space-node{will-change:auto}#playersRoster.space-ready :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art) img{transition:none}#playersRoster.space-ready .space-node>button:is(:hover,:focus-visible) :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art) img{transform:scale(1.07)}}
+#openPlayers .db-players-mark{width:34px;height:34px;object-fit:contain;filter:brightness(2) drop-shadow(0 0 6px #1b65d840)}
+/* The directory is a window into the scene, with no surrounding card frame. */
+#playersRoster.players-space{border:0;background:transparent;touch-action:none;contain:layout paint;cursor:grab;outline:none}
+#playersRoster.players-space::before{display:none}#playersRoster.players-space:focus-visible{outline:1px solid #44668f66;outline-offset:6px}
+#playersRoster.players-space.is-dragging{cursor:grabbing}#playersRoster.players-space .space-node>button{touch-action:none}
+.space-controls{position:absolute;top:10px;right:0;z-index:20;display:flex;align-items:center;gap:5px;padding:5px;background:#03070bc9;border-radius:2px;cursor:default;touch-action:manipulation}
+.database .space-controls button{position:static;min-width:35px;min-height:35px;padding:6px;border:1px solid #38517288;background:#07111bc9;color:#b4c8e5;font:18px/1 Arial,sans-serif;cursor:pointer;touch-action:manipulation}
+.database .space-controls button:is(:hover,:focus-visible){border-color:#83aef0;outline:1px solid #83aef0;outline-offset:2px;background:#11233d}.space-zoom{min-width:42px;text-align:center;font:9px/1.6 Arial,sans-serif;color:#7f9abf}
+@media(max-width:600px){.space-hud{left:3px;top:23px}.space-controls{gap:3px}.database .space-controls button{min-width:32px;min-height:36px;font-size:17px}.space-zoom{min-width:32px;font-size:8px}}
+#playersRoster.space-fallback{cursor:default;background:none}#playersRoster.space-fallback .space-controls{display:none}
+
+/* The fourth dossier uses the same projected hit target and portrait height. */
+#playersRoster.space-ready #swarggyCard,#playersRoster.space-ready .swarggy-card-body{background:#14050a;color:#f6dde0}
+#playersRoster.space-ready .swarggy-card-art{background:radial-gradient(ellipse at 50% 72%,#7a0d22,#2a050d 52%,#0b0205 82%)}
+#playersRoster.space-ready .swarggy-card-index{top:6px;left:7px;font-size:5px;letter-spacing:.1em}
+#playersRoster.space-ready .swarggy-card-name{font:500 19px/1.1 Arial,sans-serif;letter-spacing:-.04em;white-space:nowrap;overflow-wrap:normal;color:#ffe3e6}
+#playersRoster.space-ready .swarggy-card-action{font-size:6px;color:#d98892;letter-spacing:.08em}
+@media(max-width:760px){#playersRoster.space-ready .swarggy-card-name{font-size:15px}#playersRoster.space-ready .swarggy-card-action{font-size:5px}}
+
+
+#playersRoster.players-space.space-expanded{height:clamp(620px,72vh,820px)}
+@media(max-width:760px){#playersRoster.players-space.space-expanded{height:620px;min-height:620px}}
+/* Compact directory labels preserve complete Cyrillic names on each node. */
+#playersRoster.space-ready .new-card-name{font-size:15px;line-height:1.08;letter-spacing:-.035em;overflow-wrap:normal;word-break:normal}
+#playersRoster.space-ready .new-card-body{padding:6px 8px;gap:3px;justify-content:center}
+#playersRoster.space-ready .np-card-country{gap:5px;font-size:8px;line-height:1.2}
+#playersRoster.space-ready .np-card-country .np-flag{width:15px;height:10px;flex-basis:15px}
+#playersRoster.space-ready .np-card-country .np-flag-jp::after{width:6px;height:6px;left:4.5px;top:2px}
+#playersRoster.space-ready .new-card-action{display:none}
+#playersRoster.space-fallback .new-card-name{font-size:17px;overflow-wrap:normal;word-break:normal}
+@media(max-width:760px){#playersRoster.space-ready .new-card-name{font-size:13px;line-height:1.07}#playersRoster.space-ready .new-card-body{padding:5px 7px;gap:3px}#playersRoster.space-ready .np-card-country{font-size:7px}}

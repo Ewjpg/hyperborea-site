@@ -1,0 +1,9 @@
+INTERLOCK / Белая сборка — original instrumental for wahhiyyy, Hyperborea.
+Created for this project on 2026-10-22 using original composition and synthesis.
+No third-party musical recordings or samples are included.
+The composition, rendered audio and generator source may be used, modified and
+redistributed with this project and its derivatives.
+
+100 seconds / 96 BPM / D minor / stereo MP3.
+Piano, chamber strings, plucked glass, warm bass and restrained electronic drums.
+Generator source: scripts/compose-wahhiyyy-ost.py.

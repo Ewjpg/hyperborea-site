@@ -1,0 +1,65 @@
+/* A white threshold, then either a dimensional vision or a playable cube. */
+.screen.kle-intro-active{background:#fff;box-shadow:none}
+.screen.kle-intro-active::before,.screen.kle-intro-active::after,.screen.kle-intro-active>.noise,.screen.kle-intro-active>.tracking{display:none!important}
+.kle-experience{position:absolute;inset:0;z-index:41;isolation:isolate;overflow:hidden;background:#fff;color:#263b59;font-family:Arial,sans-serif;touch-action:none}
+.kle-experience[hidden],.kle-experience [hidden]{display:none!important}
+.kle-scene-stage{position:absolute;inset:0;z-index:1;overflow:hidden;touch-action:none}
+.kle-scene-stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.kle-experience[data-variant="rubik"] .kle-scene-stage{bottom:202px}
+.kle-gate{position:absolute;inset:0;z-index:3;display:block;width:100%;height:100%;padding:0;border:0;background:#fff;color:#55708f;cursor:pointer;touch-action:manipulation}
+.kle-gate>span{position:absolute;left:50%;bottom:16%;transform:translateX(-50%);width:80%;text-align:center;font:10px/1.8 Arial,sans-serif;letter-spacing:.12em}
+.kle-gate>i{position:absolute;left:50%;bottom:10.5%;transform:translateX(-50%);font:20px/1 Arial,sans-serif;font-style:normal;color:#8faacc}
+.kle-gate:focus-visible{outline:none!important}.kle-gate:focus-visible>span{outline:2px solid #8cb2e8;outline-offset:10px}
+.kle-intro-header{position:absolute;z-index:5;inset:max(22px,env(safe-area-inset-top)) 26px auto;display:flex;align-items:center;justify-content:space-between;gap:18px;pointer-events:none}
+.kle-intro-header button{pointer-events:auto;min-height:44px;padding:10px 17px;border:1px solid #bfcee0;border-radius:0;background:#ffffffed;box-shadow:0 5px 20px #1c468507;color:#365578;font:9px/1.8 Arial,sans-serif;letter-spacing:.05em;cursor:pointer;touch-action:manipulation}
+.kle-experience button:focus-visible{outline:2px solid #4c86d8;outline-offset:4px}
+.kle-experience button:disabled{opacity:.4;cursor:default}
+.kle-intro-header button:hover:not(:disabled){background:#edf4ff;border-color:#5c8dcc}
+.kle-cube-controls{position:absolute;z-index:4;bottom:max(18px,env(safe-area-inset-bottom));left:50%;width:min(560px,calc(100% - 40px));transform:translateX(-50%);text-align:center;background:#fff}
+#kleCubeStatus{min-height:19px;margin:0 0 12px;color:#43638b;font:11px/1.7 Arial,sans-serif}
+.kle-face-controls{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:0 0 9px}
+.kle-face-controls button{position:relative;display:flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:7px 5px;border:1px solid #d0dbe8;background:#fff;color:#5e718b;font:10px/1.7 Arial,sans-serif;cursor:pointer;touch-action:manipulation}
+.kle-face-controls button::before{content:'';width:7px;height:7px;border:1px solid #aab7ca;background:var(--face-color);border-radius:2px}
+[data-kle-face="U"]{--face-color:#fff}[data-kle-face="D"]{--face-color:#f3ce50}[data-kle-face="F"]{--face-color:#2474e9}[data-kle-face="B"]{--face-color:#46aa8c}[data-kle-face="L"]{--face-color:#f3954d}[data-kle-face="R"]{--face-color:#e24e52}
+.kle-face-controls button[aria-pressed="true"]{color:#1751a3;border-color:#6d9fdf;background:#ecf3ff}
+.kle-turn-controls{display:grid;grid-template-columns:60px minmax(0,1fr) 60px;gap:9px}
+.kle-turn-controls button{min-height:42px;border:1px solid #b9cbe4;background:#f7faff;color:#2c5c9e;font:9px/1.5 Arial,sans-serif;letter-spacing:.06em;cursor:pointer;touch-action:manipulation}
+#kleTurnLeft,#kleTurnRight{font:26px/1 Arial,sans-serif}
+.kle-cube-hint{margin:10px 0 0;font:10px/1.65 Arial,sans-serif;color:#8191a7}
+.kle-unavailable{position:absolute;inset:45% 20px auto;margin:0;text-align:center;color:#6c7f98;font:12px/1.8 Arial,sans-serif}
+
+/* Shared outline, stacked side faces and a blue underside add true CSS depth. */
+.wah-puzzle-overlay{z-index:43;perspective:1000px;perspective-origin:50% 45%}
+.wah-piece-side{position:absolute;inset:0;clip-path:var(--piece-clip);backface-visibility:visible}
+.wah-piece-depth{background:linear-gradient(135deg,#b6d3f6,#447fc5)!important;transform:translateZ(-36px)}
+.wah-piece-face{transform:translateZ(2px)}
+.wah-piece-face::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,#fff2,transparent 42%,#195aa311)}
+
+.kle-vision-fallback{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,#eaf3ff55,transparent 65%),#fff;overflow:hidden}
+.kle-fallback-eye{position:absolute;width:min(90%,680px);height:75%;left:50%;top:5%;transform:translateX(-50%);filter:drop-shadow(0 10px 16px #1d416f10);animation:kle-fallback-eye 4.9s both}
+.kle-fallback-pitch{position:absolute;inset:22% 12% 20%;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;perspective:700px;transform:rotateX(35deg) rotateZ(-14deg);animation:kle-fallback-pitch 4.9s both}
+.kle-fallback-pitch i{position:relative;display:block;background:linear-gradient(135deg,#d7e8fe,#eff6ff);border:1px solid #74a1da;box-shadow:3px 5px #447bbd;clip-path:polygon(0 0,38% 0,38% 8%,62% 8%,62% 0,100% 0,100% 40%,92% 40%,92% 60%,100% 60%,100% 100%,62% 100%,62% 92%,38% 92%,38% 100%,0 100%);animation:kle-fallback-fragment 4.9s both;--x:0;--y:0}
+.kle-fallback-pitch i:nth-child(3n+1){--x:-1}.kle-fallback-pitch i:nth-child(3n){--x:1}.kle-fallback-pitch i:nth-child(-n+3){--y:-1}.kle-fallback-pitch i:nth-child(n+7){--y:1}
+.kle-fallback-key{position:absolute;width:min(80%,520px);height:70%;top:15%;left:50%;transform:translateX(-50%);filter:drop-shadow(8px 12px 0 #bdd3f155);animation:kle-fallback-lock 4.9s both}
+@keyframes kle-fallback-eye{0%,18%{opacity:1;scale:1}28%,100%{opacity:0;scale:2}}
+@keyframes kle-fallback-pitch{0%,19%{opacity:0;scale:.4}30%,70%{opacity:1;scale:1}84%,100%{opacity:0;scale:1.1}}
+@keyframes kle-fallback-fragment{0%,48%{translate:0 0;rotate:0deg}72%,100%{translate:calc(var(--x)*100px) calc(var(--y)*90px);rotate:calc(var(--x)*30deg)}}
+@keyframes kle-fallback-lock{0%,68%{opacity:0;scale:.6;rotate:-10deg}88%,100%{opacity:1;scale:1;rotate:0deg}}
+@media(max-width:700px){.kle-intro-header{inset:max(15px,env(safe-area-inset-top)) 16px auto;gap:12px}.kle-intro-header button{min-height:44px;padding:9px 12px;font-size:8px}.kle-gate>span{font-size:10px;letter-spacing:.06em}.kle-experience[data-variant="rubik"] .kle-scene-stage{bottom:234px}.kle-cube-controls{bottom:max(14px,env(safe-area-inset-bottom));width:calc(100% - 32px)}.kle-face-controls{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.kle-face-controls button{min-height:34px}.kle-turn-controls{grid-template-columns:54px minmax(0,1fr) 54px}.kle-cube-hint{font-size:10px;margin-top:9px}#kleCubeStatus{font-size:10px;margin-bottom:9px}.kle-fallback-pitch{inset:28% 8% 25%}}
+@media(prefers-reduced-motion:reduce){.kle-vision-fallback *{animation:none!important}.kle-fallback-pitch,.kle-fallback-key{display:none}.kle-gate>i{display:none}}
+
+/* Transitions: the white gate dissolves, the cube controls rise in, and the whole scene fades into the profile. */
+.kle-gate{transition:opacity .5s ease}
+.kle-gate.kle-gate-leaving{opacity:0;pointer-events:none}
+.kle-gate>span,.kle-gate>i{transition:transform .5s ease,opacity .35s ease}
+.kle-gate.kle-gate-leaving>span,.kle-gate.kle-gate-leaving>i{transform:translate(-50%,-16px);opacity:0}
+.kle-cube-controls:not([hidden]){animation:kle-controls-in .65s .3s both}
+@keyframes kle-controls-in{from{opacity:0;transform:translate(-50%,26px)}to{opacity:1;transform:translateX(-50%)}}
+.kle-experience.kle-leaving{pointer-events:none;opacity:0;transform:scale(1.04);filter:blur(6px);transition:opacity .74s ease,transform .74s cubic-bezier(.2,.7,.2,1),filter .74s ease}
+.kle-experience.kle-leaving .kle-intro-header{opacity:0;transition:opacity .25s ease}
+@media(hover:none){.kle-key-hint{display:none}}
+@media(prefers-reduced-motion:reduce){.kle-cube-controls:not([hidden]){animation:none}}
+
+/* Kle's metavision film fills the white stage; portrait screens show it whole. */
+.kle-metavision-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#f3f6fd}
+@media(max-aspect-ratio:4/3){.kle-metavision-video{object-fit:contain}}

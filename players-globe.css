@@ -1,0 +1,29 @@
+/* PLAYERS as a planet (players-globe.js). The top panel goes: only the back button stays, floating over the planet. */
+.database:has(#dbSection[data-directory="players"]:not([hidden])):has(#playersRoster:not([hidden]))>.db-header{display:none}
+#dbSection[data-directory="players"]:has(#playersRoster:not([hidden])) .db-kicker,#dbSection[data-directory="players"]:has(#playersRoster:not([hidden])) .db-title{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+#dbSection[data-directory="players"]:has(#playersRoster:not([hidden])){position:relative;width:100%}
+#dbSection[data-directory="players"]:has(#playersRoster:not([hidden])) .db-section-top{position:absolute;z-index:12;left:22px;top:18px;margin:0;padding:0;border:0}
+#dbSection[data-directory="players"]:has(#playersRoster:not([hidden])) #dbReturn{font-size:0;min-height:40px;padding:9px 14px;border-color:#345077;background:#08111ce6;color:#adc5e9}
+#dbSection[data-directory="players"]:has(#playersRoster:not([hidden])) #dbReturn::before{content:'← НАЗАД';font:10px/1.8 Arial,sans-serif;letter-spacing:.16em}
+#playersRoster.players-globe{height:calc(100vh - 40px);height:calc(100dvh - 40px);min-height:520px;margin:0;border:0;background:radial-gradient(ellipse at 50% 50%,#0b1830 0%,#050a15 55%,#020409 100%)}
+#playersRoster.players-globe .space-hud{top:auto;bottom:20px}
+#playersRoster.players-globe.is-dragging{cursor:grabbing}
+#playersRoster.players-globe.space-ready{cursor:grab}
+/* Cards on the far side of the planet fade out and cannot be clicked. */
+#playersRoster.players-globe .space-node{transition:opacity .35s}
+#playersRoster.players-globe .space-node.is-far{opacity:0;pointer-events:none}
+/* The entrance: through the Blue Lock mark. */
+.globe-intro{position:absolute;inset:0;z-index:20;display:grid;place-items:center;pointer-events:none;background:radial-gradient(circle,#0b1a33,#02050b 70%)}
+.globe-intro[hidden]{display:none}
+.globe-intro img{width:min(34vmin,260px);height:auto;filter:drop-shadow(0 0 30px #1d73ff)}
+@media(max-width:700px){#dbSection[data-directory="players"]:has(#playersRoster:not([hidden])) .db-section-top{left:12px;top:12px}#playersRoster.players-globe{height:calc(100dvh - 24px)}}
+/* Dossiers have their own back button and sound slider, so the database's top panel is hidden in all of them. */
+.database:has(article[id$="Dossier"]:not([hidden]))>.db-header{display:none}
+/* Country names on the planet, at the foot of each pin. */
+.globe-country{position:absolute;left:0;top:0;z-index:2;padding:2px 6px;border-radius:3px;background:#05102acc;border:1px solid #9cc2ff55;color:#dbe9ff;font:700 9px/1.4 Arial,sans-serif;letter-spacing:.18em;white-space:nowrap;pointer-events:none;transition:opacity .35s}
+.globe-country.is-far{opacity:0}
+#playersRoster:not(.space-ready) .globe-country{display:none}
+/* The planet fills the whole database area (no cut-off edge), and the page under it does not scroll. */
+.database:has(#dbSection[data-directory="players"]:not([hidden])):has(#playersRoster.players-globe:not([hidden])){overflow:hidden!important;padding:0!important}
+#dbSection[data-directory="players"]:has(#playersRoster.players-globe:not([hidden])){position:static!important;padding:0!important;margin:0!important;width:auto!important}
+#playersRoster.players-globe{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;min-height:0!important;margin:0!important}

@@ -1,0 +1,8 @@
+Звуки для новелл в разделе LORE (lore-novel.js).
+
+kids-tokyo.ogg — «Kids playing janken, Tokyo area, March 2015», автор Nesnad, CC BY-SA 4.0.
+  https://commons.wikimedia.org/wiki/File:Kidsplayingjanken-Tokyoarea-march2015.ogg
+ball-kick.ogg — «Soccer kick effect», автор Frogfriend99, CC BY-SA 3.0.
+  https://commons.wikimedia.org/wiki/File:Soccer_kick_effect.ogg
+
+Обе лицензии требуют указывать автора и распространять изменённые версии под той же лицензией.

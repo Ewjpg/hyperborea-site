@@ -1,0 +1,81 @@
+/* Mobile layout also covers phones held sideways. */
+@media (max-width:700px), (pointer:coarse) and (max-width:950px){
+  .screen{height:var(--app-height,100dvh);min-height:0;border-radius:0}
+  .database{padding: max(20px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));-webkit-overflow-scrolling:touch;scroll-padding-block:100px 28px}
+  .db-header{gap:12px;align-items:center}
+  .db-path{font-size:8px;line-height:1.8;min-width:0;flex:1}
+  .database .db-back{min-height:48px;font-size:8px;padding:12px;line-height:1.6;max-width:52%}
+  .db-view{padding:28px 0;width:100%}
+  .db-grid{grid-template-columns:1fr;gap:14px}
+  .database .db-card{min-height:168px;padding:22px;gap:14px}
+  .db-card-description{font-size:16px}
+  .db-card-open{font-size:8px;line-height:1.8}
+  .db-caption,.db-kicker{font-size:8px;line-height:2}
+  .db-footer{font-size:7px;flex-wrap:wrap}
+  .players-roster{grid-template-columns:minmax(0,380px);justify-content:center;width:100%}
+  .fear-thumbnail{height:clamp(230px,65vw,320px)}
+  .fear-card-action{font-size:11px}
+  .database.fear-theme{--fear-page-gutter:max(18px,env(safe-area-inset-left),env(safe-area-inset-right));padding-top:0}
+  .fear-theme>.db-header{padding-top:max(12px,env(safe-area-inset-top));padding-bottom:12px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .fear-theme .db-path{font-size:9px;letter-spacing:.06em}
+  .fear-dossier{padding:12px 0 30px;min-height:0}
+  .fear-file-header{margin-bottom:14px}
+  .fear-profile{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:0 12px;min-height:0;align-items:center}
+  .fear-identity{display:contents}
+  .fear-title{grid-column:1;grid-row:1;align-self:end;font-size:clamp(64px,20vw,112px);line-height:1.05;margin:0 0 12px;max-width:100%}
+  .fear-player-label{grid-column:1;grid-row:2;align-self:start;justify-self:start;font-size:10px;letter-spacing:.15em;margin:0;padding:6px 0 6px 10px}
+  .fear-rule{display:none}
+  .fear-hero-art{grid-column:2;grid-row:1 / span 2;min-height:0;height:clamp(200px,58vw,300px);width:100%;overflow:hidden}
+  .fear-hero-art img{height:100%;width:100%}
+  .fear-portrait-echo{font-size:clamp(110px,36vw,230px);top:16%}
+  .fear-portrait-caption{left:10%;right:10%;bottom:4px}
+  .fear-portrait-caption span:first-child{font-size:18px}
+  .fear-portrait-caption span:last-child{font-size:7px;letter-spacing:.05em}
+  .fear-music-controls{grid-column:1 / -1;grid-row:3;display:flex;flex-wrap:nowrap;gap:20px;max-width:none;margin:24px 0 0}
+  .fear-music-controls button{min-height:48px;min-width:88px;font-size:11px}
+  .fear-music-controls label{flex:1;min-width:0;font-size:10px;gap:2px 10px}
+  .fear-music-controls input{width:100%;height:44px;touch-action:pan-y}
+  .fear-music-controls output{font-size:12px}
+  .fear-quick-facts{grid-column:1 / -1;grid-row:4;gap:12px;margin:20px 0 0;padding:16px 0}
+  .fear-quick-facts dt{font-size:9px;letter-spacing:.06em}
+  .fear-quick-facts dd{font-size:12px;letter-spacing:0}
+  .fear-section-nav{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:22px}
+  .fear-section-nav button{flex-direction:column;justify-content:center;gap:6px;min-height:74px;padding:10px 4px;border-bottom:0;border-right:1px solid #252525;font-size:9px;letter-spacing:0;text-align:center}
+  .fear-section-nav button:last-child{border-right:0}
+  .fear-section-nav button span:first-child{font-size:24px}
+  .fear-section-nav button span:last-child{display:none}
+  .fear-scroll-cue{padding-top:18px;font-size:20px}
+  .fear-details{grid-template-columns:1fr;gap:18px;padding-top:24px;margin-top:24px}
+  .fear-stats-cell,.fear-description-cell,.fear-weapon-cell{padding:18px}
+  .fear-radar{margin-bottom:18px}
+  .fear-ratings{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 12px}
+  .fear-ratings label{font-size:11px;gap:6px}
+  .fear-ratings input{height:48px;font-size:16px}
+  .fear-cell-heading{font-size:10px;letter-spacing:.08em}
+  .fear-description-cell{min-height:0}
+  #fearDescription,#fearWeapon{font-size:16px;line-height:1.8;min-height:240px;padding:14px;resize:vertical}
+  .fear-save-state,.fear-editor-footer>span{font-size:11px;letter-spacing:0}
+  .fear-weapon-cell{grid-template-columns:1fr;gap:18px;margin-top:18px}
+  .fear-weapon-heading{display:flex;align-items:center;gap:18px;min-height:0;padding:0}
+  .fear-weapon-number{font-size:60px}
+  .fear-weapon-heading h3{margin:0;font-size:12px}
+  .fear-weapon-rule{margin-left:auto}
+  .fear-stats-cell,.fear-description-cell,.fear-weapon-cell{scroll-margin-top:100px}
+  .fear-watchers{opacity:.85}
+}
+@media (hover:none) and (pointer:coarse){
+  .noise{animation-duration:.6s;opacity:.12}
+  .fear-hero-art img{animation:none}
+  .fear-player-card:hover .fear-thumbnail img{transform:scale(1.02)}
+  .fear-player-card:active .fear-thumbnail img{transform:scale(1.07)}
+  .glitch-band:nth-child(even){filter:contrast(1.5)}
+  .screen.system-switching>.database{will-change:transform}
+  button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+}
+@media (max-height:500px) and (orientation:landscape){
+  .connection-start{gap:10px;padding:12px}.connection-emblem{width:75px}
+  .center{padding-block:60px 20px}.top{top:max(10px,env(safe-area-inset-top))}
+  .enter{min-height:44px;padding:12px 16px}.divider{margin:10px 0 18px}
+  .fear-theme>.db-header{padding-top:8px;padding-bottom:8px}
+  .fear-profile{max-width:650px;margin-inline:auto}
+}

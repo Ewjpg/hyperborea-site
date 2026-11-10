@@ -1,0 +1,56 @@
+/* Roster cards as collectible foil cards (player-foil.js adds the rating corner, number, callsign and sheen).
+   Each card gets --ink / --accent / --deep. This layer sits over players-space.css and the cards' own styles,
+   so backgrounds and colours here are marked !important on purpose. Only the 3D roster (space-ready) is restyled. */
+#playersRoster.space-ready .space-node{perspective:650px}
+#playersRoster.space-ready .space-node>button.foil-card{--tilt:0deg;--tilt-x:0;--tilt-y:0;--foil-x:50%;--foil-y:30%;
+  border:0!important;border-radius:12px;overflow:visible;color:#fff!important;
+  background:linear-gradient(160deg,var(--accent) 0%,var(--deep) 48%,#06080c 100%)!important;
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 30%,transparent),0 16px 30px #000a!important;
+  rotate:var(--tilt-x) var(--tilt-y) 0 var(--tilt);transition:rotate .35s cubic-bezier(.2,.8,.3,1),box-shadow .3s}
+#playersRoster.space-ready .space-node>button.foil-card:is(:hover,:focus-visible){outline:none!important;transition:rotate .08s linear,box-shadow .3s;
+  box-shadow:0 0 0 1px var(--ink),0 0 22px color-mix(in srgb,var(--accent) 55%,transparent),0 20px 38px #000c!important}
+/* The inner frame with a fine diagonal pattern in the card's colour. */
+#playersRoster.space-ready .foil-card::before{content:'';position:absolute;z-index:1;inset:5px;border-radius:8px;pointer-events:none;
+  border:1px solid color-mix(in srgb,var(--ink) 40%,transparent);
+  background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--ink) 8%,transparent) 0 2px,transparent 2px 8px),linear-gradient(180deg,transparent 45%,#000c 85%)}
+/* The portrait stays inside the inner frame. */
+#playersRoster.space-ready .foil-card :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art){background:none!important;border:0!important;box-shadow:none!important;overflow:hidden!important;margin:5px 5px 0;width:calc(100% - 10px)!important;border-radius:8px 8px 0 0}
+#playersRoster.space-ready .foil-card :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art)::before,
+#playersRoster.space-ready .foil-card :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art)::after{display:none!important}
+/* The portrait, shifted right so the rating corner stays clear. */
+#playersRoster.space-ready .foil-card :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art) img{z-index:3;transform:translate(14%,4%) scale(1);filter:drop-shadow(0 10px 10px #000c)!important}
+#playersRoster.space-ready .space-node>button.foil-card:is(:hover,:focus-visible) :is(.fear-thumbnail,.wah-card-art,.frog-card-art,.swarggy-card-art,.new-card-art) img{transform:translate(14%,0) scale(1.08)}
+/* Repeated information goes: the country is the chip, the action is the card itself; old decorations make way. */
+#playersRoster.space-ready .foil-card :is(.roster-country,.np-card-country,.fear-card-action,.wah-card-action,.frog-card-action,.swarggy-card-action,.new-card-action,.wah-card-index,.swarggy-card-index,.fear-card-eye,.wah-card-symbol,.frog-card-suit,.np-card-decoration,.minami-card-bloom){display:none!important}
+#playersRoster.space-ready .foil-card .player-country-code{left:auto;right:9px;top:9px;z-index:5;padding:3px 5px;border-radius:4px;background:#000b;border:1px solid #ffffff33;color:#fff;font-size:8px}
+#playersRoster.space-ready .foil-card .club-badge{top:30px;right:9px;width:22px;height:22px;z-index:5}
+/* Rating corner, top left: Overall, then positions. */
+.foil-corner{display:none}
+#playersRoster.space-ready .foil-card .foil-corner{position:absolute;z-index:5;left:7px;top:7px;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:38px;padding:5px 4px 5px;border-radius:7px;pointer-events:none;text-shadow:0 2px 0 #000a;background:linear-gradient(180deg,#000b,#0006);box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 28%,transparent)}
+#playersRoster.space-ready .foil-ovr{font:900 24px/1 Arial,sans-serif;letter-spacing:-.04em;color:#fff}
+#playersRoster.space-ready .foil-ovr-label{font:700 6px/1 Arial,sans-serif;letter-spacing:.2em;color:var(--ink)}
+#playersRoster.space-ready .foil-positions{margin-top:5px;padding:2px 5px;border-radius:3px;background:color-mix(in srgb,var(--ink) 22%,#0009);font:700 7px/1.4 Arial,sans-serif;letter-spacing:.08em;color:#fff;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.foil-number{display:none}
+#playersRoster.space-ready .foil-card .foil-number{position:absolute;z-index:2;right:8px;bottom:-4px;display:block;font:900 52px/1 Georgia,serif;letter-spacing:-.06em;color:color-mix(in srgb,var(--ink) 20%,transparent);pointer-events:none}
+/* Name and callsign at the bottom. */
+#playersRoster.space-ready .foil-card :is(.fear-card-body,.wah-card-body,.frog-card-body,.swarggy-card-body,.new-card-body){z-index:4;gap:2px;justify-content:flex-end;padding:0 12px 11px;background:none!important;border:0!important;color:#fff!important}
+#playersRoster.space-ready .foil-card [data-player-name]{font:800 15px/1.08 Arial,sans-serif!important;letter-spacing:-.02em!important;color:#fff!important;text-shadow:0 2px 0 #000;text-transform:none!important}
+.foil-callsign{display:none}
+#playersRoster.space-ready .foil-card .foil-callsign{display:block;font:700 6.5px/1.5 Arial,sans-serif;letter-spacing:.26em;color:var(--ink);text-transform:uppercase}
+#playersRoster.space-ready .foil-card .foil-callsign:empty{display:none}
+/* The holographic sheen that follows the pointer. */
+.foil-sheen{display:none}
+#playersRoster.space-ready .foil-card .foil-sheen{position:absolute;z-index:7;inset:0;display:block;border-radius:12px;pointer-events:none;mix-blend-mode:color-dodge;opacity:0;transition:opacity .3s;
+  background:radial-gradient(circle at var(--foil-x) var(--foil-y),#ffffffb0 0%,#fff0 34%),linear-gradient(115deg,#ff2d95 0%,#ffd400 22%,#00e1ff 44%,#7a5cff 66%,#ff2d95 88%);background-size:100% 100%,260% 260%;background-position:0 0,var(--foil-x) var(--foil-y)}
+#playersRoster.space-ready .space-node>button.foil-card:is(:hover,:focus-visible) .foil-sheen{opacity:.45}
+@media(prefers-reduced-motion:reduce){#playersRoster.space-ready .space-node>button.foil-card{rotate:none;transition:none}}
+
+/* A gradient of its own for every card. */
+#playersRoster.space-ready #fearCard.foil-card{background:linear-gradient(100deg,#2b2b2b 0%,#8a8a8a 18%,#3a3a3a 34%,#bdbdbd 52%,#2a2a2a 70%,#0b0b0b 100%)!important}
+#playersRoster.space-ready #wahCard.foil-card{background:radial-gradient(circle at 30% 18%,#7fb0ff 0%,#2665d7 32%,#0c2257 66%,#050b1c 100%)!important}
+#playersRoster.space-ready #frogCard.foil-card{background:linear-gradient(145deg,#f6dc93 0%,#b8892f 26%,#5a3d10 52%,#c9a046 72%,#1d1306 100%)!important}
+#playersRoster.space-ready #swarggyCard.foil-card{background:radial-gradient(ellipse at 50% 110%,#ff3b53 0%,#b3122b 30%,#4a0815 62%,#0e0205 100%)!important}
+#playersRoster.space-ready #emilianoCard.foil-card{background:conic-gradient(from 210deg at 70% 25%,#ff7ad9,#8a5cc7,#3b1d66,#c7a4ef,#ff7ad9)!important}
+#playersRoster.space-ready #yoruCard.foil-card{background:radial-gradient(circle at 80% 15%,#cfe2ff 0 1.5%,transparent 2%),radial-gradient(circle at 25% 30%,#cfe2ff 0 1%,transparent 1.4%),linear-gradient(180deg,#0a1630 0%,#1f3d70 45%,#36588e 70%,#0b1222 100%)!important}
+/* [ BACK TO TERMINAL ] lives only in the database's main menu: hidden in the players' list and in every dossier. */
+.database:has(#dbSection[data-directory="players"]:not([hidden]))>.db-header #back,.database:has(article[id$="Dossier"]:not([hidden]))>.db-header #back{display:none}

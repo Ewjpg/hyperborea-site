@@ -1,0 +1,9 @@
+CHECKMATE / Puzzle Drive — original instrumental for wahhiyyy, Hyperborea.
+Created for this project using original composition and synthesis.
+No third-party musical recordings or samples are included.
+The composition, rendered audio and generator source may be used, modified and
+redistributed with this project and its derivatives.
+
+90 seconds / 128 BPM / D minor / stereo MP3.
+Piano, staccato strings, interlocking motifs, bass and electronic drums.
+Generator: scripts/compose-wahhiyyy-checkmate.py (Python + numpy + FFmpeg).

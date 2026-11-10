@@ -1,0 +1,48 @@
+/* The terminal's new entrance (terminal-intro.js) and the CRT glass over the whole screen.
+   1. Power-on: the tube lights as a thin white line that opens into the picture.
+   2. Signal: the Blue Lock mark flickers through the static, then opens like a door into the system.
+   3. Boot: BIOS lines and a login that is refused twice before access is granted (index.html's boot steps). */
+
+/* ── CRT glass: rounded corners, darker edges and a soft reflection make the screen feel slightly convex ── */
+.crt-glass{position:absolute;inset:0;z-index:2147483000;pointer-events:none;border-radius:inherit;
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 50%,transparent 62%,#00000059 88%,#000000a6 100%),
+    radial-gradient(ellipse 55% 35% at 28% 14%,#ffffff12,transparent 70%),
+    linear-gradient(180deg,#ffffff08,transparent 24%);
+  box-shadow:inset 0 0 90px #000000b3,inset 0 0 0 1px #ffffff10}
+.crt-glass::after{content:'';position:absolute;inset:0;border-radius:inherit;background:repeating-linear-gradient(0deg,#ffffff05 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+/* Light pages (Кле, Эмилиано) get a gentler edge so they do not look dirty. */
+.screen:has(.database.wah-theme.active,.database.emiliano-theme.active) .crt-glass{background:radial-gradient(ellipse 120% 90% at 50% 50%,transparent 66%,#0000002e 92%,#00000059 100%),radial-gradient(ellipse 55% 35% at 28% 14%,#ffffff26,transparent 70%);box-shadow:inset 0 0 60px #0000004d}
+
+/* ── 1. Power-on ── */
+.crt-power{position:absolute;inset:0;z-index:2147483100;pointer-events:none;background:#000;overflow:hidden}
+.crt-power::before{content:'';position:absolute;left:50%;top:50%;width:100%;height:2px;translate:-50% -50%;background:#eaf6ff;box-shadow:0 0 22px #bfe3ff,0 0 60px #6fb6ff;transform-origin:50% 50%;animation:crt-line 1.05s cubic-bezier(.6,0,.2,1) both}
+.crt-power{animation:crt-open 1.05s cubic-bezier(.6,0,.2,1) both}
+/* The line widens, then the picture fades in behind it — no grey wash of a stretched white line. */
+@keyframes crt-line{0%{scale:0 1;opacity:1}30%{scale:1 1;opacity:1}55%{scale:1 1;opacity:.9}100%{scale:1 1;opacity:0}}
+@keyframes crt-open{0%,50%{background:#000}100%{background:#0000;visibility:hidden}}
+
+/* ── 2. Signal: the mark comes and goes through the static until the connection holds ── */
+.connection:not(.is-locked) .connection-emblem{animation:signal-flicker 2.6s steps(1,end) infinite}
+@keyframes signal-flicker{0%,18%{opacity:.25;filter:blur(2px) contrast(1.6)}19%{opacity:.9;filter:none}24%{opacity:.15;filter:blur(3px)}25%,52%{opacity:.75;filter:blur(.5px)}53%{opacity:.1;translate:4px 0}55%,78%{opacity:.95;translate:0 0;filter:none}79%{opacity:.3;filter:blur(2px) hue-rotate(40deg)}81%,100%{opacity:.6;filter:blur(1px)}}
+.connection.is-locked .connection-emblem{animation:none;opacity:1;filter:drop-shadow(0 0 18px #2f8cff)}
+/* The door: two halves of the mark slide apart and the light behind them fills the screen. */
+.signal-door{position:absolute;inset:0;z-index:30;pointer-events:none;display:grid;place-items:center}
+.signal-door img{position:absolute;width:var(--door-size,156px);height:auto;filter:drop-shadow(0 0 20px #2f8cff)}
+.signal-door .left{clip-path:inset(0 50% 0 0);animation:door-left .62s cubic-bezier(.7,0,.25,1) both}
+.signal-door .right{clip-path:inset(0 0 0 50%);animation:door-right .62s cubic-bezier(.7,0,.25,1) both}
+.signal-door::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:4px;translate:-50% 0;background:#cfe7ff;box-shadow:0 0 40px 20px #2f8cff88;animation:door-light .62s cubic-bezier(.7,0,.25,1) both}
+@keyframes door-left{0%{translate:0 0;scale:1}25%{translate:0 0;scale:1.08}100%{translate:-70vw 0;scale:2.6}}
+@keyframes door-right{0%{translate:0 0;scale:1}25%{translate:0 0;scale:1.08}100%{translate:70vw 0;scale:2.6}}
+@keyframes door-light{0%,20%{opacity:0;width:4px}55%{opacity:.8;width:40px}100%{opacity:0;width:200px}}
+.connection.is-opening .connection-emblem{opacity:0!important}
+
+/* ── 3. Boot lines: refusals in red, the grant in bright blue ── */
+.boot-line.is-denied{color:#ff5a6a;text-shadow:0 0 8px #ff2b4566}
+.boot-line.is-granted{color:#9fd4ff;text-shadow:0 0 10px #2f8cff88}
+.boot-line.is-bios{color:#8fa6b8}
+@media(prefers-reduced-motion:reduce){.crt-power{display:none}.connection .connection-emblem{animation:none!important}.signal-door{display:none}}
+/* The glitch transition copies the whole screen into its bands; without the glass and a little darker,
+   the copies no longer add up into a grey wash. */
+.glitch-band :is(.crt-glass,.crt-power,.signal-door,.sysupd-panel,.crt-cursor){display:none!important}
+.glitch-band{filter:contrast(1.5) saturate(.6) brightness(.72)!important}

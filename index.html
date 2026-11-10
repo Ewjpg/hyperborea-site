@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#000000" />
+<title>AZURE LATCH — HYPERBOREA DATABASE</title>
+<meta name="description" content="HYPERBOREA DATABASE — архив игроков AZURE LATCH. PLAYERS, досье игроков, LORE и тактические составы 5×5 / 11×11.">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+:root{color-scheme:dark;--white:#dedfe4;--cyan:#a4d9ee}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#000;color:var(--white)}
+[hidden]{display:none!important}
+body{font-family:'Press Start 2P','Courier New',monospace;overflow:hidden}
+.screen{position:relative;isolation:isolate;width:100vw;height:100dvh;min-height:420px;overflow:hidden;background:radial-gradient(ellipse at center,#07090b 0%,#010203 65%,#000 100%);border-radius:clamp(12px,2.5vw,40px);box-shadow:inset 0 0 65px #000, inset 0 0 8px #52606b66}
+.screen::before{content:"";position:absolute;inset:0;z-index:8;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,#0008 4px,#0008 5px);opacity:.42}
+.screen::after{content:"";position:absolute;inset:-15%;z-index:9;pointer-events:none;background:radial-gradient(ellipse at center,transparent 38%,#000b 85%);opacity:.65}
+.noise{position:absolute;inset:0;pointer-events:none;z-index:7;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");animation:grain .18s steps(2) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-1%,1%)}50%{transform:translate(1%,-1%)}75%{transform:translate(-1%,-1%)}100%{transform:translate(0,0)}}
+.tracking{position:absolute;left:0;right:0;height:2px;top:16%;background:linear-gradient(90deg,transparent,#b5cbd4 35%,#e5e5e5 53%,transparent);box-shadow:0 1px 3px #6aa8c8;opacity:.23;pointer-events:none;z-index:6;animation:track 14s linear infinite}
+.tracking.two{top:80%;opacity:.12;animation-duration:19s;animation-delay:-8s}
+@keyframes track{0%{transform:translateY(-20vh)}100%{transform:translateY(120vh)}}
+.top{position:absolute;z-index:4;top:clamp(26px,4.2vh,55px);left:clamp(24px,4.4vw,82px);right:clamp(24px,4.4vw,82px);display:flex;justify-content:space-between;gap:24px;align-items:flex-start;font-size:clamp(8px,.82vw,12px);line-height:1.9;letter-spacing:.07em;text-shadow:1px 0 #a74b4b99,-1px 0 #3c8dbb99}
+.top .right{text-align:right}
+.center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;transform:translateY(-1%);z-index:4}
+h1{font-size:clamp(19px,4.5vw,70px);font-weight:400;line-height:1.35;letter-spacing:clamp(3px,1.1vw,19px);margin:0 0 26px;padding-left:clamp(3px,1.1vw,19px);white-space:nowrap;text-shadow:2px 0 #9b51516b,-2px 0 #4b9fc46b,0 0 12px #dcefff30}
+.subtitle{font-size:clamp(8px,1.1vw,16px);letter-spacing:clamp(2px,.75vw,12px);padding-left:clamp(2px,.75vw,12px);line-height:1.9;white-space:nowrap;text-shadow:1px 0 #b55a5a55,-1px 0 #3d98bf55}
+.divider{width:38px;height:2px;background:#cfd5db;margin:28px 0 54px;box-shadow:0 0 6px #fff5}
+.enter{position:relative;border:2px solid #cbd0d6;color:var(--white);background:transparent;font:inherit;font-size:clamp(10px,1.2vw,17px);letter-spacing:.12em;padding:20px 30px;min-width:min(410px,82vw);cursor:pointer;text-shadow:1px 0 #b45d5d66,-1px 0 #3d98bf66;transition:background .12s,color .12s,box-shadow .12s}
+.enter::before{content:'>';position:absolute;left:-32px;top:50%;transform:translateY(-50%)}.enter:hover,.enter:focus-visible{background:#d6dce3;color:#070809;outline:none;box-shadow:0 0 24px #b7d9ee55;text-shadow:none}.enter:active{transform:translateY(1px)}
+.boot{display:none;max-width:90vw;text-align:left;font-size:clamp(10px,1vw,15px);line-height:2.5;min-width:min(580px,88vw);color:#d7e4e8}.boot.active{display:block}.boot-line{animation:appear .12s both}@keyframes appear{from{opacity:0}to{opacity:1}}
+
+.database{display:none;position:absolute;inset:0;z-index:5;overflow-y:auto;text-align:left;background:radial-gradient(ellipse at 50% 40%,#080b0e,#010203 72%);padding:clamp(24px,4vw,60px);color:var(--white)}
+.database.active{display:flex;flex-direction:column}
+.db-header{display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:1px solid #70798455;padding-bottom:18px;flex-shrink:0}
+.db-path{font-size:clamp(7px,.8vw,10px);line-height:2;letter-spacing:.1em;color:#9aa5b1;overflow-wrap:anywhere}
+.database .db-back{font:inherit;font-size:8px;line-height:1.8;letter-spacing:.04em;cursor:pointer;color:#b8c3ce;background:transparent;border:1px solid #66717a;padding:12px 15px;min-height:44px;flex-shrink:0}
+.database .db-back:hover,.database .db-back:focus-visible{color:#eff7ff;border-color:#c2d3df;background:#caddeb12;outline:1px solid #b5c9d7;outline-offset:3px}
+.db-view{width:min(850px,100%);margin:auto;flex-shrink:0;padding:clamp(28px,5vh,60px) 0}
+.db-kicker{font-size:8px;line-height:2;letter-spacing:.16em;color:#82909c;margin:0 0 18px}
+.database .db-title{font-size:clamp(22px,3.2vw,40px);font-weight:400;line-height:1.5;letter-spacing:.1em;margin:0 0 13px;color:#dedfe4;text-shadow:1px 0 #a74b4b66,-1px 0 #3c8dbb66}
+.database .db-title:focus{outline:none}
+.db-caption{font-size:8px;line-height:2;letter-spacing:.12em;color:#8e9ba6;margin:0 0 35px}
+.db-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.database .db-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:20px;min-height:235px;padding:26px;border:1px solid #7c879166;background:#050708a6;color:#dedfe4;cursor:pointer;font:inherit;transition:border-color .12s,background .12s,box-shadow .12s;touch-action:manipulation}
+.database .db-card::after{content:'>';position:absolute;right:24px;bottom:23px;color:#a4d9ee;opacity:0}
+.database .db-card:hover,.database .db-card:focus-visible{background:#b7d2e30c;border-color:#c7d8e6;box-shadow:inset 3px 0 #c7d8e6;outline:none}
+.database .db-card:hover::after,.database .db-card:focus-visible::after{opacity:1}
+.db-card-top{display:flex;justify-content:space-between;align-items:center;width:100%;color:#a9b6c2}
+.db-card-number{font-size:8px;letter-spacing:.12em;color:#85939e}
+.db-icon{width:32px;height:32px}
+.db-card-name{font-size:clamp(17px,2vw,24px);letter-spacing:.1em;line-height:1.6}
+.db-card-description{font:14px/1.6 Arial,sans-serif;color:#98a5b1}
+.db-card-open{margin-top:auto;font-size:7px;line-height:1.8;letter-spacing:.06em;color:#a2b1bd}
+.db-section-top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:25px}
+.db-empty{border:1px solid #68768155;min-height:200px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:16px;padding:30px;background:#050708a6}
+.db-empty-code{font-size:9px;line-height:2;letter-spacing:.1em;color:#8b9ba8}
+.db-empty-text{font:15px/1.8 Arial,sans-serif;color:#aab4be;margin:0}
+.db-footer{display:flex;justify-content:space-between;gap:15px;border-top:1px solid #70798444;padding-top:16px;color:#6f818e;font-size:7px;line-height:2;letter-spacing:.08em;flex-shrink:0}
+@media(max-width:650px){
+ .database{padding:24px 20px max(20px,env(safe-area-inset-bottom))}
+ .db-header{align-items:flex-start;gap:10px;padding-bottom:14px}
+ .database .db-back{font-size:7px;padding:10px}
+ .db-path{font-size:6px}
+ .db-grid{grid-template-columns:1fr;gap:14px}
+ .db-view{padding:28px 0}
+ .database .db-card{min-height:185px;padding:22px;gap:14px}
+ .db-card-name{font-size:20px}
+ .db-caption{margin-bottom:24px;font-size:7px}
+ .db-section-top{flex-direction:column}
+ .db-empty{padding:22px;min-height:180px}
+ .db-footer{font-size:6px}
+}
+@media(max-height:520px) and (orientation:landscape){.database{padding:18px 26px}.db-view{padding:20px 0}.database .db-card{min-height:170px;gap:10px;padding:18px}.db-caption{margin-bottom:18px}.database .db-title{font-size:22px}}
+@media(prefers-reduced-motion:reduce){.database .db-card{transition:none}}
+@media(max-width:650px){.top{font-size:7px;left:18px;right:18px;top:22px}.center{transform:translateY(-4%)}h1{font-size:clamp(13px,4vw,26px);letter-spacing:2px;padding-left:2px;margin-bottom:19px}.subtitle{font-size:clamp(6px,1.8vw,10px);letter-spacing:1.5px;padding-left:1.5px}.divider{margin:25px 0 45px}.enter{min-width:0;width:75vw;font-size:10px;padding:17px 8px}.enter::before{left:-20px}}
+@media(max-width:650px){
+.screen{min-height:0;border-radius:12px}
+.top{font-size:clamp(6px,1.75vw,8px);line-height:1.8;gap:8px;left:14px;right:14px;top:max(20px,env(safe-area-inset-top))}
+.top .right{overflow-wrap:anywhere;max-width:66%}
+.center{padding:20px 12px;transform:translateY(-2%)}
+h1{font-size:clamp(12px,3.6vw,23px);letter-spacing:clamp(1px,.8vw,3px);padding-left:0;max-width:100%;white-space:normal;overflow-wrap:normal;line-height:1.8}
+.subtitle{font-size:clamp(6px,1.45vw,9px);letter-spacing:clamp(0px,.35vw,2px);padding-left:0;white-space:normal;line-height:2.2}
+.divider{margin:22px 0 34px}.enter{width:auto;min-width:0;max-width:calc(100vw - 56px);font-size:clamp(8px,2.3vw,11px);padding:17px 15px;letter-spacing:0}
+.enter::before{left:-17px}.boot{min-width:0;width:100%;font-size:clamp(7px,2vw,11px);line-height:2.2;overflow-wrap:anywhere}
+
+}
+@media(max-width:360px){.top{font-size:6px}.enter{font-size:8px;padding:15px 10px}}
+@media(max-height:480px) and (orientation:landscape){.top{top:12px}.center{transform:none}.divider{margin:12px 0 15px}.enter{padding:10px 14px}h1{margin-bottom:7px}}
+@media(prefers-reduced-motion:reduce){.noise,.tracking{animation:none}}
+
+/* Mobile CRT adjustments: comfortable tap targets, safe areas and small displays. */
+@media (max-width:650px){
+ .screen{height:100svh;min-height:0;border-radius:0}
+ .top{left:max(14px,env(safe-area-inset-left));right:max(14px,env(safe-area-inset-right));top:max(16px,env(safe-area-inset-top))}
+ .top .right{font-size:clamp(5px,1.6vw,8px)}
+ .center{padding-inline:14px}
+}
+@media (max-width:380px){h1{font-size:clamp(11px,3.45vw,15px);letter-spacing:1px}.subtitle{font-size:6px;letter-spacing:0}.enter{font-size:8px}}
+.connection{position:absolute;inset:0;z-index:5;display:grid;place-items:center;background:#000;text-align:center}
+.connection-start{display:flex;flex-direction:column;align-items:center;gap:22px;width:min(360px,85vw);padding:32px 20px;border:0;background:transparent;color:#d5e9ff;font:inherit;cursor:pointer;touch-action:manipulation}
+.connection-start:focus-visible{outline:1px solid #7cbdff;outline-offset:12px}
+.connection-start:disabled{opacity:1;cursor:wait;color:#d5e9ff}
+.connection-emblem{display:block;width:clamp(112px,24vw,156px);height:auto;max-width:100%;object-fit:contain}
+.connection-wordmark{font-size:clamp(14px,3vw,21px);letter-spacing:.25em;padding-left:.25em}
+.connection-status{font-size:11px;letter-spacing:.08em;min-height:18px}
+.connection-hint{font:10px/1.8 'Courier New',monospace;color:#7f9bb7;letter-spacing:.13em;min-height:18px}
+.connection-meter{width:min(220px,60vw);height:3px;background:#142136;overflow:hidden}
+.connection-fill{display:block;width:0;height:100%;background:#88c6ff;box-shadow:0 0 10px #278bff;transition:width .3s ease}
+@media(prefers-reduced-motion:reduce){.connection-fill{transition:none}}
+@media(max-height:480px){.connection-start{gap:10px;padding:16px}.connection-emblem{width:88px}}
+
+.glitch-overlay{position:absolute;inset:0;z-index:11;overflow:hidden;pointer-events:auto;background:transparent}
+.glitch-band{position:absolute;inset:0;overflow:hidden;mix-blend-mode:screen;animation:band-jump .86s steps(1,end) both;filter:contrast(1.7) saturate(.55);animation-delay:var(--delay,0ms)}
+.glitch-band:nth-child(even){filter:contrast(1.9) saturate(.4) drop-shadow(5px 0 #124872)}
+.glitch-static{position:absolute;inset:0;opacity:.6;background:repeating-linear-gradient(0deg,transparent 0 9px,#94c7df25 10px 11px,#000 12px 13px);animation:broken-sync .86s steps(1,end) both}
+.screen.system-switching>.connection,.screen.system-switching>.center,.screen.system-switching>.top,.screen.system-switching>.database{animation:signal-break .86s steps(1,end) both}
+.screen.music-failure>.database{animation:terminal-stutter .76s steps(1,end) both}
+@keyframes band-jump{
+ 0%{transform:translateX(0);opacity:0}
+ 9%{transform:translateX(var(--shift));opacity:.85}
+ 19%{transform:translateX(-8px) skewX(3deg);opacity:.25}
+ 31%{transform:translateX(calc(var(--shift) * -1.5));opacity:.9}
+ 42%{transform:translateX(2px);opacity:0}
+ 53%{transform:translateX(var(--shift)) scaleX(1.04);opacity:.8}
+ 65%{transform:translateX(-4px);opacity:.1}
+ 76%{transform:translateX(calc(var(--shift) * -.5));opacity:.65}
+ 90%,100%{transform:none;opacity:0}
+}
+@keyframes broken-sync{
+ 0%,100%{opacity:0;transform:none}
+ 10%{opacity:.6;transform:translateY(12%)}
+ 24%{opacity:.15;transform:translateY(-8%)}
+ 38%{opacity:.8;transform:scaleY(1.2)}
+ 51%{opacity:.35;transform:translateY(18%)}
+ 67%{opacity:.6;transform:translateY(-13%)}
+ 83%{opacity:.18;transform:none}
+}
+@keyframes signal-break{
+ 0%,100%{transform:none;filter:none;opacity:1}
+ 13%{transform:translateX(-7px);filter:contrast(1.6);opacity:.65}
+ 26%{transform:skewX(-2deg);opacity:.25}
+ 39%{transform:translateX(11px);filter:blur(.7px);opacity:.8}
+ 51%{transform:none;opacity:.1}
+ 64%{transform:translateX(-4px);filter:contrast(1.8);opacity:.9}
+ 79%{transform:translateY(3px);opacity:.5}
+}
+@keyframes terminal-stutter{
+ 0%,100%{transform:none;filter:none}
+ 12%{transform:translateX(6px);filter:contrast(1.8)}
+ 23%{transform:translateX(-5px);filter:blur(.8px)}
+ 37%{transform:skewX(1deg);filter:none}
+ 56%{transform:translateY(2px);filter:contrast(1.5)}
+ 72%{transform:translateX(-2px);filter:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .glitch-band{animation:none;transform:none;opacity:.08}
+ .glitch-static{animation:none;opacity:.08}
+ .screen.system-switching>.connection,.screen.system-switching>.center,.screen.system-switching>.top,.screen.system-switching>.database,.screen.music-failure>.database{animation:none}
+}
+
+</style>
+<link rel="stylesheet" href="./fear-font.css">
+<link rel="stylesheet" href="./fear.css">
+<link rel="stylesheet" href="./mobile.css">
+<link rel="stylesheet" href="./fear-submit.css">
+<link rel="stylesheet" href="./fear-experience.css?v=2">
+<link rel="stylesheet" href="./fear-dance.css?v=2">
+<link rel="stylesheet" href="./wahhiyyy.css?v=35">
+<link rel="stylesheet" href="./kle-experience.css?v=58">
+<link rel="stylesheet" href="./roster-popout.css">
+<link rel="stylesheet" href="./frog.css?v=34">
+<link rel="stylesheet" href="./swarggy.css?v=65">
+<link rel="stylesheet" href="./new-players.css?v=52">
+<link rel="stylesheet" href="./player-identity.css?v=53">
+<link rel="stylesheet" href="./players-space.css?v=49">
+<link rel="stylesheet" href="./boot-events.css">
+<link rel="stylesheet" href="./tactics.css?v=27">
+<link rel="stylesheet" href="./simulation.css?v=32">
+<link rel="stylesheet" href="./player-ratings.css?v=36">
+<link rel="stylesheet" href="./sound-mixer.css?v=3">
+<link rel="stylesheet" href="./fira-font.css?v=1">
+<link rel="stylesheet" href="./azure-latch.css?v=1">
+<link rel="stylesheet" href="./fear-card-world.css?v=3">
+<link rel="stylesheet" href="./player-foil.css?v=1">
+<link rel="stylesheet" href="./players-globe.css?v=3">
+<link rel="stylesheet" href="./dossier-cover.css?v=2">
+<link rel="stylesheet" href="./app-cursor.css?v=1">
+<link rel="stylesheet" href="./terminal-intro.css?v=3">
+<link rel="stylesheet" href="./hyper-os.css?v=2">
+<link rel="stylesheet" href="./hyper-net.css?v=2">
+<link rel="stylesheet" href="./system-update.css?v=1">
+<link rel="stylesheet" href="./versus.css?v=1">
+<link rel="stylesheet" href="./lore.css?v=3">
+<link rel="stylesheet" href="./lore-novel.css?v=4">
+<link rel="stylesheet" href="./sim-match.css?v=1">
+</head>
+<body>
+<main class="screen" id="screen">
+<div class="noise" aria-hidden="true"></div><div class="tracking" aria-hidden="true"></div><div class="tracking two" aria-hidden="true"></div>
+<section class="connection" id="connection" aria-label="Подключение к Blue Lock">
+<button class="connection-start" id="connectStart" type="button" aria-label="Подключиться к системе">
+<img class="connection-emblem" src="./assets/bluelock-mark.svg" alt="Пятиугольная эмблема Blue Lock" width="300" height="300">
+<span class="connection-status" id="connectionStatus" role="status">connection...</span>
+<span class="connection-meter" id="connectionMeter" role="progressbar" aria-label="Подключение" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="connection-fill" id="connectionFill"></span></span>
+<span class="connection-hint" id="connectionHint">[ CLICK TO CONNECT ]</span>
+</button>
+</section>
+<header class="top" id="top" hidden><div>v0.1.4</div><div class="right"><div id="clock">---- -- -- --:--:--</div><div>USER : <span id="userId">--------</span></div></div></header>
+<section class="center" id="landing" hidden><h1>AZURE LATCH</h1><div class="subtitle">HYPERBOREA DATABASE</div><div class="divider"></div><button class="enter" id="enter">[ ENTER SYSTEM ]</button></section>
+<section class="center" id="bootWrap" hidden><div class="boot active" id="boot" aria-live="polite"></div></section>
+<section class="database" id="database" aria-label="Hyperborea Database">
+<header class="db-header">
+<div class="db-path" id="dbPath">HYPERBOREA / DATABASE</div>
+<button class="db-back" id="back" type="button">[ BACK TO TERMINAL ]</button>
+</header>
+<div class="db-view" id="dbHome">
+<p class="db-kicker">ACCESS GRANTED / DIRECTORY</p>
+<h2 class="db-title">DATABASE</h2>
+<p class="db-caption">SELECT A DIRECTORY</p>
+<div class="db-grid">
+<button class="db-card" id="openPlayers" type="button" aria-label="Открыть PLAYERS — досье игроков">
+<span class="db-card-top"><img class="db-icon db-players-mark" src="./assets/bluelock-mark.svg" width="32" height="32" alt=""><span class="db-card-number">01</span></span>
+<span class="db-card-name">PLAYERS</span>
+<span class="db-card-description">Досье игроков</span>
+<span class="db-card-open">[ OPEN DIRECTORY ]</span>
+</button>
+<button class="db-card" id="openLore" type="button" aria-label="Открыть LORE — история мира">
+<span class="db-card-top"><svg class="db-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M6 3h15l5 5v21H6zM21 3v6h5M11 14h10M11 19h10M11 24h6"/><path d="M3 7v25h19"/></svg><span class="db-card-number">02</span></span>
+<span class="db-card-name">LORE</span>
+<span class="db-card-description">История мира</span>
+<span class="db-card-open">[ OPEN DIRECTORY ]</span>
+</button>
+<button class="db-card tactic-directory" id="openTactics" type="button" aria-label="Открыть TACTICS — футбольные схемы и составы">
+<span class="db-card-top"><svg class="db-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><rect x="3" y="2" width="26" height="28"/><path d="M3 16h26M11 2v6h10V2M11 30v-6h10v6"/><circle cx="16" cy="16" r="4"/><circle cx="8" cy="12" r="1.2"/><circle cx="24" cy="20" r="1.2"/></svg><span class="db-card-number">03</span></span>
+<span class="db-card-name">TACTICS</span><span class="db-card-description">Поле, схемы и твой состав · 5×5 / 11×11</span><span class="db-card-open">[ OPEN TACTICAL BOARD ]</span></button>
+</div>
+</div>
+<div class="db-view" id="dbSection" hidden>
+<p class="db-kicker">HYPERBOREA / DIRECTORY</p>
+<div class="db-section-top"><h2 class="db-title" id="dbSectionTitle" tabindex="-1">PLAYERS</h2><button class="db-back" id="dbReturn" type="button">[ BACK TO DATABASE ]</button></div>
+
+<div class="players-roster" id="playersRoster" hidden>
+<button class="fear-player-card has-real-name" id="fearCard" type="button" aria-label="Открыть досье Клаус Штурм">
+<span class="fear-thumbnail"><span class="player-country-code" title="Германия" aria-label="Германия">DE</span><span class="club-badge club-qiqi" role="img" aria-label="Клуб Qiqi" title="Клуб Qiqi"></span><span class="fear-card-eye" aria-hidden="true"></span><img src="./assets/fear-cutout.png" alt="Клаус Штурм" width="1254" height="1254"></span>
+<span class="fear-card-body"><span class="fear-card-name" data-player-name>Клаус Штурм</span><span class="roster-country"><span class="country-flag flag-de" role="img" aria-label="Германия"></span><span>Германия</span></span><span class="fear-card-action">CF, LW</span></span>
+</button>
+
+<button class="wah-player-card has-real-name" id="wahCard" type="button" aria-label="Открыть досье Кле Энигм"><span class="wah-card-art"><span class="player-country-code" title="Франция" aria-label="Франция">FR</span><span class="wah-card-index">02 / PLAYERS</span><img src="./assets/wahhiyyy-kit-v2.webp" alt="Кле Энигм" width="1254" height="1254"><span class="wah-card-symbol"><svg viewBox="-2 0 62 52" aria-hidden="true"><path d="M8 10H24C24 5 22 2 28 2S32 5 32 10H48V25C54 25 58 22 58 28S54 31 48 31V48H32C32 42 35 38 28 38S24 42 24 48H8V31C2 31 0 34 0 28S2 25 8 25Z"/></svg></span></span><span class="wah-card-body"><span class="wah-card-name" data-player-name>Кле Энигм</span><span class="roster-country"><span class="country-flag flag-fr" role="img" aria-label="Франция"></span><span>Франция</span></span><span class="wah-card-action">[ OPEN PROFILE ]</span></span></button>
+<button class="frog-player-card" id="frogCard" type="button" aria-label="Открыть досье Frog"><span class="frog-card-art"><span class="player-country-code" title="Страна не указана" aria-label="Страна не указана">??</span><span class="frog-card-suit" aria-hidden="true">♠</span><img src="./assets/frog-cutout.webp" alt="Frog" width="1254" height="1254"></span><span class="frog-card-body"><span class="frog-card-name" data-player-name>Frog</span><span class="frog-card-action">[ OPEN PROFILE ]</span></span></button>
+<button class="swarggy-player-card has-real-name" id="swarggyCard" type="button" aria-label="Открыть досье Минами Син"><span class="swarggy-card-art"><span class="player-country-code" title="Япония" aria-label="Япония">JP</span><span class="club-badge club-qiqi" role="img" aria-label="Клуб Qiqi" title="Клуб Qiqi"></span><span class="swarggy-card-index">04 / PLAYERS</span><img src="./assets/minami-shin-manga.webp?v=2" alt="Минами Син" width="1254" height="1254"></span><span class="swarggy-card-body"><span class="swarggy-card-name" data-player-name>Минами Син</span><span class="roster-country"><span class="country-flag flag-jp" role="img" aria-label="Япония"></span><span>Япония</span></span><span class="swarggy-card-action">[ OPEN PROFILE ]</span></span></button>
+<button class="new-player-card np-card-emiliano" id="emilianoCard" type="button" aria-label="Открыть досье Эмилиано Санчес"><span class="np-card-art new-card-art"><span class="np-card-corner player-country-code" title="Испания" aria-label="Испания">ES</span><span class="np-card-decoration" aria-hidden="true"></span><img src="./assets/emiliano-cutout.png" alt="Эмилиано Санчес" width="1254" height="1254"></span><span class="np-card-body new-card-body"><span class="np-card-name new-card-name" data-player-name>Эмилиано Санчес</span><span class="np-card-country"><span class="np-flag np-flag-es" role="img" aria-label="Испания"></span>Испания</span><span class="np-card-action new-card-action">ОТКРЫТЬ ДОСЬЕ ↗</span></span></button>
+<button class="new-player-card np-card-yoru" id="yoruCard" type="button" aria-label="Открыть досье Нишимура Йору"><span class="np-card-art new-card-art"><span class="np-card-corner player-country-code" title="Япония" aria-label="Япония">JP</span><span class="np-card-decoration" aria-hidden="true"></span><img src="./assets/yoru-cutout.png" alt="Нишимура Йору" width="1254" height="1254"></span><span class="np-card-body new-card-body"><span class="np-card-name new-card-name" data-player-name>Нишимура Йору</span><span class="np-card-country"><span class="np-flag np-flag-jp" role="img" aria-label="Япония"></span>Япония</span><span class="np-card-action new-card-action">ОТКРЫТЬ ДОСЬЕ ↗</span></span></button>
+</div>
+
+<div class="db-empty" id="dbEmpty"><span class="db-empty-code">[ NO RECORDS YET ]</span><p class="db-empty-text" id="dbSectionText">Здесь появятся досье игроков.</p></div>
+</div>
+
+<section class="db-view tactic-view" id="tacticsView" aria-label="Тактическая доска" hidden>
+<div id="tacticsHub"><div class="tactic-hub-top"><div><p class="db-kicker">HYPERBOREA / TACTICAL ROOM</p><h2 class="db-title" id="tacticsHubTitle" tabindex="-1">TACTICS</h2><p class="db-caption">ВЫБЕРИ ФОРМАТ ПОЛЯ</p></div><button class="db-back" id="tacticsExit" type="button">[ BACK TO DATABASE ]</button></div>
+<div class="tactic-mode-grid"><button class="tactic-mode-card" type="button" data-tactics-mode="5"><svg viewBox="0 0 200 110" aria-hidden="true"><rect x="6" y="6" width="188" height="98"/><path d="M100 6v98M6 30h30v50H6M194 30h-30v50h30"/><circle cx="100" cy="55" r="18"/><circle cx="59" cy="35" r="3"/><circle cx="59" cy="75" r="3"/><circle cx="142" cy="35" r="3"/><circle cx="142" cy="75" r="3"/></svg><strong>5×5</strong><p>Компактное поле. Два состава по пять игроков, быстрые перестроения.</p><small>10 ПОЗИЦИЙ / 2 СОСТАВА ↗</small></button><button class="tactic-mode-card" type="button" data-tactics-mode="11"><svg viewBox="0 0 200 110" aria-hidden="true"><rect x="6" y="6" width="188" height="98"/><path d="M100 6v98M6 30h30v50H6M194 30h-30v50h30"/><circle cx="100" cy="55" r="18"/><circle cx="59" cy="35" r="3"/><circle cx="59" cy="75" r="3"/><circle cx="142" cy="35" r="3"/><circle cx="142" cy="75" r="3"/></svg><strong>11×11</strong><p>Полный состав. Два отряда, классические схемы и свободная расстановка.</p><small>22 ПОЗИЦИИ / 2 СОСТАВА ↗</small></button></div></div>
+<div class="tactic-workspace" id="tacticsWorkspace" hidden>
+<div class="tactic-workspace-top"><div><button class="db-back" id="tacticsModes" type="button">← ФОРМАТЫ ПОЛЯ</button><h2 id="tacticsTitle" tabindex="-1">ПОЛЕ 5×5</h2></div><div class="tactic-mode-tabs" id="tacticsModeTabs" role="group" aria-label="Формат поля"><button type="button" data-tactics-mode="5">5×5</button><button type="button" data-tactics-mode="11">11×11</button></div></div>
+<div class="tactic-shell"><div class="tactic-field-column"><div class="tactic-field-meta"><span id="tacticsModeLabel">5×5 / ДВА СОСТАВА</span><output id="tacticsCount" aria-label="Заполненные позиции">0 / 10</output></div>
+<div class="tactic-pitch" id="tacticsPitch" data-mode="5" aria-label="Футбольное поле: выбери игрока и позицию">
+<svg class="tactic-pitch-lines" viewBox="0 0 680 1050" aria-hidden="true"><rect x="24" y="24" width="632" height="1002"/><path d="M24 525H656M158 24V174H522V24M158 1026V876H522V1026M250 24V84H430V24M250 1026V966H430V1026M290 24V7H390V24M290 1026V1043H390V1026M280 174Q340 232 400 174M280 876Q340 818 400 876"/><circle cx="340" cy="525" r="82"/><circle class="spot" cx="340" cy="525" r="3"/><circle class="spot" cx="340" cy="130" r="3"/><circle class="spot" cx="340" cy="920" r="3"/><path d="M24 44A20 20 0 0 0 44 24M636 24A20 20 0 0 0 656 44M24 1006A20 20 0 0 1 44 1026M636 1026A20 20 0 0 1 656 1006"/></svg>
+<div class="tactic-slots" id="tacticsSlots"></div></div><p class="tactic-status" id="tacticsStatus" role="status" aria-live="polite"></p></div>
+<aside class="tactic-sidebar" aria-label="Футбольные схемы и управление составом"><section class="tactic-panel"><h3 class="tactic-panel-title">РЕДАКТИРУЕМЫЙ СОСТАВ</h3><div class="tactic-teams" id="tacticsTeams" role="group" aria-label="Выбор состава"><button type="button" data-tactics-team="a">СОСТАВ A</button><button type="button" data-tactics-team="b">СОСТАВ B</button></div></section>
+<section class="tactic-panel"><h3 class="tactic-panel-title">ФУТБОЛЬНЫЕ СХЕМЫ</h3><div class="tactic-formations" id="tacticsFormations"></div><output class="tactic-formation-label" id="tacticsFormationLabel"></output><div class="tactic-actions"><button id="tacticsResetPositions" type="button">ПОЗИЦИИ ПО СХЕМЕ</button></div></section>
+<section class="tactic-panel"><p class="tactic-selected-label">ВЫБРАНО</p><output class="tactic-selected" id="tacticsSelected">Выбери игрока</output><div class="tactic-actions"><button id="tacticsRemove" type="button" disabled>УБРАТЬ ИГРОКА</button><button id="tacticsUndo" type="button" disabled>↶ ОТМЕНИТЬ</button><button id="tacticsClear" type="button">ОЧИСТИТЬ СОСТАВ</button></div><p class="tactic-hint" id="tacticsHint">Перетащи игрока снизу на позицию. Или выбери его нажатием, затем нажми на позицию. Игроков на поле можно двигать.</p><p class="tactic-save-note">Расстановки сохраняются на этом устройстве отдельно для 5×5 и 11×11.</p></section></aside></div>
+<section class="tactic-bench-panel" aria-label="Доступные игроки"><div class="tactic-bench-heading"><p>PLAYERS / РЕЗЕРВ</p><span>Болванки не заканчиваются · ∞</span></div><div class="tactic-bench" id="tacticsBench"></div></section>
+<div class="tactic-next-panel"><p id="tacticsReadyHint">Собери хотя бы один полный состав, чтобы продолжить.</p><button id="tacticsNext" type="button" disabled>ДАЛЬШЕ / 3D ПОЛЕ →</button></div></div>
+<section class="sim-view" id="simulationView" aria-labelledby="simTitle" hidden>
+<header class="sim-header"><div><button class="db-back" id="simBack" type="button">← К РАССТАНОВКЕ</button><p class="sim-kicker">TACTICAL ROOM / <span id="simModeLabel">5 × 5</span></p><h2 id="simTitle" tabindex="-1">РЕПЕТИЦИЯ КОМБИНАЦИИ</h2></div><div class="sim-header-mark" aria-hidden="true">3D<span>PLAYBOOK</span></div></header>
+<div class="sim-shell"><div class="sim-main">
+
+<div class="sim-field-controls" id="simTools" role="group" aria-label="Управление полем"><output class="sim-pass-measure" id="simPassMeasure" aria-label="Расчёт паса" hidden></output><button type="button" data-sim-tool="select">↖ ВЫБОР</button><button type="button" data-sim-tool="camera">⤢ КАМЕРА</button></div><div class="sim-field-wrap"><div class="sim-viewport" id="simViewport" aria-label="Объёмное футбольное поле"></div><div class="sim-goal" id="simGoal" role="status" hidden>GOAL</div><span class="sim-field-label" aria-hidden="true">HYPERBOREA / TACTICAL SIMULATION</span></div>
+<p class="sim-visually-hidden" id="simHint"></p><p class="sim-visually-hidden" id="simStatus" role="status" aria-live="polite"></p>
+<div class="sim-playback"><div class="sim-playback-buttons"><button class="sim-primary" id="simPlay" type="button">▶ ПРОИГРАТЬ</button><button id="simReset" type="button">↶ В НАЧАЛО</button><output id="simTime" aria-label="Время комбинации">0:00 / 0:00</output></div><label class="sim-seek-label" for="simSeek">ХОД КОМБИНАЦИИ<input id="simSeek" type="range" min="0" max="100" step="0.1" value="0"></label><div class="sim-options"><label>СКОРОСТЬ<select id="simSpeed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label><label>РАКУРС<select id="simCamera"><option value="broadcast">ТРАНСЛЯЦИЯ</option><option value="top">СВЕРХУ</option><option value="side">СБОКУ</option></select></label></div></div>
+</div><aside class="sim-sidebar"><section class="sim-panel"><p class="sim-kicker">01 / ПЛАН КОМБИНАЦИИ</p><h3>СЦЕНАРИЙ</h3><p class="sim-panel-note">Каждое новое действие сразу проигрывается. Следующее начинается из получившейся позиции.</p><ol class="sim-actions" id="simActions"></ol><div class="sim-edit-actions"><button id="simUndo" type="button">↶ ОТМЕНИТЬ</button><button id="simClear" type="button">ОЧИСТИТЬ</button></div></section><section class="sim-panel sim-reactions" id="simReactionPanel" aria-label="Активная химическая реакция" hidden><div id="simReactionDepth" class="sim-reaction-depth" aria-hidden="true"></div><span class="sim-reaction-flank flank-left" aria-hidden="true"></span><span class="sim-reaction-flank flank-right" aria-hidden="true"></span><p class="sim-kicker">02 / CHEMICAL REACTION</p><div class="sim-reaction-art" id="simReactionArt" aria-hidden="true"><span class="sim-reaction-shard shard-one"></span><span class="sim-reaction-shard shard-two"></span><svg viewBox="0 0 260 200"><defs><radialGradient id="reactionBlue"><stop stop-color="#1865ff" stop-opacity=".65"/><stop offset="1" stop-color="#04070e" stop-opacity="0"/></radialGradient><linearGradient id="reactionEye"><stop stop-color="#050609"/><stop offset=".5" stop-color="#145ce5"/><stop offset="1" stop-color="#020204"/></linearGradient></defs><ellipse cx="130" cy="101" rx="122" ry="88" fill="url(#reactionBlue)"/><g class="sim-reaction-maze" fill="none" stroke="#2060df" stroke-width=".8"><path d="M28 41h37v22H45v53h20v34H28M232 41h-37v22h20v53h-20v34h37M75 28v21h33V28h43v21h33V28M74 172v-20h34v20h43v-20h34v20"/><path d="M57 19 26 66l20 25-19 40 39 47M203 19l31 47-20 25 19 40-39 47"/></g><g class="sim-reaction-eye"><path d="M35 99Q130 13 225 99Q130 176 35 99Z" fill="#020305" stroke="url(#reactionEye)" stroke-width="2"/><path d="M52 98Q130 43 207 98Q130 152 52 98Z" fill="none" stroke="#1f5fdc" stroke-width=".6"/><circle class="sim-reaction-iris" cx="130" cy="98" r="28" fill="#030509" stroke="#2f74ff" stroke-width="1.4"/><path class="sim-reaction-pupil" d="M126 78h8v40h-8Z" fill="#0e45be"/></g><g class="sim-reaction-key" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="miter"><circle cx="78" cy="102" r="14"/><path d="M92 102h65v10h-11v-10m-13 0v-10h-11v10"/><path d="M70 102h16m-8-8v16" stroke-width="1"/></g><g class="sim-reaction-sparks" fill="#e8f2ff"><path d="m38 70 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z"/><path d="m218 120 2 6 6 2-6 2-2 6-2-6-6-2 6-2Z"/></g></svg><span class="sim-reaction-partners" id="simReactionPartners"></span></div><div id="simReactionList" aria-live="polite"></div></section><p class="sim-save-note">Сцены сохраняются на этом устройстве отдельно для каждого формата. Расстановка остаётся доступна по кнопке «Назад».</p></aside></div>
+<aside class="sim-pass-notice" id="simPassNotice" aria-labelledby="simPassNoticeText" hidden><button class="sim-notice-close" id="simPassNoticeClose" type="button" aria-label="Закрыть подсказку">×</button><p id="simPassNoticeText" role="status" aria-live="polite"></p><div class="sim-pass-demo" id="simPassDemo" aria-label="Анимированный пример паса"><svg viewBox="0 0 300 130" role="img" aria-label="Болванки показывают передачу и движение"><path class="demo-field" d="M10 10h280v110H10ZM150 10v110"/><circle class="demo-field" cx="150" cy="65" r="25"/><path class="demo-route" d="M68 93 252 35"/><g class="demo-pawn demo-owner"><circle cy="-14" r="6"/><path d="m-6-5-9 8 5 6 4-4v19H6V5l4 4 5-6-9-8Z"/></g><g class="demo-pawn demo-receiver"><circle cy="-14" r="6"/><path d="m-6-5-9 8 5 6 4-4v19H6V5l4 4 5-6-9-8Z"/></g><circle class="demo-ball" r="4"/></svg></div><button id="simPassUseRange" type="button" hidden>ВЫБРАТЬ ДИСТАНЦИЮ</button><button id="simPassGiveBall" type="button" hidden>ДАТЬ МЯЧ</button></aside><div class="sim-tooltip" id="simTooltip" role="tooltip" hidden></div>
+<section class="sim-player-menu" id="simPlayerMenu" role="dialog" aria-modal="false" aria-labelledby="simPlayerName" hidden><div class="sim-player-menu-top"><p class="sim-kicker">PLAYER / ACTION</p><button id="simPlayerClose" type="button" aria-label="Закрыть меню игрока">×</button></div><h3 id="simPlayerName"></h3><p class="sim-player-role" id="simPlayerRole"></p><p class="sim-player-weapon" id="simPlayerWeapon"></p><div class="sim-player-menu-actions" id="simPlayerActions" role="group" aria-label="Действие игрока"><button type="button" data-player-action="pass">↗ ПАС</button><button type="button" data-player-action="run">⇢ РЫВОК</button><button type="button" data-player-action="shot">◎ УДАР</button><button type="button" data-player-action="zone">◯ ДАВЛЕНИЕ</button><button type="button" data-player-action="possession">● МЯЧ</button></div><section class="sim-pass-panel" id="simPassPanel" aria-labelledby="simPassTitle" hidden><h3 id="simPassTitle">ВЫБЕРИ ПАС</h3><div class="sim-pass-ranges" id="simPassRanges" role="group" aria-label="Дистанция паса"><button type="button" data-pass-range="short"><strong>КОРОТКИЙ</strong><span>до 15 м</span></button><button type="button" data-pass-range="medium"><strong>СРЕДНИЙ</strong><span>15–30 м</span></button><button type="button" data-pass-range="long"><strong>ДЛИННЫЙ</strong><span>более 30 м</span></button></div><div class="sim-pass-variants" id="simPassVariants" role="group" aria-label="Способ паса"><button type="button" data-pass-variant="low"><svg viewBox="0 0 90 30" aria-hidden="true"><path d="M5 22h76m-9-7 9 7-9 7"/></svg><strong>НИЗОВОЙ ПАС</strong></button><button type="button" data-pass-variant="lob"><svg viewBox="0 0 90 30" aria-hidden="true"><path d="M5 24Q44-18 81 24m-10-4 10 4 1-11"/></svg><strong>НАВЕС</strong></button><button type="button" data-pass-variant="through"><svg viewBox="0 0 90 30" aria-hidden="true"><path d="m5 25 76-20m-11-3 11 3-7 9M55 28l20-10"/></svg><strong>ПАС ВРАЗРЕЗ</strong></button><button type="button" data-pass-variant="hidden"><svg viewBox="0 0 90 30" aria-hidden="true"><path d="M7 10h20m-7-6 7 6-7 6M29 10Q58 7 81 25m-2-10 2 10-11-1"/></svg><strong>СКРЫТЫЙ ПАС</strong></button><button type="button" data-pass-variant="curve"><svg viewBox="0 0 90 30" aria-hidden="true"><path d="M5 24Q44-14 81 16m-10-4 10 4-5 9"/></svg><strong>КРУЧЁНЫЙ ПАС</strong></button></div></section><section class="sim-shot-panel" id="simShotPanel" aria-labelledby="simShotTitle" hidden><div class="sim-shot-heading"><div><p class="sim-kicker">STRIKE / TECHNIQUE</p><h3 id="simShotTitle">ВЫБЕРИ УДАР</h3></div><label for="simShotOwner">ИГРОК<select id="simShotOwner" aria-label="Игрок, выполняющий удар"></select></label></div><div class="sim-shot-variants" id="simShotVariants" role="group" aria-label="Тип удара"><button type="button" data-shot-variant="straight"><svg viewBox="0 0 90 30" aria-hidden="true"><path d="M4 23H82m-9-7 9 7-9 7"/></svg><strong>ПРЯМОЙ</strong></button><button type="button" data-shot-variant="curve"><svg viewBox="0 0 90 30" aria-hidden="true"><path d="M4 23Q42-14 82 15m-11-4 11 4-5 10"/></svg><strong>КРУЧЁНЫЙ</strong></button><button type="button" data-shot-variant="lob"><svg viewBox="0 0 90 30" aria-hidden="true"><path d="M4 25Q43-22 82 25m-9-7 9 7 1-11"/></svg><strong>НАВЕСНОЙ</strong></button><button class="sim-weapon-shot" type="button" data-shot-variant="formless" hidden><svg viewBox="0 0 90 30" aria-hidden="true"><path d="M9 26 21 9m-9 3 9-3 1 10M25 24Q65-22 82 22m-10-4 10 4 2-11"/></svg><strong>FORMLESS</strong></button><button class="sim-weapon-shot" type="button" data-shot-variant="formless-control" hidden><svg viewBox="0 0 90 30" aria-hidden="true"><path d="M6 24Q40 3 82 16m-9-7 9 7-10 5M42 6v17m-8-8h17"/></svg><strong>FORMLESS ПРЫЖОК</strong></button></div><p class="sim-visually-hidden" id="simShotHint"></p></section></section>
+</section><div class="tactic-tooltip" id="tacticsTooltip" role="tooltip" hidden></div></section>
+<article class="fear-dossier" id="fearDossier" hidden aria-labelledby="fearTitle">
+<div class="fear-watchers" aria-hidden="true"><span class="watcher-pair watcher-one"><svg viewBox="0 0 150 45" fill="none" aria-hidden="true"><path d="M8 24Q31 4 59 18Q35 38 8 24ZM91 18Q119 4 142 24Q115 38 91 18Z"/><g class="watcher-pupils"><circle cx="34" cy="22" r="4"/><circle cx="116" cy="22" r="4"/></g></svg></span><span class="watcher-pair watcher-two"><svg viewBox="0 0 150 45" fill="none" aria-hidden="true"><path d="M8 24Q31 4 59 18Q35 38 8 24ZM91 18Q119 4 142 24Q115 38 91 18Z"/><g class="watcher-pupils"><circle cx="34" cy="22" r="4"/><circle cx="116" cy="22" r="4"/></g></svg></span><span class="watcher-pair watcher-three"><svg viewBox="0 0 150 45" fill="none" aria-hidden="true"><path d="M8 24Q31 4 59 18Q35 38 8 24ZM91 18Q119 4 142 24Q115 38 91 18Z"/><g class="watcher-pupils"><circle cx="34" cy="22" r="4"/><circle cx="116" cy="22" r="4"/></g></svg></span><span class="watcher-pair watcher-four"><svg viewBox="0 0 150 45" fill="none" aria-hidden="true"><path d="M8 24Q31 4 59 18Q35 38 8 24ZM91 18Q119 4 142 24Q115 38 91 18Z"/><g class="watcher-pupils"><circle cx="34" cy="22" r="4"/><circle cx="116" cy="22" r="4"/></g></svg></span><span class="watcher-pair watcher-five"><svg viewBox="0 0 150 45" fill="none" aria-hidden="true"><path d="M8 24Q31 4 59 18Q35 38 8 24ZM91 18Q119 4 142 24Q115 38 91 18Z"/><g class="watcher-pupils"><circle cx="34" cy="22" r="4"/><circle cx="116" cy="22" r="4"/></g></svg></span></div>
+<div class="fear-file-header"><button class="db-back" id="fearReturn" type="button">← PLAYERS</button></div>
+<div class="fear-profile"><div class="fear-identity"><div class="profile-name-block"><h2 class="fear-title real-name" id="fearTitle" tabindex="-1">Клаус <span>Штурм</span></h2><p class="player-country-line"><span class="country-flag flag-de" role="img" aria-label="Германия"></span><span>Германия</span></p></div><p class="profile-callsign callsign-fear"><span class="callsign-label">ПОЗЫВНОЙ</span><strong>FEAR</strong></p><span class="fear-rule" aria-hidden="true"></span><div class="fear-music-controls" aria-label="Музыка FEAR"><button id="fearMusicToggle" type="button" aria-label="Пауза музыки FEAR">PAUSE</button><label for="fearMusicVolume">ГРОМКОСТЬ <input id="fearMusicVolume" type="range" min="0" max="100" value="18" aria-label="Громкость музыки FEAR"><output id="fearMusicLevel" for="fearMusicVolume">18%</output></label></div><dl class="fear-quick-facts profile-quick-facts" data-profile-overview="fear"><div><dt>ПОЗИЦИИ</dt><dd id="fearQuickPosition">CF / LW</dd></div><div><dt>ПАРАМЕТРЫ</dt><dd id="fearQuickStats">0 / 7</dd></div><div><dt>ОРУЖИЕ</dt><dd id="fearQuickWeapon">—</dd></div></dl></div>
+<figure class="fear-hero-art" data-look="field"><span class="fear-portrait-echo" aria-hidden="true">STURM</span><svg class="fear-portrait-frame" viewBox="0 0 600 600" preserveAspectRatio="none" aria-hidden="true"><path d="M44 106V44h106M450 44h106v62M556 494v62h-106M150 556H44v-62"/><path class="fear-frame-dim" d="M44 300v80M556 220v80M64 494h472"/><circle class="fear-frame-dim" cx="300" cy="494" r="68"/></svg><img src="./assets/fear-cutout.png" alt="Клаус Штурм" width="1254" height="1254"><img class="fear-portrait-off" src="./assets/fear-offfield.webp?v=1" alt="Клаус Штурм вне поля, цветной портрет" width="1350" height="1350" decoding="async" aria-hidden="true"><div class="fear-look" role="group" aria-label="Образ Клауса Штурма"><button type="button" data-look="field" aria-pressed="true">НА ПОЛЕ</button><button type="button" data-look="off" aria-pressed="false">ВНЕ ПОЛЯ</button></div></figure></div>
+
+<nav class="fear-section-nav" aria-label="Разделы карточки FEAR"><button type="button" data-fear-scroll="fearStatsCell"><span>01</span>ПАРАМЕТРЫ<span>↘</span></button><button type="button" data-fear-scroll="fearDescriptionCell"><span>02</span>ХАРАКТЕРИСТИКА<span>↘</span></button><button type="button" data-fear-scroll="fearWeaponCell"><span>03</span>ОРУЖИЕ<span>↘</span></button></nav>
+<div class="fear-scroll-cue" aria-hidden="true"><span>↓</span></div>
+<section class="fear-details" aria-label="Характеристики FEAR">
+<div class="fear-stats-cell" id="fearStatsCell" tabindex="-1">
+<div class="fear-cell-heading"><h3><span class="fear-section-index">01</span> ATTRIBUTES</h3><span>0 — 99</span></div>
+<svg class="fear-radar" viewBox="0 0 360 340" role="img" aria-labelledby="fearRadarTitle fearRadarDesc"><title id="fearRadarTitle">Характеристики FEAR</title><desc id="fearRadarDesc">Значения пока не заданы.</desc><g class="fear-radar-grid"><polygon points="180.00,134.50 203.06,145.61 208.76,170.56 192.80,190.58 167.20,190.58 151.24,170.56 156.94,145.61"/><polygon points="180.00,105.00 226.13,127.21 237.52,177.13 205.60,217.16 154.40,217.16 122.48,177.13 133.87,127.21"/><polygon points="180.00,75.50 249.19,108.82 266.28,183.69 218.40,243.74 141.60,243.74 93.72,183.69 110.81,108.82"/><polygon points="180.00,46.00 272.26,90.43 295.04,190.26 231.20,270.31 128.80,270.31 64.96,190.26 87.74,90.43"/><path d="M180 164L180.00 46.00M180 164L272.26 90.43M180 164L295.04 190.26M180 164L231.20 270.31M180 164L128.80 270.31M180 164L64.96 190.26M180 164L87.74 90.43"/></g><polygon id="fearRadarProfile" class="fear-radar-profile" style="display:none"/><g id="fearRadarDots" class="fear-radar-dots"></g><g class="fear-radar-labels"><text x="180.00" y="25.00" text-anchor="middle">PAC</text><text x="291.80" y="78.84" text-anchor="start">SHO</text><text x="319.41" y="199.82" text-anchor="start">PAS</text><text x="242.05" y="296.84" text-anchor="start">DRI</text><text x="117.95" y="296.84" text-anchor="end">DEF</text><text x="40.59" y="199.82" text-anchor="end">PHY</text><text x="68.20" y="78.84" text-anchor="end" aria-label="OFN — Offense, атака">OFN</text></g></svg>
+<section class="player-overall overall-fear" id="fearOverall" role="status" aria-live="polite" aria-atomic="true" aria-label="Overall FEAR" data-rank="unrated"><span class="overall-sigil" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M3 32Q32 0 61 32Q32 64 3 32Z"/><path d="M8 32Q32 15 56 32Q32 49 8 32Z"/><ellipse cx="32" cy="32" rx="8" ry="15"/><path d="M32 22V42M9 14L17 22M47 42L55 50M14 54L20 44M44 20L50 10"/></svg></span><div class="overall-heading"><span>Overall</span><output class="overall-score" id="fearOverallScore">—</output><small>/ 99</small><span class="overall-state" id="fearOverallState">Заполнено 0 / 7</span></div><output class="overall-rank" id="fearOverallRank" aria-label="Ранг не рассчитан">—</output><div class="overall-meter" aria-hidden="true"><span></span></div></section><details class="overall-scale"><summary>ШКАЛА РАНГОВ</summary><p>Overall — среднее семи характеристик, округлённое до целого. Для расчёта заполни все 7 значений.</p><div class="overall-scale-list"><span><b>S</b> 90–99</span><span><b>A</b> 80–89</span><span><b>B</b> 70–79</span><span><b>C</b> 60–69</span><span><b>D</b> 50–59</span><span><b>E</b> 30–49</span><span><b>F</b> 0–29</span></div></details>
+
+<div class="fear-ratings profile-ratings"><label>PAC<input type="number" id="fearStatPAC" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAC от 0 до 99"></label><label>SHO<input type="number" id="fearStatSHO" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="SHO от 0 до 99"></label><label>PAS<input type="number" id="fearStatPAS" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAS от 0 до 99"></label><label>DRI<input type="number" id="fearStatDRI" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DRI от 0 до 99"></label><label>DEF<input type="number" id="fearStatDEF" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DEF от 0 до 99"></label><label>PHY<input type="number" id="fearStatPHY" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PHY от 0 до 99"></label><label class="offense-label" title="Offense — атака">OFN<input id="fearStatOFN" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="OFN Offense FEAR от 0 до 99"></label></div>
+</div>
+<div class="fear-description-cell" id="fearDescriptionCell" tabindex="-1">
+<div class="fear-cell-heading"><label for="fearDescription"><span class="fear-section-index">02</span> ХАРАКТЕРИСТИКА</label></div>
+<textarea id="fearDescription" maxlength="12000" placeholder="Напиши характеристику FEAR…" aria-describedby="fearSaveState"></textarea>
+<div class="fear-editor-footer"><p class="fear-save-state" id="fearSaveState" role="status"></p><span id="fearDescriptionCount">0 / 12000</span></div>
+</div>
+</section>
+<section class="fear-weapon-cell" id="fearWeaponCell" tabindex="-1" aria-labelledby="fearWeaponHeading"><div class="fear-weapon-heading"><span class="fear-weapon-number" aria-hidden="true">03</span><h3 id="fearWeaponHeading"><label for="fearWeapon">ОРУЖИЕ / FORMLESS</label></h3><span class="fear-weapon-rule" aria-hidden="true"></span></div><div class="fear-weapon-editor"><textarea id="fearWeapon" readonly aria-readonly="true" aria-describedby="fearWeaponSaveState">Formless - Главное оружие Fear. Formless это резкий взрывной рывок вперёд вверх с последующим ударом через себя за спину, также Фир может использовать другую вариацию Formless для более чётких ударов, но с более слабой силой и более предсказуемым направлением удара. Formless позволяет Фиру ловить мячи меж пассами, принимать их с огромной высоты, забивать непредсказуемые голы и так же использовать для защиты ворот.</textarea><div class="fear-editor-footer"><p class="fear-save-state" id="fearWeaponSaveState">Главное оружие FEAR · закреплено</p><span id="fearWeaponCount">ЗАКРЕПЛЕНО</span></div></div></section><form class="fear-send-cell" id="fearSubmissionForm" aria-labelledby="fearSendHeading"><h3 class="fear-send-heading" id="fearSendHeading"><span aria-hidden="true">04</span> ПЕРЕДАТЬ КАРТОЧКУ JOSEPH</h3><p class="fear-send-note">Заполненная карточка сохранится на сервере и придёт Joseph в Telegram. Другим посетителям она не показывается. Пока ты редактируешь поля, черновик остаётся только на твоём устройстве.</p><div class="fear-send-row"><label class="fear-send-name" for="fearSender"><span>ТВОЙ НИК <span>необязательно</span></span><input id="fearSender" name="nickname" type="text" maxlength="60" autocomplete="nickname" placeholder="Можно отправить анонимно"></label><button id="fearSubmit" type="submit">ОТПРАВИТЬ JOSEPH</button></div><label class="fear-send-trap" aria-hidden="true">Website<input name="website" type="text" tabindex="-1" autocomplete="off"></label><p class="fear-send-status" id="fearSubmitStatus" role="status" aria-live="polite"></p></form></article>
+
+<article class="wah-dossier" id="wahDossier" aria-labelledby="wahTitle" hidden>
+<div class="wah-file-top"><p>ДОСЬЕ ИГРОКА / 02</p><button class="wah-return" id="wahReturn" type="button">← PLAYERS</button></div>
+<section class="wah-hero" aria-label="Профиль wahhiyyy"><div class="wah-identity"><p class="wah-overline">HYPERBOREA / PLAYERS</p><div class="profile-name-block"><h2 class="wah-title wah-real-name" id="wahTitle" tabindex="-1">Кле Энигм</h2><p class="player-country-line"><span class="country-flag flag-fr" role="img" aria-label="Франция"></span><span>Франция</span></p></div><p class="profile-callsign callsign-wah"><span class="callsign-label">ПОЗЫВНОЙ</span><strong>wahhiyyy</strong></p><label class="wah-position-label" for="wahPosition">ПОЗИЦИЯ<input id="wahPosition" type="text" maxlength="40" placeholder="Позиция пока не указана" autocomplete="off"></label><section class="wah-music" aria-label="Музыка wahhiyyy"><div class="wah-music-controls"><button id="wahMusicToggle" type="button" aria-label="Воспроизвести OST wahhiyyy" aria-pressed="false">PLAY</button><label for="wahMusicVolume"><span>ГРОМКОСТЬ</span><input id="wahMusicVolume" type="range" min="0" max="100" value="28" aria-label="Громкость OST wahhiyyy"><output id="wahMusicLevel" for="wahMusicVolume">28%</output></label></div><p class="wah-music-status" id="wahMusicStatus" role="status"></p></section><button class="wah-hero-link" type="button" data-wah-scroll="wahStatsCell">ПАРАМЕТРЫ ИГРОКА <span aria-hidden="true">↘</span></button><dl class="profile-quick-facts" data-profile-overview="wah"><div><dt>ПОЗИЦИИ</dt><dd id="wahQuickPosition">Не указана</dd></div><div><dt>ПАРАМЕТРЫ</dt><dd id="wahQuickStats">0 / 7</dd></div><div><dt>ОРУЖИЕ</dt><dd id="wahQuickWeapon">—</dd></div></dl></div>
+<figure class="wah-art"><div class="wah-scene"><span class="wah-art-number" aria-hidden="true">02</span><div class="wah-lattice" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><img class="wah-portrait" src="./assets/wahhiyyy-kit-v2.webp" alt="Портрет wahhiyyy с белыми волосами и тёмными очками" width="1254" height="1254"><span class="wah-orbit-piece wah-orbit-one" aria-hidden="true"><svg viewBox="-2 0 62 52" aria-hidden="true"><path d="M8 10H24C24 5 22 2 28 2S32 5 32 10H48V25C54 25 58 22 58 28S54 31 48 31V48H32C32 42 35 38 28 38S24 42 24 48H8V31C2 31 0 34 0 28S2 25 8 25Z"/></svg></span><span class="wah-orbit-piece wah-orbit-two" aria-hidden="true"><svg viewBox="-2 0 62 52" aria-hidden="true"><path d="M8 10H24C24 5 22 2 28 2S32 5 32 10H48V25C54 25 58 22 58 28S54 31 48 31V48H32C32 42 35 38 28 38S24 42 24 48H8V31C2 31 0 34 0 28S2 25 8 25Z"/></svg></span><span class="wah-orbit-piece wah-orbit-three" aria-hidden="true"><svg viewBox="-2 0 62 52" aria-hidden="true"><path d="M8 10H24C24 5 22 2 28 2S32 5 32 10H48V25C54 25 58 22 58 28S54 31 48 31V48H32C32 42 35 38 28 38S24 42 24 48H8V31C2 31 0 34 0 28S2 25 8 25Z"/></svg></span></div></figure></section>
+<nav class="wah-nav" aria-label="Разделы досье wahhiyyy"><button type="button" data-wah-scroll="wahStatsCell"><span>01</span>ПАРАМЕТРЫ<span aria-hidden="true">↘</span></button><button type="button" data-wah-scroll="wahDescriptionCell"><span>02</span>ХАРАКТЕРИСТИКА<span aria-hidden="true">↘</span></button><button type="button" data-wah-scroll="wahWeaponCell"><span>03</span>ОРУЖИЕ<span aria-hidden="true">↘</span></button></nav>
+<section class="wah-details" aria-label="Характеристики wahhiyyy"><div class="wah-cell" id="wahStatsCell" tabindex="-1"><div class="wah-cell-heading"><h3><span class="wah-cell-index">01</span>ПАРАМЕТРЫ</h3><span>0 — 99</span></div><svg class="wah-radar" viewBox="0 0 360 340" role="img" aria-labelledby="wahRadarTitle wahRadarDesc"><title id="wahRadarTitle">Характеристики Кле Энигм</title><desc id="wahRadarDesc">Значения пока не заданы.</desc><g class="wah-radar-grid"><polygon points="180.00,134.50 203.06,145.61 208.76,170.56 192.80,190.58 167.20,190.58 151.24,170.56 156.94,145.61"/><polygon points="180.00,105.00 226.13,127.21 237.52,177.13 205.60,217.16 154.40,217.16 122.48,177.13 133.87,127.21"/><polygon points="180.00,75.50 249.19,108.82 266.28,183.69 218.40,243.74 141.60,243.74 93.72,183.69 110.81,108.82"/><polygon points="180.00,46.00 272.26,90.43 295.04,190.26 231.20,270.31 128.80,270.31 64.96,190.26 87.74,90.43"/><path d="M180 164L180.00 46.00M180 164L272.26 90.43M180 164L295.04 190.26M180 164L231.20 270.31M180 164L128.80 270.31M180 164L64.96 190.26M180 164L87.74 90.43"/></g><polygon id="wahRadarProfile" class="wah-radar-profile" style="display:none"/><g id="wahRadarDots" class="wah-radar-dots"></g><g class="wah-radar-labels"><text x="180.00" y="25.00" text-anchor="middle">PAC</text><text x="291.80" y="78.84" text-anchor="start">SHO</text><text x="319.41" y="199.82" text-anchor="start">PAS</text><text x="242.05" y="296.84" text-anchor="start">DRI</text><text x="117.95" y="296.84" text-anchor="end">DEF</text><text x="40.59" y="199.82" text-anchor="end">PHY</text><text x="68.20" y="78.84" text-anchor="end" aria-label="OFN — Offense, атака">OFN</text></g></svg>
+<section class="player-overall overall-wah" id="wahOverall" role="status" aria-live="polite" aria-atomic="true" aria-label="Overall Кле Энигм" data-rank="unrated"><span class="overall-sigil" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M7 8H25C17 -3 47 -3 39 8H57V25C46 17 46 47 57 39V57H39C47 46 17 46 25 57H7V39C-4 47 -4 17 7 25Z" fill="currentColor" fill-opacity=".07"/><path d="M7 31H25C17 20 47 20 39 31H57M32 8V23M32 41V57"/></svg></span><div class="overall-heading"><span>Overall</span><output class="overall-score" id="wahOverallScore">—</output><small>/ 99</small><span class="overall-state" id="wahOverallState">Заполнено 0 / 7</span></div><output class="overall-rank" id="wahOverallRank" aria-label="Ранг не рассчитан">—</output><div class="overall-meter" aria-hidden="true"><span></span></div></section><details class="overall-scale"><summary>ШКАЛА РАНГОВ</summary><p>Overall — среднее семи характеристик, округлённое до целого. Для расчёта заполни все 7 значений.</p><div class="overall-scale-list"><span><b>S</b> 90–99</span><span><b>A</b> 80–89</span><span><b>B</b> 70–79</span><span><b>C</b> 60–69</span><span><b>D</b> 50–59</span><span><b>E</b> 30–49</span><span><b>F</b> 0–29</span></div></details>
+<div class="wah-ratings profile-ratings"><label>PAC<input id="wahStatPAC" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAC wahhiyyy от 0 до 99"></label><label>SHO<input id="wahStatSHO" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="SHO wahhiyyy от 0 до 99"></label><label>PAS<input id="wahStatPAS" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAS wahhiyyy от 0 до 99"></label><label>DRI<input id="wahStatDRI" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DRI wahhiyyy от 0 до 99"></label><label>DEF<input id="wahStatDEF" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DEF wahhiyyy от 0 до 99"></label><label>PHY<input id="wahStatPHY" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PHY wahhiyyy от 0 до 99"></label><label class="offense-label" title="Offense — атака">OFN<input id="wahStatOFN" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="OFN Offense Кле Энигм от 0 до 99"></label></div></div><div class="wah-cell wah-editor" id="wahDescriptionCell" tabindex="-1"><div class="wah-cell-heading"><label for="wahDescription"><span class="wah-cell-index">02</span>ХАРАКТЕРИСТИКА</label></div><textarea id="wahDescription" maxlength="12000" placeholder="Напиши характеристику Кле Энигм…" aria-describedby="wahSaveState"></textarea><div class="wah-editor-footer"><p id="wahSaveState" role="status"></p><span id="wahDescriptionCount">0 / 12000</span></div></div></section>
+<section class="wah-cell wah-weapon-cell" id="wahWeaponCell" tabindex="-1" aria-labelledby="wahWeaponHeading"><div class="wah-weapon-heading"><span aria-hidden="true">03</span><h3 id="wahWeaponHeading"><label for="wahWeapon">ОРУЖИЕ</label></h3></div><div class="wah-editor"><textarea id="wahWeapon" maxlength="6000" placeholder="Название и описание оружия…" aria-describedby="wahWeaponSaveState"></textarea><div class="wah-editor-footer"><p id="wahWeaponSaveState" role="status"></p><span id="wahWeaponCount">0 / 6000</span></div></div></section><form class="wah-cell wah-send-cell" id="wahSubmissionForm" aria-labelledby="wahSendHeading"><h3 class="wah-send-heading" id="wahSendHeading"><span aria-hidden="true">04</span> ПЕРЕДАТЬ КАРТОЧКУ JOSEPH</h3><p class="wah-send-note">По кнопке досье wahhiyyy сохранится на сервере и придёт Joseph в Telegram. Позиция, оценки, характеристика и оружие останутся в твоём черновике. Другим посетителям отправленная карточка не показывается.</p><div class="wah-send-row"><label class="wah-send-name" for="wahSender"><span>ТВОЙ НИК <span>необязательно</span></span><input id="wahSender" name="nickname" type="text" maxlength="60" autocomplete="nickname" placeholder="Можно отправить анонимно"></label><button id="wahSubmit" type="submit">ОТПРАВИТЬ JOSEPH</button></div><label class="wah-send-trap" aria-hidden="true">Website<input name="website" type="text" tabindex="-1" autocomplete="off"></label><p class="wah-send-status" id="wahSubmitStatus" role="status" aria-live="polite"></p></form><p class="wah-local-note">Черновик сохраняется на этом устройстве. Для отправки в Telegram нужен интернет.</p>
+</article>
+<article class="frog-dossier" id="frogDossier" aria-labelledby="frogTitle" hidden>
+  <div class="frog-file-top"><p><span aria-hidden="true">♠</span> ДОСЬЕ ИГРОКА / 03</p><button class="frog-return" id="frogReturn" type="button">← PLAYERS</button></div>
+  <section class="frog-hero" aria-label="Профиль Frog">
+    <div class="frog-identity">
+      <p class="frog-overline">HYPERBOREA / PLAYERS</p><div class="profile-name-block"><h2 class="frog-title" id="frogTitle" tabindex="-1">Frog</h2><p class="player-country-line country-pending" id="frogCountry"><span class="country-flag flag-unknown" aria-hidden="true">?</span><span>Страна не указана</span></p></div><p class="profile-callsign callsign-frog"><span class="callsign-label">ПОЗЫВНОЙ</span><strong>Frog</strong></p>
+      <label class="frog-position-label" for="frogPosition">ПОЗИЦИЯ<input id="frogPosition" type="text" maxlength="40" placeholder="Позиция пока не указана" autocomplete="off"></label>
+<section class="frog-music" aria-label="Музыка Frog"><div class="frog-music-controls"><button id="frogMusicToggle" type="button" aria-pressed="false">PLAY</button><label for="frogMusicVolume"><span>ГРОМКОСТЬ</span><input id="frogMusicVolume" type="range" min="0" max="100" value="24" aria-label="Громкость музыки Frog"><output id="frogMusicLevel">24%</output></label></div><p id="frogMusicStatus" role="status"></p></section>
+      <div class="frog-draw"><div class="frog-reels" aria-hidden="true"><span class="frog-reel"><span class="frog-reel-symbol">♠</span></span><span class="frog-reel"><span class="frog-reel-symbol">♦</span></span><span class="frog-reel"><span class="frog-reel-symbol">♣</span></span></div><button id="frogRoll" type="button" aria-label="Перемешать символы" aria-busy="false">ROLL ↗</button><p class="frog-draw-status" id="frogRollStatus" role="status" aria-live="polite"></p></div>
+      <button class="frog-hero-link" type="button" data-frog-scroll="frogStatsCell">ПАРАМЕТРЫ ИГРОКА <span aria-hidden="true">↘</span></button><dl class="profile-quick-facts" data-profile-overview="frog"><div><dt>ПОЗИЦИИ</dt><dd id="frogQuickPosition">Не указана</dd></div><div><dt>ПАРАМЕТРЫ</dt><dd id="frogQuickStats">0 / 7</dd></div><div><dt>ОРУЖИЕ</dt><dd id="frogQuickWeapon">—</dd></div></dl>
+    </div>
+    <figure class="frog-art"><div class="frog-table"><span class="frog-roulette" aria-hidden="true"></span><span class="frog-hand-card" data-suit="♠" aria-hidden="true">♠</span><span class="frog-hand-card" data-suit="♦" aria-hidden="true">♦</span><img class="frog-portrait" src="./assets/frog-cutout.webp" alt="Портрет Frog с тёмными волосами, цепью и спиральными глазами" width="1254" height="1254"><span class="frog-chip frog-chip-one" aria-hidden="true">♠</span><span class="frog-chip frog-chip-two" aria-hidden="true">♣</span></div></figure>
+  </section>
+  <nav class="frog-nav" aria-label="Разделы досье Frog"><button type="button" data-frog-scroll="frogStatsCell"><span aria-hidden="true">♠</span> ПАРАМЕТРЫ <span aria-hidden="true">↘</span></button><button type="button" data-frog-scroll="frogDescriptionCell"><span aria-hidden="true">♦</span> ХАРАКТЕРИСТИКА <span aria-hidden="true">↘</span></button><button type="button" data-frog-scroll="frogWeaponCell"><span aria-hidden="true">♣</span> ОРУЖИЕ <span aria-hidden="true">↘</span></button></nav>
+  <section class="frog-details" aria-label="Характеристики Frog">
+    <div class="frog-cell" id="frogStatsCell" tabindex="-1"><div class="frog-cell-heading"><h3><span aria-hidden="true">01</span> ПАРАМЕТРЫ</h3><span>0 — 99</span></div>
+      <svg class="frog-radar" viewBox="0 0 360 340" role="img" aria-labelledby="frogRadarTitle frogRadarDesc"><title id="frogRadarTitle">Характеристики Frog</title><desc id="frogRadarDesc">Значения пока не заданы.</desc><g class="frog-radar-grid"><polygon points="180.00,134.50 203.06,145.61 208.76,170.56 192.80,190.58 167.20,190.58 151.24,170.56 156.94,145.61"/><polygon points="180.00,105.00 226.13,127.21 237.52,177.13 205.60,217.16 154.40,217.16 122.48,177.13 133.87,127.21"/><polygon points="180.00,75.50 249.19,108.82 266.28,183.69 218.40,243.74 141.60,243.74 93.72,183.69 110.81,108.82"/><polygon points="180.00,46.00 272.26,90.43 295.04,190.26 231.20,270.31 128.80,270.31 64.96,190.26 87.74,90.43"/><path d="M180 164L180.00 46.00M180 164L272.26 90.43M180 164L295.04 190.26M180 164L231.20 270.31M180 164L128.80 270.31M180 164L64.96 190.26M180 164L87.74 90.43"/></g><polygon id="frogRadarProfile" class="frog-radar-profile" style="display:none"/><g id="frogRadarDots" class="frog-radar-dots"></g><g class="frog-radar-labels"><text x="180.00" y="25.00" text-anchor="middle">PAC</text><text x="291.80" y="78.84" text-anchor="start">SHO</text><text x="319.41" y="199.82" text-anchor="start">PAS</text><text x="242.05" y="296.84" text-anchor="start">DRI</text><text x="117.95" y="296.84" text-anchor="end">DEF</text><text x="40.59" y="199.82" text-anchor="end">PHY</text><text x="68.20" y="78.84" text-anchor="end" aria-label="OFN — Offense, атака">OFN</text></g></svg>
+<section class="player-overall overall-frog" id="frogOverall" role="status" aria-live="polite" aria-atomic="true" aria-label="Overall Frog" data-rank="unrated"><span class="overall-sigil" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="29"/><circle cx="32" cy="32" r="24" stroke-dasharray="7 5" stroke-width="3"/><circle cx="32" cy="32" r="19"/><path d="M32 17C28 23 20 25 20 33C20 40 28 40 31 35L27 46H37L33 35C37 40 44 40 44 33C44 25 36 23 32 17Z" fill="currentColor" stroke="none"/></svg></span><div class="overall-heading"><span>Overall</span><output class="overall-score" id="frogOverallScore">—</output><small>/ 99</small><span class="overall-state" id="frogOverallState">Заполнено 0 / 7</span></div><output class="overall-rank" id="frogOverallRank" aria-label="Ранг не рассчитан">—</output><div class="overall-meter" aria-hidden="true"><span></span></div></section><details class="overall-scale"><summary>ШКАЛА РАНГОВ</summary><p>Overall — среднее семи характеристик, округлённое до целого. Для расчёта заполни все 7 значений.</p><div class="overall-scale-list"><span><b>S</b> 90–99</span><span><b>A</b> 80–89</span><span><b>B</b> 70–79</span><span><b>C</b> 60–69</span><span><b>D</b> 50–59</span><span><b>E</b> 30–49</span><span><b>F</b> 0–29</span></div></details>
+
+      <div class="frog-ratings profile-ratings"><label>PAC<input id="frogStatPAC" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAC Frog от 0 до 99"></label><label>SHO<input id="frogStatSHO" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="SHO Frog от 0 до 99"></label><label>PAS<input id="frogStatPAS" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAS Frog от 0 до 99"></label><label>DRI<input id="frogStatDRI" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DRI Frog от 0 до 99"></label><label>DEF<input id="frogStatDEF" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DEF Frog от 0 до 99"></label><label>PHY<input id="frogStatPHY" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PHY Frog от 0 до 99"></label><label class="offense-label" title="Offense — атака">OFN<input id="frogStatOFN" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="OFN Offense Frog от 0 до 99"></label></div>
+    </div>
+    <div class="frog-cell frog-editor" id="frogDescriptionCell" tabindex="-1"><div class="frog-cell-heading"><label for="frogDescription"><span aria-hidden="true">02</span> ХАРАКТЕРИСТИКА</label></div><textarea id="frogDescription" maxlength="12000" placeholder="Напиши характеристику Frog…" aria-describedby="frogSaveState"></textarea><div class="frog-editor-footer"><span id="frogDescriptionCount">0 / 12000</span></div></div>
+  </section>
+  <section class="frog-cell frog-weapon-cell" id="frogWeaponCell" tabindex="-1" aria-labelledby="frogWeaponHeading"><div class="frog-weapon-heading"><span aria-hidden="true">♣</span><h3 id="frogWeaponHeading"><label for="frogWeapon">ОРУЖИЕ</label></h3></div><div class="frog-editor"><textarea id="frogWeapon" maxlength="6000" placeholder="Название и описание оружия Frog…" aria-describedby="frogSaveState"></textarea><div class="frog-editor-footer"><span id="frogWeaponCount">0 / 6000</span></div></div></section>
+  <p class="frog-save-state" id="frogSaveState" role="status" aria-live="polite">Черновик сохраняется на этом устройстве.</p>
+</article>
+
+<article class="swarggy-dossier" id="swarggyDossier" aria-labelledby="swarggyTitle" hidden>
+ <div class="swarggy-field" aria-hidden="true"></div>
+ <div class="swarggy-file-top"><button class="swarggy-return" id="swarggyReturn" type="button">← PLAYERS</button></div>
+ <div class="swarggy-hero">
+  <div class="swarggy-identity"><p class="swarggy-overline"><span aria-hidden="true"></span><b lang="ja">彼岸花</b> HIGANBANA ARCHIVE</p><div class="profile-name-block"><h2 class="swarggy-title" id="swarggyTitle" tabindex="-1">Минами <span>Син</span></h2><p class="player-country-line"><span class="country-flag flag-jp" role="img" aria-label="Япония"></span><span>Япония</span></p></div><p class="profile-callsign callsign-swarggy"><span class="callsign-label">ПОЗЫВНОЙ</span><strong>Swarggy/Ew</strong></p><label class="swarggy-position-label" for="swarggyPosition">ПОЗИЦИЯ<input id="swarggyPosition" maxlength="40" placeholder="Укажи позицию на поле" autocomplete="off"></label><section class="swarggy-sound" aria-label="Музыка Минами Сина"><div class="swarggy-sound-controls"><button id="swarggyMusicToggle" type="button" aria-pressed="false">PLAY</button><label for="swarggyVolume"><span>ГРОМКОСТЬ</span><input id="swarggyVolume" type="range" min="0" max="100" value="60" aria-label="Громкость темы Минами Сина"><output id="swarggyVolumeLevel" for="swarggyVolume">60%</output></label></div><p id="swarggyMusicStatus" class="swarggy-music-status" role="status"></p></section><button class="minami-flow-toggle" id="swarggyFlowToggle" type="button" aria-pressed="false" aria-label="Flow state: тёмный режим досье"><span class="minami-flow-dot" aria-hidden="true"></span><span class="minami-flow-label" data-text="FLOW STATE">FLOW STATE</span></button><button class="swarggy-hero-link" type="button" data-swarggy-scroll="swarggyStatsCell">ОТКРЫТЬ ДОСЬЕ <span aria-hidden="true">↘</span></button><dl class="profile-quick-facts" data-profile-overview="swarggy"><div><dt>ПОЗИЦИИ</dt><dd id="swarggyQuickPosition">Не указана</dd></div><div><dt>ПАРАМЕТРЫ</dt><dd id="swarggyQuickStats">0 / 7</dd></div><div><dt>ОРУЖИЕ</dt><dd id="swarggyQuickWeapon">—</dd></div></dl></div>
+  <figure class="swarggy-art" data-look="field" aria-label="Минами Син среди хиганбан"><div class="minami-scene"><div class="minami-sun" aria-hidden="true"></div><span class="minami-kanji" aria-hidden="true" lang="ja">彼岸花</span><div class="minami-flowers minami-flowers-back" aria-hidden="true"></div><img class="swarggy-portrait minami-portrait-field" src="./assets/minami-shin-manga.webp?v=2" alt="Минами Син на поле" width="1254" height="1254"><img class="swarggy-portrait minami-portrait-off" src="./assets/minami-shin-color.webp" alt="Минами Син вне поля, цветной портрет" width="1350" height="1350" decoding="async"><div class="minami-flowers minami-flowers-front" aria-hidden="true"></div><div class="minami-drift" aria-hidden="true"></div><span class="swarggy-art-index" aria-hidden="true">04</span></div><div class="minami-look" role="group" aria-label="Образ Минами Сина"><button type="button" data-look="field" aria-pressed="true">НА ПОЛЕ</button><button type="button" data-look="off" aria-pressed="false">ВНЕ ПОЛЯ</button></div></figure>
+ </div>
+ <nav class="swarggy-nav" aria-label="Разделы досье Минами Сина"><button type="button" data-swarggy-scroll="swarggyStatsCell"><span>01</span>ПАРАМЕТРЫ<span aria-hidden="true">↘</span></button><button type="button" data-swarggy-scroll="swarggyDescriptionCell"><span>02</span>ХАРАКТЕРИСТИКА<span aria-hidden="true">↘</span></button><button type="button" data-swarggy-scroll="swarggyWeaponCell"><span>03</span>ОРУЖИЕ<span aria-hidden="true">↘</span></button><button type="button" data-swarggy-scroll="swarggyGardenCell"><span>04</span>ХИГАНБАНА<span aria-hidden="true">↘</span></button></nav>
+ <section class="swarggy-details" aria-label="Характеристики Минами Сина">
+  <div class="swarggy-cell" id="swarggyStatsCell" tabindex="-1"><div class="swarggy-cell-heading"><h3><span>01</span>ПАРАМЕТРЫ</h3><span>0 — 99</span></div><svg class="swarggy-radar" viewBox="0 0 360 340" role="img" aria-labelledby="swarggyRadarTitle swarggyRadarDesc"><title id="swarggyRadarTitle">Характеристики Минами Сина</title><desc id="swarggyRadarDesc">Значения пока не заданы.</desc><g class="swarggy-radar-grid"><polygon points="180.00,134.50 203.06,145.61 208.76,170.56 192.80,190.58 167.20,190.58 151.24,170.56 156.94,145.61"/><polygon points="180.00,105.00 226.13,127.21 237.52,177.13 205.60,217.16 154.40,217.16 122.48,177.13 133.87,127.21"/><polygon points="180.00,75.50 249.19,108.82 266.28,183.69 218.40,243.74 141.60,243.74 93.72,183.69 110.81,108.82"/><polygon points="180.00,46.00 272.26,90.43 295.04,190.26 231.20,270.31 128.80,270.31 64.96,190.26 87.74,90.43"/><path d="M180 164L180.00 46.00M180 164L272.26 90.43M180 164L295.04 190.26M180 164L231.20 270.31M180 164L128.80 270.31M180 164L64.96 190.26M180 164L87.74 90.43"/></g><polygon id="swarggyRadarProfile" class="swarggy-radar-profile" style="display:none"/><g id="swarggyRadarDots" class="swarggy-radar-dots"></g><g class="swarggy-radar-labels"><text x="180.00" y="25.00" text-anchor="middle">PAC</text><text x="291.80" y="78.84" text-anchor="start">SHO</text><text x="319.41" y="199.82" text-anchor="start">PAS</text><text x="242.05" y="296.84" text-anchor="start">DRI</text><text x="117.95" y="296.84" text-anchor="end">DEF</text><text x="40.59" y="199.82" text-anchor="end">PHY</text><text x="68.20" y="78.84" text-anchor="end" aria-label="OFN — Offense, атака">OFN</text></g></svg>
+   <section class="player-overall overall-swarggy" id="swarggyOverall" role="status" aria-live="polite" aria-atomic="true" aria-label="Overall Минами Син" data-rank="unrated"><span class="overall-sigil" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 30C27 21 20 17 11 18M32 30C37 21 44 17 53 18M32 30C24 27 15 29 9 36M32 30C40 27 49 29 55 36M32 30C30 20 30 12 33 5M32 30C29 37 30 47 32 62"/><path d="M32 30C22 33 18 41 19 49M32 30C42 33 46 41 45 49" stroke-opacity=".5"/><circle cx="32" cy="30" r="3.5" fill="currentColor"/><circle cx="11" cy="18" r="1.6" fill="currentColor"/><circle cx="53" cy="18" r="1.6" fill="currentColor"/><circle cx="9" cy="36" r="1.6" fill="currentColor"/><circle cx="55" cy="36" r="1.6" fill="currentColor"/><circle cx="33" cy="5" r="1.6" fill="currentColor"/></svg></span><div class="overall-heading"><span>Overall</span><output class="overall-score" id="swarggyOverallScore">—</output><small>/ 99</small><span class="overall-state" id="swarggyOverallState">Заполнено 0 / 7</span></div><output class="overall-rank" id="swarggyOverallRank" aria-label="Ранг не рассчитан">—</output><div class="overall-meter" aria-hidden="true"><span></span></div></section><details class="overall-scale"><summary>ШКАЛА РАНГОВ</summary><p>Overall — среднее семи характеристик, округлённое до целого. Для расчёта заполни все 7 значений.</p><div class="overall-scale-list"><span><b>S</b> 90–99</span><span><b>A</b> 80–89</span><span><b>B</b> 70–79</span><span><b>C</b> 60–69</span><span><b>D</b> 50–59</span><span><b>E</b> 30–49</span><span><b>F</b> 0–29</span></div></details>
+   <div class="swarggy-ratings profile-ratings"><label>PAC<input id="swarggyStatPAC" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAC Swarggy/Ew от 0 до 99"></label><label>SHO<input id="swarggyStatSHO" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="SHO Swarggy/Ew от 0 до 99"></label><label>PAS<input id="swarggyStatPAS" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAS Swarggy/Ew от 0 до 99"></label><label>DRI<input id="swarggyStatDRI" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DRI Swarggy/Ew от 0 до 99"></label><label>DEF<input id="swarggyStatDEF" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DEF Swarggy/Ew от 0 до 99"></label><label>PHY<input id="swarggyStatPHY" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PHY Swarggy/Ew от 0 до 99"></label><label class="offense-label" title="Offense — атака">OFN<input id="swarggyStatOFN" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="OFN Swarggy/Ew от 0 до 99"></label></div>
+  </div>
+  <div class="swarggy-cell swarggy-editor" id="swarggyDescriptionCell" tabindex="-1"><div class="swarggy-cell-heading"><label for="swarggyDescription"><span>02</span>ХАРАКТЕРИСТИКА</label></div><textarea id="swarggyDescription" maxlength="12000" placeholder="Напиши характеристику Минами Сина…" aria-describedby="swarggySaveState"></textarea><div class="swarggy-editor-footer"><span id="swarggyDescriptionCount">0 / 12000</span></div></div>
+ </section>
+ <section class="swarggy-cell swarggy-weapon-cell" id="swarggyWeaponCell" tabindex="-1" aria-labelledby="swarggyWeaponHeading"><div class="swarggy-weapon-heading"><span aria-hidden="true" lang="ja">花</span><h3 id="swarggyWeaponHeading"><label for="swarggyWeapon">ОРУЖИЕ</label></h3></div><div class="swarggy-editor"><textarea id="swarggyWeapon" maxlength="6000" placeholder="Название и описание оружия…" aria-describedby="swarggySaveState"></textarea><div class="swarggy-editor-footer"><span id="swarggyWeaponCount">0 / 6000</span></div></div></section>
+ <p class="swarggy-save-state" id="swarggySaveState" role="status" aria-live="polite">Черновик сохраняется на этом устройстве.</p>
+ <section class="swarggy-cell minami-garden-cell" id="swarggyGardenCell" tabindex="-1" aria-labelledby="swarggyGardenHeading"><div class="minami-garden-side"><span class="minami-garden-kanji" aria-hidden="true" lang="ja">咲</span><h3 id="swarggyGardenHeading"><span>04</span>ХИГАНБАНА</h3><ul class="minami-garden-hints" id="swarggyGardenHints"><li><b>ПОТЯНИ</b>повернуть цветок</li><li><b>ЗАЖМИ</b>бутон сомкнётся</li><li><b>ОТПУСТИ</b>и он расцветёт</li><li><b>НАЖМИ НА ЦВЕТОК</b>лепестки опадут</li></ul></div><div class="minami-garden-stage" id="swarggyGarden" tabindex="0" role="group" aria-label="Хиганбана. Удерживай пробел, чтобы сомкнуть бутон, отпусти — и он расцветёт. Стрелки поворачивают цветок." aria-describedby="swarggyGardenHints"><i class="minami-garden-wave" aria-hidden="true"></i><p class="minami-garden-status" id="swarggyGardenStatus" aria-hidden="true">ЗАЖМИ ЦВЕТОК</p></div></section>
+</article>
+<article class="new-player-dossier np-emiliano" id="emilianoDossier" aria-labelledby="emilianoTitle" hidden>
+ <div class="np-background" aria-hidden="true"></div>
+ <div class="np-top"><button class="np-return" id="emilianoReturn" type="button">← PLAYERS</button></div>
+ <section class="np-hero"><div class="np-identity"><span class="np-editorial-mark" aria-hidden="true">///</span><div class="profile-name-block"><h2 id="emilianoTitle" class="np-title" tabindex="-1">Эмилиано <span>Санчес</span></h2><p class="player-country-line"><span class="country-flag flag-es" role="img" aria-label="Испания"></span><span>Испания</span></p></div><label class="profile-callsign callsign-emiliano" for="emilianoCallsign"><span class="callsign-label">ПОЗЫВНОЙ</span><input id="emilianoCallsign" maxlength="40" placeholder="Не указан" autocomplete="off" spellcheck="false"></label><label class="np-position" for="emilianoPosition">ПОЗИЦИЯ<input id="emilianoPosition" maxlength="40" placeholder="Укажи позицию на поле" autocomplete="off"></label><section class="np-music" aria-label="Музыка Санчеса"><div class="np-music-controls"><button id="emilianoMusicToggle" type="button" aria-pressed="false">PLAY</button><label for="emilianoMusicVolume"><span>ГРОМКОСТЬ</span><input id="emilianoMusicVolume" type="range" min="0" max="100" value="22" aria-label="Громкость OST Санчеса"><output id="emilianoMusicLevel" for="emilianoMusicVolume">22%</output></label></div><p id="emilianoMusicStatus" class="np-music-status" role="status"></p></section><button class="np-hero-link" type="button" data-np-scroll="emilianoStatsCell">ХАРАКТЕРИСТИКИ <span aria-hidden="true">↘</span></button><dl class="profile-quick-facts" data-profile-overview="emiliano"><div><dt>ПОЗИЦИИ</dt><dd id="emilianoQuickPosition">Не указана</dd></div><div><dt>ПАРАМЕТРЫ</dt><dd id="emilianoQuickStats">0 / 7</dd></div><div><dt>ОРУЖИЕ</dt><dd id="emilianoQuickWeapon">—</dd></div></dl></div><figure class="np-art" aria-label="Эмилиано Санчес"><div class="np-art-depth"><span class="np-art-paper paper-one"></span><span class="np-art-paper paper-two"></span><span class="np-art-paper paper-three"></span><span class="np-halftone"></span><span class="np-art-tape tape-one"></span><span class="np-art-tape tape-two"></span><img class="np-portrait" src="./assets/emiliano-cutout.png" alt="Эмилиано Санчес" width="1254" height="1254"></div></figure></section>
+ <nav class="np-nav" aria-label="Разделы досье Эмилиано Санчес"><button type="button" data-np-scroll="emilianoStatsCell">ПАРАМЕТРЫ <span>↘</span></button><button type="button" data-np-scroll="emilianoDescriptionCell">ХАРАКТЕРИСТИКА <span>↘</span></button><button type="button" data-np-scroll="emilianoWeaponCell">ОРУЖИЕ <span>↘</span></button></nav>
+ <div class="np-details"><div class="np-cell np-stat-cell" id="emilianoStatsCell" tabindex="-1"><div class="np-cell-heading"><h3><span>01</span>ПАРАМЕТРЫ</h3><span>0 — 99</span></div><svg class="np-radar" viewBox="0 0 360 340" role="img" aria-labelledby="emilianoRadarTitle emilianoRadarDesc"><title id="emilianoRadarTitle">Характеристики Эмилиано Санчес</title><desc id="emilianoRadarDesc">Значения пока не заданы.</desc><g class="np-radar-grid"><polygon points="180.00,134.50 203.06,145.61 208.76,170.56 192.80,190.58 167.20,190.58 151.24,170.56 156.94,145.61"/><polygon points="180.00,105.00 226.13,127.21 237.52,177.13 205.60,217.16 154.40,217.16 122.48,177.13 133.87,127.21"/><polygon points="180.00,75.50 249.19,108.82 266.28,183.69 218.40,243.74 141.60,243.74 93.72,183.69 110.81,108.82"/><polygon points="180.00,46.00 272.26,90.43 295.04,190.26 231.20,270.31 128.80,270.31 64.96,190.26 87.74,90.43"/><path d="M180 164L180.00 46.00M180 164L272.26 90.43M180 164L295.04 190.26M180 164L231.20 270.31M180 164L128.80 270.31M180 164L64.96 190.26M180 164L87.74 90.43"/></g><polygon id="emilianoRadarProfile" class="np-radar-profile" style="display:none"/><g id="emilianoRadarDots" class="np-radar-dots"></g><g class="np-radar-labels"><text x="180.00" y="25.00" text-anchor="middle">PAC</text><text x="291.80" y="78.84" text-anchor="start">SHO</text><text x="319.41" y="199.82" text-anchor="start">PAS</text><text x="242.05" y="296.84" text-anchor="start">DRI</text><text x="117.95" y="296.84" text-anchor="end">DEF</text><text x="40.59" y="199.82" text-anchor="end">PHY</text><text x="68.20" y="78.84" text-anchor="end" aria-label="OFN — Offense, атака">OFN</text></g></svg>
+   <section class="player-overall overall-emiliano" id="emilianoOverall" role="status" aria-live="polite" aria-atomic="true" aria-label="Overall Эмилиано Санчес" data-rank="unrated"><span class="overall-sigil" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M7 16L31 7L56 19L48 51L19 58L7 16Z"/><path d="M19 40L29 17L34 29L46 22L36 47L30 35L19 40Z"/></svg></span><div class="overall-heading"><span>Overall</span><output class="overall-score" id="emilianoOverallScore">—</output><small>/ 99</small><span class="overall-state" id="emilianoOverallState">Заполнено 0 / 7</span></div><output class="overall-rank" id="emilianoOverallRank" aria-label="Ранг не рассчитан">—</output><div class="overall-meter" aria-hidden="true"><span></span></div></section><details class="overall-scale"><summary>ШКАЛА РАНГОВ</summary><p>Overall — среднее семи характеристик, округлённое до целого. Для расчёта заполни все 7 значений.</p><div class="overall-scale-list"><span><b>S</b> 90–99</span><span><b>A</b> 80–89</span><span><b>B</b> 70–79</span><span><b>C</b> 60–69</span><span><b>D</b> 50–59</span><span><b>E</b> 30–49</span><span><b>F</b> 0–29</span></div></details>
+   <div class="np-ratings profile-ratings"><label>PAC<input id="emilianoStatPAC" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAC Эмилиано Санчес от 0 до 99"></label><label>SHO<input id="emilianoStatSHO" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="SHO Эмилиано Санчес от 0 до 99"></label><label>PAS<input id="emilianoStatPAS" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAS Эмилиано Санчес от 0 до 99"></label><label>DRI<input id="emilianoStatDRI" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DRI Эмилиано Санчес от 0 до 99"></label><label>DEF<input id="emilianoStatDEF" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DEF Эмилиано Санчес от 0 до 99"></label><label>PHY<input id="emilianoStatPHY" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PHY Эмилиано Санчес от 0 до 99"></label><label class="offense-label" title="Offense — атака">OFN<input id="emilianoStatOFN" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="OFN Эмилиано Санчес от 0 до 99"></label></div>
+  </div><section class="np-cell np-editor" id="emilianoDescriptionCell" tabindex="-1"><div class="np-cell-heading"><label for="emilianoDescription">ХАРАКТЕРИСТИКА</label></div><textarea id="emilianoDescription" maxlength="12000" placeholder="Напиши характеристику персонажа…" aria-describedby="emilianoSaveState"></textarea><div class="np-editor-footer" id="emilianoDescriptionCount">0 / 12000</div></section></div>
+ <section class="np-cell np-weapon" id="emilianoWeaponCell" tabindex="-1"><div class="np-cell-heading"><label for="emilianoWeapon">ОРУЖИЕ</label></div><textarea id="emilianoWeapon" maxlength="6000" placeholder="Название и описание оружия…" aria-describedby="emilianoSaveState"></textarea><div class="np-editor-footer" id="emilianoWeaponCount">0 / 6000</div></section><p class="np-save-state" id="emilianoSaveState" role="status" aria-live="polite">Черновик сохраняется на этом устройстве.</p>
+</article>
+<article class="new-player-dossier np-yoru" id="yoruDossier" aria-labelledby="yoruTitle" hidden>
+ <div class="np-background" aria-hidden="true"></div>
+ <div class="np-top"><button class="np-return" id="yoruReturn" type="button">← PLAYERS</button></div>
+ <section class="np-hero"><div class="np-identity"><span class="np-editorial-mark" aria-hidden="true">···</span><div class="profile-name-block"><h2 id="yoruTitle" class="np-title" tabindex="-1">Нишимура <span>Йору</span></h2><p class="player-country-line"><span class="country-flag flag-jp" role="img" aria-label="Япония"></span><span>Япония</span></p></div><label class="profile-callsign callsign-yoru" for="yoruCallsign"><span class="callsign-label">ПОЗЫВНОЙ</span><input id="yoruCallsign" maxlength="40" placeholder="Не указан" autocomplete="off" spellcheck="false"></label><label class="np-position" for="yoruPosition">ПОЗИЦИЯ<input id="yoruPosition" maxlength="40" placeholder="Укажи позицию на поле" autocomplete="off"></label><section class="np-music np-music-yoru" aria-label="Звук Йору"><div class="np-music-controls"><label for="yoruMusicVolume"><span>ГРОМКОСТЬ</span><input id="yoruMusicVolume" type="range" min="0" max="100" value="60" aria-label="Громкость темы Йору"><output id="yoruMusicLevel" for="yoruMusicVolume">60%</output></label></div><p class="np-music-status">Своей темы пока нет — громкость уже готова.</p></section><button class="np-hero-link" type="button" data-np-scroll="yoruStatsCell">ХАРАКТЕРИСТИКИ <span aria-hidden="true">↘</span></button><dl class="profile-quick-facts" data-profile-overview="yoru"><div><dt>ПОЗИЦИИ</dt><dd id="yoruQuickPosition">Не указана</dd></div><div><dt>ПАРАМЕТРЫ</dt><dd id="yoruQuickStats">0 / 7</dd></div><div><dt>ОРУЖИЕ</dt><dd id="yoruQuickWeapon">Absolute analytics</dd></div></dl></div><figure class="np-art" aria-label="Нишимура Йору"><div class="np-art-depth"><span class="np-city-depth"></span><span class="np-city-lines"></span><span class="np-rain"></span><span class="np-glass glass-one"></span><span class="np-glass glass-two"></span><span class="yoru-advisor" role="img" aria-label="Призрак-подсказчик — мысленная проекция Нишимуры"><i class="advisor-head"></i><i class="advisor-body"></i><i class="advisor-hand"></i><i class="advisor-trace"></i></span><span class="yoru-analysis-paths" aria-hidden="true"></span><img class="np-portrait" src="./assets/yoru-cutout.png" alt="Нишимура Йору" width="1254" height="1254"></div></figure></section>
+ <nav class="np-nav" aria-label="Разделы досье Нишимура Йору"><button type="button" data-np-scroll="yoruStatsCell">ПАРАМЕТРЫ <span>↘</span></button><button type="button" data-np-scroll="yoruDescriptionCell">ХАРАКТЕРИСТИКА <span>↘</span></button><button type="button" data-np-scroll="yoruWeaponCell">ОРУЖИЕ <span>↘</span></button></nav>
+ <div class="np-details"><div class="np-cell np-stat-cell" id="yoruStatsCell" tabindex="-1"><div class="np-cell-heading"><h3><span>01</span>ПАРАМЕТРЫ</h3><span>0 — 99</span></div><svg class="np-radar" viewBox="0 0 360 340" role="img" aria-labelledby="yoruRadarTitle yoruRadarDesc"><title id="yoruRadarTitle">Характеристики Нишимура Йору</title><desc id="yoruRadarDesc">Значения пока не заданы.</desc><g class="np-radar-grid"><polygon points="180.00,134.50 203.06,145.61 208.76,170.56 192.80,190.58 167.20,190.58 151.24,170.56 156.94,145.61"/><polygon points="180.00,105.00 226.13,127.21 237.52,177.13 205.60,217.16 154.40,217.16 122.48,177.13 133.87,127.21"/><polygon points="180.00,75.50 249.19,108.82 266.28,183.69 218.40,243.74 141.60,243.74 93.72,183.69 110.81,108.82"/><polygon points="180.00,46.00 272.26,90.43 295.04,190.26 231.20,270.31 128.80,270.31 64.96,190.26 87.74,90.43"/><path d="M180 164L180.00 46.00M180 164L272.26 90.43M180 164L295.04 190.26M180 164L231.20 270.31M180 164L128.80 270.31M180 164L64.96 190.26M180 164L87.74 90.43"/></g><polygon id="yoruRadarProfile" class="np-radar-profile" style="display:none"/><g id="yoruRadarDots" class="np-radar-dots"></g><g class="np-radar-labels"><text x="180.00" y="25.00" text-anchor="middle">PAC</text><text x="291.80" y="78.84" text-anchor="start">SHO</text><text x="319.41" y="199.82" text-anchor="start">PAS</text><text x="242.05" y="296.84" text-anchor="start">DRI</text><text x="117.95" y="296.84" text-anchor="end">DEF</text><text x="40.59" y="199.82" text-anchor="end">PHY</text><text x="68.20" y="78.84" text-anchor="end" aria-label="OFN — Offense, атака">OFN</text></g></svg>
+   <section class="player-overall overall-yoru" id="yoruOverall" role="status" aria-live="polite" aria-atomic="true" aria-label="Overall Нишимура Йору" data-rank="unrated"><span class="overall-sigil" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M8 12H56V52H8Z"/><path d="M16 20H48V44H16Z"/><path d="M8 32H56M32 12V52"/></svg></span><div class="overall-heading"><span>Overall</span><output class="overall-score" id="yoruOverallScore">—</output><small>/ 99</small><span class="overall-state" id="yoruOverallState">Заполнено 0 / 7</span></div><output class="overall-rank" id="yoruOverallRank" aria-label="Ранг не рассчитан">—</output><div class="overall-meter" aria-hidden="true"><span></span></div></section><details class="overall-scale"><summary>ШКАЛА РАНГОВ</summary><p>Overall — среднее семи характеристик, округлённое до целого. Для расчёта заполни все 7 значений.</p><div class="overall-scale-list"><span><b>S</b> 90–99</span><span><b>A</b> 80–89</span><span><b>B</b> 70–79</span><span><b>C</b> 60–69</span><span><b>D</b> 50–59</span><span><b>E</b> 30–49</span><span><b>F</b> 0–29</span></div></details>
+   <div class="np-ratings profile-ratings"><label>PAC<input id="yoruStatPAC" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAC Нишимура Йору от 0 до 99"></label><label>SHO<input id="yoruStatSHO" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="SHO Нишимура Йору от 0 до 99"></label><label>PAS<input id="yoruStatPAS" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAS Нишимура Йору от 0 до 99"></label><label>DRI<input id="yoruStatDRI" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DRI Нишимура Йору от 0 до 99"></label><label>DEF<input id="yoruStatDEF" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DEF Нишимура Йору от 0 до 99"></label><label>PHY<input id="yoruStatPHY" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PHY Нишимура Йору от 0 до 99"></label><label class="offense-label" title="Offense — атака">OFN<input id="yoruStatOFN" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="OFN Нишимура Йору от 0 до 99"></label></div>
+  </div><section class="np-cell np-editor" id="yoruDescriptionCell" tabindex="-1"><div class="np-cell-heading"><label for="yoruDescription">ХАРАКТЕРИСТИКА</label></div><textarea id="yoruDescription" maxlength="12000" placeholder="Напиши характеристику персонажа…" aria-describedby="yoruSaveState"></textarea><div class="np-editor-footer" id="yoruDescriptionCount">0 / 12000</div></section></div>
+ <section class="np-cell np-weapon" id="yoruWeaponCell" tabindex="-1"><div class="np-cell-heading"><label for="yoruWeapon">ОРУЖИЕ</label></div><textarea id="yoruWeapon" maxlength="6000" placeholder="Название и описание оружия…" aria-describedby="yoruSaveState">Absolute analytics</textarea><div class="np-editor-footer" id="yoruWeaponCount">0 / 6000</div></section><p class="np-save-state" id="yoruSaveState" role="status" aria-live="polite">Черновик сохраняется на этом устройстве.</p>
+</article>
+
+<footer class="db-footer"><span>Joseph</span><span id="dbNetworkStatus">CONNECTION STABLE</span></footer>
+</section>
+
+
+<div class="wah-puzzle-overlay" id="wahPuzzleOverlay" aria-hidden="true" hidden></div><div class="fear-shroud" id="fearShroud" aria-hidden="true" hidden></div><audio id="emilianoScore" src="./assets/emiliano-punk-tactics.mp3" preload="none" playsinline loop></audio><audio id="swarggyScore" src="./assets/minami-run-up.mp3" preload="none" playsinline loop></audio><audio id="swarggyFlowScore" src="./assets/minami-creepiness.mp3" preload="none" playsinline loop></audio><audio id="frogScore" src="./assets/frog-malevolence.mp3" preload="none" playsinline loop></audio><audio id="wahPreview" src="./assets/wahhiyyy-interlock-v1.mp3" preload="none" playsinline loop></audio><audio id="wahScore" src="./assets/wahhiyyy-neo-egoist.mp3" preload="none" playsinline loop></audio><audio id="fearPreview" src="./assets/fear-preview-heavy.mp3" preload="none" playsinline></audio><audio id="fearScore" src="./assets/fear-dossier-heavy.mp3" preload="none" playsinline loop></audio><div class="glitch-overlay" id="glitchOverlay" aria-hidden="true" hidden></div><audio id="music" src="./assets/judgement-from-0040.mp3" preload="none" playsinline></audio><section class="boot-event" id="bootEventOverlay" role="dialog" aria-modal="true" aria-label="System connection event" tabindex="-1" hidden>
+<div class="boot-event-tears" id="bootEventTears" aria-hidden="true"></div>
+<img class="boot-event-emblem" id="bootEventEmblem" src="./assets/bluelock-mark.svg" alt="Blue Lock" width="300" height="300" hidden>
+<h2 id="bootEventTitle">CONNECTION LOST</h2><p id="bootEventNote" role="status"></p>
+<output class="boot-event-timer" id="bootEventTimer" role="timer" aria-label="Time until automatic retry" aria-live="off">00:00</output>
+<div class="boot-event-meter" id="bootEventMeter" role="progressbar" aria-label="Reconnection progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="boot-event-fill" id="bootEventFill"></span></div>
+<img class="boot-crash-icon" id="bootCrashIcon" src="./assets/boot-crash-icon.png" alt="System failure" width="540" height="500" hidden>
+<div class="boot-event-actions"><button id="bootEventReconnect" type="button" hidden>[ RECONNECT ]</button><button id="bootEventPlay" type="button" hidden>[ PLAY AUDIO ]</button></div>
+</section><audio id="bootCrashAudio" src="./assets/mi-bombo.mp3" preload="none" playsinline></audio></main>
+<script src="./sound-mixer.js?v=10"></script>
+<script src="./boot-events.js?v=27"></script>
+<script>
+(() => {
+  'use strict';
+  const clock = document.getElementById('clock');
+  const userEl = document.getElementById('userId');
+  const landing = document.getElementById('landing');
+  const bootWrap = document.getElementById('bootWrap');
+  const boot = document.getElementById('boot');
+  const database = document.getElementById('database');
+  const top = document.getElementById('top');
+  const enter = document.getElementById('enter');
+
+  // The bundled excerpt starts at original Judgement 0:40 before tape processing.
+  let audioCtx, hissSource, hissGain, hissFilter;
+  const audioEnabled = true;
+  const music = document.getElementById('music');
+  const screen = document.getElementById('screen');
+  // Levels come from the shared sound mixer (window.HyperboreaSound).
+  const sound = window.HyperboreaSound, musicLevel = () => sound.gain('terminal', 'music');
+  let musicSelected = null;
+  let musicState = 'unrolled';
+  let musicPromise = null;
+  let musicExitTimers = [];
+  music.volume = musicLevel();
+  sound.subscribe(channel => {
+    if (channel !== 'terminal' && channel !== 'master') return;
+    if (musicState !== 'ending' && musicState !== 'stopped') music.volume = musicLevel();
+    applyVolume();
+  });
+  music.preservesPitch = false; music.webkitPreservesPitch = false;
+  function rollMusicOnce(){
+    if(musicSelected !== null) return;
+    musicSelected = Math.random() < .10;
+    musicState = musicSelected ? 'ready' : 'not-selected';
+  }
+  function applyVolume(){
+    if(hissGain && audioCtx) hissGain.gain.setTargetAtTime(
+      !document.hidden && !window.WahArchive?.isOpen && !window.FrogArchive?.isOpen && !window.SwarggyArchive?.isOpen && !window.NewPlayersArchive?.isOpen && !(window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy) && !window.BootEvents?.active ? .018 * sound.factor('terminal', 'fx') : 0, audioCtx.currentTime, .12);
+  }
+  window.HyperboreaAmbience={refresh:applyVolume};
+  function unlockCrt(){
+    try{
+      ensureAudio();
+      if(audioCtx.state !== 'running') audioCtx.resume().catch(console.warn);
+      applyVolume();
+    }catch(error){console.warn('CRT effects:',error);}
+  }
+  function startSessionAudio(){
+    // Roll before CRT noise consumes random samples. A retry never rolls again.
+    rollMusicOnce();
+    let playback = Promise.resolve();
+    if(musicSelected && musicState === 'ready'){
+      musicState = 'starting';
+      music.currentTime = 0; // The WAV itself begins at original MP3 timestamp 0:40.
+      try { playback = Promise.resolve(music.play()); }
+      catch(error){ playback = Promise.reject(error); }
+      musicPromise = playback.then(()=>{
+        if(musicState === 'starting') musicState = 'playing';
+      }).catch(error=>{
+        if(musicState === 'starting') musicState = 'ready';
+        throw error;
+      }).finally(()=>{musicPromise=null;});
+      playback = musicPromise;
+    } else if(musicState === 'starting' && musicPromise) playback = musicPromise;
+    unlockCrt();
+    return playback;
+  }
+  function resumeSessionAudio(){
+    if(document.hidden || window.BootEvents?.active){applyVolume();return;}
+    unlockCrt();
+    // A stopped or unselected track can never be revived by clicks or tab focus.
+    if(musicState === 'playing' && music.paused && !database.classList.contains('active')){
+      music.play().catch(console.warn);
+    }
+  }
+  window.BootEvents?.configure({onActive:(active,result)=>{
+    if(active){music.pause();applyVolume();}
+    else if(result==='cancelled'){music.pause();if(hissGain && audioCtx)hissGain.gain.setTargetAtTime(0,audioCtx.currentTime,.05);}
+    else if(!document.hidden)resumeSessionAudio();
+  }});
+  music.addEventListener('ended',()=>{
+    if(musicState !== 'playing' || database.classList.contains('active') || window.BootEvents?.active) return;
+    music.currentTime=0;
+    music.play().catch(console.warn);
+  });
+  function stopMusicWithGlitch(){
+    if(musicState === 'ending' || musicState === 'stopped') return;
+    const wasPlaying = musicSelected && (musicState === 'playing' || musicState === 'starting');
+    musicState = 'ending'; // Block every resume path before scheduling the final stutter.
+    screen.classList.add('music-failure');
+    const anchor = music.currentTime;
+    const cuts = [
+      [0,.18,1,0],[55,0,1,0],[100,.15,.72,.025],[155,.015,1.6,0],
+      [210,0,.8,0],[250,.12,.52,.04],[320,0,.5,0],
+      [365,.10,1.8,.06],[420,0,1,0],[465,.075,.32,0],
+      [530,0,.5,0],[580,.045,.2,.02],[650,0,.2,0]
+    ];
+    if(wasPlaying && !music.paused){
+      cuts.forEach(([delay,volume,rate,offset])=>{
+        musicExitTimers.push(setTimeout(()=>{
+          if(musicState !== 'ending') return;
+          music.volume=Math.min(1,volume*musicLevel()/.18);
+          music.playbackRate=rate;
+          if(volume>0) {
+            try{music.currentTime=Math.min(anchor+offset,Math.max(0,music.duration-.15));}catch(error){}
+          }
+        },delay));
+      });
+    }
+    musicExitTimers.push(setTimeout(()=>{
+      music.pause();music.volume=0;music.playbackRate=1;
+      musicState='stopped';
+      musicExitTimers.forEach(clearTimeout);musicExitTimers=[];
+      screen.classList.remove('music-failure');
+    },760));
+  }
+  function cloneScreen(node){
+    const copy=node.cloneNode(true);
+    copy.hidden=false;copy.removeAttribute('id');
+    copy.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+    copy.querySelectorAll('button').forEach(button=>{button.disabled=true;button.tabIndex=-1;});
+    if(copy.classList.contains('database')) copy.classList.add('active');
+    return copy;
+  }
+  let glitchActive=false;
+  function glitchTransition(outgoing,incoming,swap,done=()=>{}){
+    if(glitchActive) return false;
+    glitchActive=true;
+    const overlay=document.getElementById('glitchOverlay');
+    overlay.replaceChildren();
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const bands=window.matchMedia('(pointer:coarse)').matches ? [[6,28,20],[39,60,-28],[72,94,24]] : [[4,24,28],[26,38,-42],[40,53,18],[57,67,-30],[70,81,38],[85,96,-22]];
+    bands.forEach(([start,end,shift],index)=>{
+      const band=document.createElement('div');
+      band.className='glitch-band';
+      band.style.clipPath='inset('+start+'% 0 '+(100-end)+'% 0)';
+      band.style.setProperty('--shift',shift+'px');
+      band.style.setProperty('--delay',(-index*19)+'ms');
+      band.appendChild(cloneScreen(index%2 ? incoming : outgoing));
+      overlay.appendChild(band);
+    });
+    const noise=document.createElement('div');noise.className='glitch-static';overlay.appendChild(noise);
+    overlay.hidden=false;screen.classList.add('system-switching');
+    setTimeout(swap,reduced?90:390);
+    setTimeout(()=>{
+      overlay.hidden=true;overlay.replaceChildren();
+      screen.classList.remove('system-switching');
+      glitchActive=false;done();
+    },reduced?180:860);
+  }
+
+  window.HyperboreaTransitions = {
+    glitch:glitchTransition,
+    get busy(){return glitchActive || !!window.WahArchive?.busy || !!(window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy);}
+  };
+
+  function ensureAudio(){
+    if(audioCtx) return;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if(!AudioContextClass) throw new Error('Web Audio unavailable');
+    audioCtx = new AudioContextClass();
+    const length = audioCtx.sampleRate * 2;
+    const buffer = audioCtx.createBuffer(1,length,audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<length;i++) data[i] = Math.random()*2-1;
+    hissSource=audioCtx.createBufferSource();hissSource.buffer=buffer;hissSource.loop=true;
+    hissFilter=audioCtx.createBiquadFilter();hissFilter.type='lowpass';hissFilter.frequency.value=1800;
+    hissGain=audioCtx.createGain();hissGain.gain.value=0;
+    hissSource.connect(hissFilter).connect(hissGain).connect(audioCtx.destination);
+    hissSource.start();
+  }
+  function blip(freq=420,duration=.07,volume=.018){
+    if(!audioEnabled || !audioCtx || document.hidden) return;
+    const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+    osc.type='square';osc.frequency.value=freq;
+    const t=audioCtx.currentTime;
+    gain.gain.setValueAtTime(Math.max(.0001,volume*sound.factor('terminal','fx')),t);gain.gain.exponentialRampToValueAtTime(.0001,t+duration);
+    osc.connect(gain).connect(audioCtx.destination);osc.start(t);osc.stop(t+duration+.01);
+  }
+  let connectionStarted = false;
+  const connection = document.getElementById('connection');
+  const connectStart = document.getElementById('connectStart');
+  const connectionStatus = document.getElementById('connectionStatus');
+  const connectionFill = document.getElementById('connectionFill');
+  const connectionMeter = document.getElementById('connectionMeter');
+  function setConnectionProgress(value){
+    connectionFill.style.width = value + '%';
+    connectionMeter.setAttribute('aria-valuenow', String(value));
+  }
+  connectStart.addEventListener('click', async () => {
+    if(connectionStarted) return;
+    connectionStarted = true;
+    connectStart.disabled = true;
+    connectionStatus.textContent = 'connection...';
+    document.getElementById('connectionHint').textContent = '';
+    try {
+      await startSessionAudio();
+    } catch(error) {
+      connectionStarted = false;
+      connectStart.disabled = false;
+      connectionStatus.textContent = 'connection...';
+      document.getElementById('connectionHint').textContent = 'Звук не запустился. Нажмите для повтора';
+      console.warn('Judgement:', error);
+      return;
+    }
+    // CRT always starts; only the selected 10% branch waits for Judgement.
+    setConnectionProgress(8);
+    [[28,450],[46,950],[74,1550],[91,2000],[100,2400]].forEach(([value,delay]) => {
+      setTimeout(() => {
+        setConnectionProgress(value);
+        if(value === 100) connectionStatus.textContent = 'done.';
+      }, delay);
+    });
+
+    setTimeout(()=>{
+      glitchTransition(connection,landing,()=>{
+        connection.hidden=true;landing.hidden=false;top.hidden=false;
+      },()=>enter.focus({preventScroll:true}));
+    },2900);
+  });
+  document.addEventListener('click',()=>{
+    if(connectionStarted && connection.hidden) resumeSessionAudio();
+  });
+  document.addEventListener('visibilitychange',()=>{
+    if(!connectionStarted) return;
+    applyVolume();
+    if(!document.hidden) resumeSessionAudio();
+  });
+
+  let running = false;
+  let timers = [];
+  const pad = n => String(n).padStart(2,'0');
+  function updateClock(){
+    const d = new Date();
+    clock.textContent = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  updateClock(); setInterval(updateClock,1000);
+  // Anonymous browser identifier, not a verified account identity.
+  function getVisitorId(){
+    const key = 'hyperborea_visitor_id_v1';
+    try {
+      let id = localStorage.getItem(key);
+      if(!id){
+        const bytes = new Uint8Array(6);
+        crypto.getRandomValues(bytes);
+        id = [...bytes].map(b => b.toString(16).padStart(2,'0')).join('').toUpperCase();
+        id = `${id.slice(0,6)}-${id.slice(6)}`;
+        localStorage.setItem(key,id);
+      }
+      return id;
+    } catch(e){return 'GUEST';}
+  }
+  userEl.textContent = getVisitorId();
+  // BIOS lines, then the system lets the scout in.
+  const steps = [
+    ['HYPERBOREA BIOS v2.06 · BLUE LOCK SYSTEMS', 120],
+    ['MEMORY TEST ........... 65536K OK', 420],
+    ['CRT SYNC .............. 60 HZ OK', 720],
+    ['SIGNAL ................ LOCKED', 1020],
+    ['> LOADING HYPERBOREA OS...', 1400],
+    ['> VERIFYING DATABASE...', 1900],
+    ['> ACCESS GRANTED.', 2400]
+  ];
+  function later(fn,delay){timers.push(setTimeout(fn,delay));}
+  function clearTimers(){timers.forEach(clearTimeout);timers=[];}
+  enter.addEventListener('click',()=>{
+    if(running || glitchActive || window.WahArchive?.busy || window.FrogArchive?.busy || (window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy))return;
+
+    blip(230,.13,.022);running=true;landing.hidden=true;bootWrap.hidden=false;boot.replaceChildren();
+    const event=window.BootEvents?.roll()||null;
+    window.BootEvents?.prepare(event);
+    const appendLine=line=>{
+      blip(line.includes('GRANTED')?790:line.includes('DENIED')?180:460,.055,.01);
+      const el=document.createElement('div');el.className='boot-line';el.textContent=line;
+      el.classList.toggle('is-denied',line.includes('DENIED'));el.classList.toggle('is-granted',line.includes('GRANTED'));el.classList.toggle('is-bios',!line.startsWith('>'));
+      boot.appendChild(el);
+    };
+    const recover=result=>{
+      if(result==='continue'){
+        appendLine('> CONNECTION RESTORED.');
+        later(()=>appendLine('> ACCESS GRANTED.'),350);later(enterDatabase,950);
+      }else{
+        clearTimers();bootWrap.hidden=true;boot.replaceChildren();landing.hidden=false;running=false;
+        if(!document.hidden)enter.focus({preventScroll:true});
+      }
+    };
+    // An event takes over where it starts: lines after that moment are not printed behind it.
+    const eventAt=event==='locked'||event==='reconnect'?1750:event==='crash'?2900:Infinity;
+    steps.filter(([line,delay])=>delay<eventAt&&(!event||event==='crash'||!line.includes('GRANTED'))).forEach(([line,delay])=>later(()=>appendLine(line),delay));
+    if(event==='locked'||event==='reconnect')later(()=>window.BootEvents.run(event).then(recover),eventAt);
+    else if(event==='crash')later(()=>window.BootEvents.run(event).then(recover),eventAt);
+    else later(enterDatabase,3050);
+  });
+  window.addEventListener('pagehide',()=>{
+    if(running && !database.classList.contains('active') && !glitchActive){
+      clearTimers();window.BootEvents?.cancel();
+      bootWrap.hidden=true;landing.hidden=false;running=false;
+    }
+  });
+  let currentDirectory = 'home';
+  function showDatabaseDirectory(name,focus=true){
+    window.NewPlayersArchive?.reset();
+    window.SwarggyArchive?.reset();
+    window.FrogArchive?.reset();
+    window.WahArchive?.reset();
+    window.FearArchive?.reset();
+    currentDirectory=name;
+    document.getElementById('dbSection').dataset.directory=name;
+    document.getElementById('playersRoster').hidden=name!=='players';
+    document.getElementById('dbEmpty').hidden=name==='players';
+    const home=name==='home',tactics=name==='tactics';
+    document.getElementById('dbHome').hidden=!home;
+    document.getElementById('dbSection').hidden=home||tactics;
+    document.getElementById('tacticsView').hidden=!tactics;
+    window.Tactics?.setActive(tactics);
+    document.getElementById('dbPath').textContent='HYPERBOREA / '+(home?'DATABASE':name.toUpperCase());
+    if(home){
+      if(focus) document.getElementById('openPlayers').focus({preventScroll:true});
+    }else if(tactics){
+      if(focus)document.getElementById('tacticsHubTitle').focus({preventScroll:true});
+    }else{
+      document.getElementById('dbSectionTitle').textContent=name.toUpperCase();
+      document.getElementById('dbSectionText').textContent=name==='players'
+        ? 'Здесь появятся досье игроков.'
+        : 'Здесь появятся записи об истории мира.';
+      if(focus) document.getElementById('dbSectionTitle').focus({preventScroll:true});
+    }
+    database.scrollTop=0;
+  }
+  window.HyperboreaNavigation={open:name=>{
+    if(running || glitchActive || window.WahArchive?.busy || window.FrogArchive?.busy || (window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy) || !['home','players','lore','tactics'].includes(name))return false;
+    showDatabaseDirectory(name);return true;
+  }};
+  document.getElementById('openTactics').addEventListener('click',()=>{
+    if(running || glitchActive || window.WahArchive?.busy || window.FrogArchive?.busy || (window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy))return;
+    blip(510,.06,.012);showDatabaseDirectory('tactics');
+  });
+  document.getElementById('openPlayers').addEventListener('click',()=>{
+    if(running || glitchActive || window.WahArchive?.busy || window.FrogArchive?.busy || (window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy))return;
+    blip(550,.06,.012);showDatabaseDirectory('players');
+  });
+  document.getElementById('openLore').addEventListener('click',()=>{
+    if(running || glitchActive || window.WahArchive?.busy || window.FrogArchive?.busy || (window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy))return;
+    blip(480,.06,.012);showDatabaseDirectory('lore');
+  });
+  document.getElementById('dbReturn').addEventListener('click',()=>{
+    if(running || glitchActive || window.WahArchive?.busy || window.FrogArchive?.busy || (window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy))return;
+    blip(320,.06,.012);showDatabaseDirectory('home');
+  });
+  document.addEventListener('keydown',event=>{
+    if(window.BootEvents?.active)return;
+    if(event.key==='Escape' && glitchActive)return;
+    if(event.key==='Escape' && (window.NewPlayersArchive?.isOpen || window.NewPlayersArchive?.busy)){event.preventDefault();window.NewPlayersArchive.close();return;}
+    if(event.key==='Escape' && (window.SwarggyArchive?.isOpen || (window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy))){
+      event.preventDefault();window.SwarggyArchive.close();return;
+    }
+    if(event.key==='Escape' && (window.FrogArchive?.isOpen || window.FrogArchive?.busy)){
+      event.preventDefault();if(!window.FrogArchive.busy)window.FrogArchive.close();return;
+    }
+    if(event.key==='Escape' && window.WahArchive?.isOpen){
+      event.preventDefault();window.WahArchive.close();return;
+    }
+    if(event.key==='Escape' && window.WahArchive?.busy){event.preventDefault();return;}
+    if(event.key==='Escape' && window.FearArchive?.isOpen){
+      event.preventDefault();window.FearArchive.close();return;
+    }
+    if(event.key==='Escape' && currentDirectory==='tactics' && window.Tactics?.back()){event.preventDefault();return;}
+    if(event.key==='Escape' && database.classList.contains('active') && currentDirectory!=='home'){
+      showDatabaseDirectory('home');
+    }
+  });
+
+  // Keep database entry centralized so every route observes the audio lifecycle.
+  function enterDatabase(){
+    showDatabaseDirectory('home',false);
+    glitchTransition(bootWrap,database,()=>{
+      bootWrap.hidden=true;top.hidden=true;database.classList.add('active');
+      stopMusicWithGlitch();
+      applyVolume();
+    },()=>{running=false;document.getElementById('openPlayers').focus({preventScroll:true});});
+  }
+  document.getElementById('back').addEventListener('click',()=>{
+    if(running || glitchActive || window.FrogArchive?.busy || (window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy))return;
+    const themedArchive=window.NewPlayersArchive?.isOpen?window.NewPlayersArchive:window.SwarggyArchive?.isOpen?window.SwarggyArchive:window.FrogArchive?.isOpen?window.FrogArchive:window.WahArchive?.isOpen?window.WahArchive:null;
+    if(themedArchive){
+      running=true;clearTimers();window.FearArchive?.silence();
+      themedArchive.exitTo(()=>{
+        showDatabaseDirectory('home',false);
+        database.classList.remove('active');top.hidden=false;bootWrap.hidden=true;landing.hidden=false;applyVolume();
+      },()=>{running=false;enter.focus({preventScroll:true});});
+      return;
+    }
+    if(window.WahArchive?.busy || window.FrogArchive?.busy || (window.SwarggyArchive?.busy || window.NewPlayersArchive?.busy))return;
+    running=true;
+    window.FearArchive?.silence();
+    blip(320,.08,.012);clearTimers();
+    glitchTransition(database,landing,()=>{
+      showDatabaseDirectory('home',false);
+      database.classList.remove('active');top.hidden=false;bootWrap.hidden=true;landing.hidden=false;
+      applyVolume();
+    },()=>{running=false;enter.focus({preventScroll:true});});
+  });
+})();
+</script>
+<script src="./fear.js?v=53"></script>
+<script src="./fear-dance.js?v=2"></script>
+<script type="module" src="./fear-experience.js?v=3"></script>
+<script type="module" src="./fear-card-world.mjs?v=1"></script>
+<script type="module" src="./fear-stats.js?v=36"></script>
+<script>
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(console.warn));
+}
+</script>
+<script src="./mobile.js?v=37"></script>
+<script src="./fear-submit.js?v=36"></script>
+<script src="./wah-audio.js?v=38"></script>
+<script type="module" src="./wahhiyyy.js?v=58"></script>
+<script src="./wah-puzzle-rain.js?v=35"></script>
+<script src="./wah-submit.js?v=36"></script>
+<script src="./frog-audio.js?v=35"></script>
+<script src="./frog-coin.js?v=35"></script>
+<script type="module" src="./frog.js?v=36"></script>
+<script type="module" src="./swarggy.js?v=65"></script>
+<script src="./emiliano-audio.js?v=55"></script>
+<script type="module" src="./new-players.js?v=52"></script>
+<script type="module" src="./profile-overview.js?v=50"></script>
+<script src="./players-globe.js?v=3"></script>
+<script src="./player-foil.js?v=1"></script>
+<script src="./dossier-cover.js?v=2"></script>
+<script src="./app-cursor.js?v=2"></script>
+<script src="./terminal-intro.js?v=3"></script>
+<script src="./system-update.js?v=1"></script>
+<script src="./versus.js?v=2"></script>
+<script src="./lore-data.js?v=5"></script>
+<script src="./lore-novel.js?v=5"></script>
+<script src="./lore.js?v=2"></script>
+<script src="./hyper-net-config.js?v=2"></script>
+<script src="./hyper-guest.js?v=2"></script>
+<script src="./hyper-net.js?v=2"></script>
+<script src="./hyper-os.js?v=3"></script>
+<script src="./tactics.js?v=47"></script>
+<script src="./simulation.js?v=48"></script>
+<script src="./sim-match.js?v=1"></script>
+</body>
+</html>
+
+
+
+
+
+

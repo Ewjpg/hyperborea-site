@@ -1,0 +1,29 @@
+/* The app's pointer (app-cursor.js). The system pointer is hidden only while ours is running. */
+html.app-cursor,html.app-cursor *{cursor:none!important}
+.crt-cursor{position:fixed;left:0;top:0;z-index:2147483647;pointer-events:none;opacity:0;will-change:transform;transition:opacity .2s}
+.crt-cursor.is-on{opacity:1}
+/* CRT: blocky phosphor arrow with a glow and faint scanlines. */
+.crt-arrow{position:absolute;left:-1px;top:-1px;width:18px;height:28.5px;overflow:visible;filter:drop-shadow(0 0 3px #7fd0ff) drop-shadow(0 0 8px #2f8cffaa);transition:transform .12s}
+.crt-arrow .edge{fill:#e8f6ff}
+.crt-arrow .body{fill:#0b1a2b}
+.crt-cursor::after{content:'';position:absolute;left:-2px;top:-2px;width:22px;height:32px;background:repeating-linear-gradient(0deg,#00000055 0 1px,transparent 1px 3px);-webkit-mask:linear-gradient(#000,#000);pointer-events:none;opacity:.7}
+.crt-cursor.is-link .crt-arrow{transform:scale(1.12);filter:drop-shadow(0 0 4px #b5e4ff) drop-shadow(0 0 14px #2f8cff)}
+.crt-cursor.is-down .crt-arrow{transform:scale(.9)}
+/* Over text fields: a glowing beam instead of the arrow. */
+.crt-beam{position:absolute;left:-1px;top:-11px;width:3px;height:22px;background:#e8f6ff;box-shadow:0 0 6px #7fd0ff,0 0 12px #2f8cffaa;display:none}
+.crt-cursor.is-text .crt-arrow,.crt-cursor.is-text::after{display:none}
+.crt-cursor.is-text .crt-beam{display:block;animation:crt-beam 1s steps(1) infinite}
+@keyframes crt-beam{50%{opacity:.35}}
+/* The lag: red and blue copies tear sideways for a moment. */
+.crt-cursor.is-lag .crt-arrow{filter:drop-shadow(-4px 0 0 #ff2b45) drop-shadow(4px 0 0 #2fd5ff) drop-shadow(0 0 6px #7fd0ff);transform:skewX(-8deg) translateX(2px)}
+/* The modern pointer: a soft dot and a ring that glides behind it. */
+.modern-dot,.modern-ring{position:absolute;display:none;border-radius:50%}
+.modern-dot{left:-4px;top:-4px;width:8px;height:8px;background:#fff;box-shadow:0 0 0 1px #0004}
+.modern-ring{left:-17px;top:-17px;width:34px;height:34px;border:1.5px solid #ffffffcc;background:#ffffff14;backdrop-filter:blur(3px) saturate(1.4);-webkit-backdrop-filter:blur(3px) saturate(1.4);transition:transform .25s cubic-bezier(.2,1.4,.4,1)}
+.crt-cursor.is-modern .crt-arrow,.crt-cursor.is-modern::after,.crt-cursor.is-modern .crt-beam{display:none}
+.crt-cursor.is-modern .modern-dot,.crt-cursor.is-modern .modern-ring{display:block}
+.crt-cursor.is-modern.is-link .modern-ring{transform:scale(1.45)}
+.crt-cursor.is-modern.is-down .modern-ring{transform:scale(.8)}
+/* Switching between the two: a short flicker. */
+.crt-cursor.is-switch{animation:crt-switch .22s steps(4) both}
+@keyframes crt-switch{0%{opacity:1}25%{opacity:.1}50%{opacity:1}75%{opacity:.2}100%{opacity:1}}

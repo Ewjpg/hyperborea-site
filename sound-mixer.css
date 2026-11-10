@@ -1,0 +1,76 @@
+/* Sound mixer: [ ЗВУК ] sits beside [ BACK TO TERMINAL ] and inherits each profile's button style. */
+.database .sound-mixer-toggle{margin-left:auto}
+.database .sound-mixer-toggle.is-muted{opacity:.6}
+.sound-mixer-glyph{display:none;font-family:Arial,sans-serif}
+.sound-mixer-toggle.is-muted .sound-mixer-glyph{text-decoration:line-through}
+@media(max-width:700px){.database .sound-mixer-toggle{padding-left:8px;padding-right:8px;white-space:nowrap}.database .sound-mixer-toggle+.db-back{max-width:36%}.sound-mixer-word{display:none}.sound-mixer-glyph{display:inline;font-size:13px;line-height:1}}
+.sound-mixer{position:fixed;z-index:1000;box-sizing:border-box;padding:16px 18px 14px;border:1px solid #6f8fb84d;background:#0a0f18f2;color:#dbe6f5;font:11px/1.6 Arial,sans-serif;box-shadow:0 18px 50px #00000073;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.sound-mixer[hidden]{display:none}
+.sound-mixer-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sound-mixer-head strong{flex:1;font:12px/1 Arial,sans-serif;letter-spacing:.2em;color:#fff}
+.sound-mixer button{font:9px/1.6 Arial,sans-serif;letter-spacing:.08em;color:#c9d8ee;background:transparent;border:1px solid #6f8fb880;padding:7px 10px;min-height:34px;cursor:pointer}
+.sound-mixer button:hover{border-color:#a9c6ef;color:#fff}
+.sound-mixer button:focus-visible,.sound-mixer input:focus-visible{outline:2px solid #5c9bff;outline-offset:2px}
+.sound-mixer .sound-mixer-close{width:34px;padding:0;font-size:18px;line-height:1}
+.sound-mixer-mute[aria-pressed="true"]{background:#2f6fd9;border-color:#2f6fd9;color:#fff}
+.sound-mixer-rows{display:grid;gap:4px}
+.sound-mixer-row{display:grid;grid-template-columns:minmax(0,1fr) 120px 38px;align-items:center;gap:10px;min-height:34px}
+.sound-mixer-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#b9c9df}
+.sound-mixer-row output{text-align:right;color:#8fa6c6;font-variant-numeric:tabular-nums}
+.sound-mixer-row.is-master{padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid #6f8fb833}
+.sound-mixer-row.is-master span{color:#fff}
+.sound-mixer-row input{width:100%;accent-color:#5c9bff;cursor:pointer}
+.sound-mixer.is-muted .sound-mixer-row{opacity:.45}
+.sound-mixer-note{margin:10px 0 0;font-size:10px;line-height:1.55;color:#7f93ae}
+@media(max-width:700px){.sound-mixer{padding:14px}.sound-mixer-row{grid-template-columns:minmax(0,1fr) 96px 34px;gap:8px}}
+
+/* ── Profile sliders, each in its character's style. --fill is set by the mixer (0–100 %). */
+:is(.fear-music-controls,.wah-music-controls,.frog-music,.swarggy-sound,.np-music-controls) input[type="range"]{
+  --track-h:4px;--track:#888;--track-r:0;--track-shadow:none;--thumb-w:16px;--thumb-h:16px;--thumb:#fff;--thumb-r:50%;--thumb-shadow:none;--thumb-transform:none;
+  -webkit-appearance:none;appearance:none;height:30px;margin:0;background:transparent;accent-color:auto;cursor:pointer}
+:is(.fear-music-controls,.wah-music-controls,.frog-music,.swarggy-sound,.np-music-controls) input[type="range"]::-webkit-slider-runnable-track{height:var(--track-h);background:var(--track);border-radius:var(--track-r);box-shadow:var(--track-shadow)}
+:is(.fear-music-controls,.wah-music-controls,.frog-music,.swarggy-sound,.np-music-controls) input[type="range"]::-moz-range-track{height:var(--track-h);background:var(--track);border-radius:var(--track-r);box-shadow:var(--track-shadow)}
+:is(.fear-music-controls,.wah-music-controls,.frog-music,.swarggy-sound,.np-music-controls) input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:var(--thumb-w);height:var(--thumb-h);margin-top:calc((var(--track-h) - var(--thumb-h)) / 2);border:0;background:var(--thumb);border-radius:var(--thumb-r);box-shadow:var(--thumb-shadow);transform:var(--thumb-transform)}
+:is(.fear-music-controls,.wah-music-controls,.frog-music,.swarggy-sound,.np-music-controls) input[type="range"]::-moz-range-thumb{width:var(--thumb-w);height:var(--thumb-h);border:0;background:var(--thumb);border-radius:var(--thumb-r);box-shadow:var(--thumb-shadow);transform:var(--thumb-transform)}
+
+/* Клаус Штурм: monochrome blade on a ruler. */
+.fear-music-controls input[type="range"]{--track-h:2px;--track:linear-gradient(90deg,#e8e8e8 0 var(--fill,50%),#3b3b3b var(--fill,50%));--thumb-w:5px;--thumb-h:22px;--thumb:#f2f2f2;--thumb-r:0;--thumb-shadow:0 0 0 1px #080808,4px 0 0 -1px #6b6b6b;
+  background:repeating-linear-gradient(90deg,#4d4d4d 0 1px,transparent 1px 10%) 0 100%/calc(100% - 1px) 5px no-repeat}
+
+/* Кле Энигм: blue fill, and the handle is a puzzle piece. */
+.wah-music-controls input[type="range"]{--track-h:8px;--track-r:8px;--track:linear-gradient(90deg,#2665d7,#5c9bff var(--fill,50%),#e6edf7 var(--fill,50%));--track-shadow:inset 0 0 0 1px #cbd7e8;--thumb-w:26px;--thumb-h:26px;--thumb-r:0;
+  --thumb:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 6.5h4.2a2.6 2.6 0 1 1 5.2 0h4.1v4.1a2.6 2.6 0 1 1 0 5.2v4.1H4v-4.1a2.6 2.6 0 1 0 0-5.2z' fill='%232665d7' stroke='%23ffffff' stroke-width='1.3' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;--thumb-shadow:none}
+.wah-music-controls input[type="range"]::-webkit-slider-thumb{filter:drop-shadow(0 2px 3px #1a4a9a40)}
+
+/* Frog: a gold coin rolling along a dark rail. */
+.frog-music input[type="range"]{--track-h:6px;--track-r:3px;--track:linear-gradient(90deg,#a8843f,#ead29c var(--fill,50%),#18100e var(--fill,50%));--track-shadow:inset 0 0 0 1px #806443;--thumb-w:20px;--thumb-h:20px;
+  --thumb:radial-gradient(circle at 36% 30%,#fff3c4 0 12%,#e8c56f 45%,#9a7433 100%);--thumb-shadow:0 0 0 2px #18100e,0 0 0 3px #d5b66e,0 3px 6px #000a}
+
+/* Минами Син: a thin crimson stem with a lily-red bud. */
+.swarggy-sound input[type="range"]{--track-h:2px;--track:linear-gradient(90deg,#e8324a 0 var(--fill,50%),#5a1c2780 var(--fill,50%));--track-shadow:0 0 6px #e8324a55;--thumb-w:14px;--thumb-h:14px;
+  --thumb:radial-gradient(circle at 34% 32%,#ffe3e6,#e0283f 55%,#4a0714);--thumb-shadow:0 0 0 4px #12050800,0 0 0 5px #ff5a6e88,0 0 14px #ff3b5366}
+.swarggy-sound{max-width:320px;margin:22px 0 0}
+.swarggy-track{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 12px;color:#d9a7ae;font:12px/1.6 Arial,sans-serif;letter-spacing:.02em}
+.swarggy-track>span{flex-basis:100%;color:#a0646d;font-size:9px;letter-spacing:.16em}
+.swarggy-track strong{color:#ffdfe3;font:400 17px/1.3 Georgia,'Times New Roman',serif;letter-spacing:.01em}
+.swarggy-sound-controls{display:flex;align-items:center;gap:16px}
+.swarggy-sound-controls>button{flex:0 0 auto;min-width:74px;min-height:44px;padding:10px 14px;border:1px solid #8a2a38;background:#2a0910a6;color:#ffd6db;font:9px/1.8 Arial,sans-serif;letter-spacing:.14em;cursor:pointer;transition:background .25s,border-color .25s}
+.swarggy-sound-controls>button:hover{border-color:#ff6b7c;background:#5a0f1c}
+.swarggy-sound-controls>button[aria-pressed="true"]{border-color:#e0283f;box-shadow:inset 0 0 14px #e0283f33}
+.swarggy-sound label{flex:1;display:grid;grid-template-columns:minmax(90px,170px) 38px;gap:6px 12px;align-items:center;color:#b77a83;font:9px/1.8 Arial,sans-serif;letter-spacing:.13em;min-width:0}
+.swarggy-sound label>span{grid-column:1/-1}
+.swarggy-sound input{width:100%;min-width:0}
+.swarggy-sound output{color:#e9b7be;font:10px/1.6 Arial,sans-serif;letter-spacing:0;text-align:right}
+.swarggy-sound input:focus-visible{outline:1px solid #ff6b7c;outline-offset:4px}
+.swarggy-music-status{min-height:18px;margin:10px 0 0;color:#e58b97;font:10px/1.6 Arial,sans-serif}
+.swarggy-music-status:empty{display:none}
+
+/* Эмилиано Санчес: a striped punk strip with a tilted block handle. */
+.np-emiliano .np-music-controls input[type="range"]{--track-h:10px;--track:linear-gradient(90deg,transparent 0 var(--fill,50%),#efe6f7 var(--fill,50%)),repeating-linear-gradient(135deg,#c7a4ef 0 5px,#9d72d1 5px 10px);--track-shadow:inset 0 0 0 1px #4d3062,2px 2px 0 #382642;
+  --thumb-w:14px;--thumb-h:24px;--thumb-r:0;--thumb:#23132f;--thumb-shadow:3px 3px 0 #c7a4ef,0 0 0 1px #4d3062;--thumb-transform:rotate(-7deg)}
+
+/* Нишимура Йору: rain-blue light along a night line, a slanted glass handle. */
+.np-yoru .np-music-controls input[type="range"]{--track-h:4px;--track:linear-gradient(90deg,#243b60,#8fbaf3 var(--fill,50%),#101a2b var(--fill,50%));--track-shadow:inset 0 0 0 1px #3d5375;--thumb-w:6px;--thumb-h:22px;--thumb-r:1px;--thumb:#d4e0f4;--thumb-shadow:0 0 10px #8fbaf3aa;--thumb-transform:skewX(-16deg)}
+.np-yoru .np-music-controls label{color:#829fbc}
+.np-yoru .np-music-controls output{color:#c6e4f6}
+.np-yoru .np-music-status{color:#7f9cb9}

@@ -1,0 +1,149 @@
+/* Azure Latch — the Blue Lock layer over the CRT terminal.
+   Tokens mirror the design system's tokens.json (egoist theme). The rules below restyle only the shared
+   screens: connection, landing, the database directory and the tactics room. Player dossiers keep their
+   own themes, so database rules are scoped away from any `*-theme` class. Sizes stay with the existing
+   (and mobile) rules; this layer sets colour, type, borders, hover and focus. */
+:root{
+  --void:#000000;
+  --surface:#060b16;
+  --surface-raised:#0a1730;
+  --lock-blue:#07317b;
+  --on-lock:#dedfe4;
+  --ink:#dedfe4;
+  --ink-muted:#9aa5b1;
+  --ink-faint:#6f818e;
+  --line:#7c879166;
+  --line-strong:#66717a;
+  --egoist:#1965e8;
+  --egoist-deep:#1256cc;
+  --on-egoist:#ffffff;
+  --cyan:#a4d9ee;
+  --on-cyan:#071114;
+  --flow:#5c9bff;
+  --flow-soft:#0c2347;
+  --eliminated:#f0646a;
+  --eliminated-soft:#2a0c10;
+  --chroma-red:#a74b4b99;
+  --chroma-blue:#3c8dbb99;
+  --pitch:#0b2424;
+  --pitch-line:#acc9ba85;
+  --team-a:#9bd6e4;
+  --team-b:#e0b590;
+  --focus:var(--flow);
+  --shadow-panel:4px 4px 0 #07317b;
+  --shadow-glow:0 0 24px #b7d9ee55;
+  --shadow-screen:inset 0 0 65px #000000, inset 0 0 8px #52606b66;
+  --focus-ring:0 0 0 2px #000000, 0 0 0 4px #5c9bff;
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:18px;
+  --space-5:26px;
+  --space-6:36px;
+  --space-7:55px;
+  --gutter:64px;
+  --radius-none:0;
+  --radius-hair:1px;
+  --radius-bezel:40px;
+  --radius-round:50%;
+  --angle-slash:-16deg;
+  --angle-seal:-9deg;
+  --angle-tilt:-4deg;
+  --opacity-scanline:0.42;
+  --opacity-noise:0.16;
+  --opacity-vignette:0.65;
+  --opacity-disabled:0.35;
+  --font-display:"Fira Sans Extra Condensed", "Arial Narrow", Impact, sans-serif;
+  --font-pixel:"Press Start 2P", "Courier New", monospace;
+  --font-body:Arial, Helvetica, sans-serif;
+}
+
+/* Connection: SyncMeter */
+.connection-start{color:var(--ink)}
+.connection-start:disabled{color:var(--ink)}
+.connection-start:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.connection-status{color:var(--ink)}
+.connection-meter{background:var(--surface-raised)}
+.connection-fill{background:var(--flow);box-shadow:0 0 10px var(--flow)}
+.connection-hint{font-family:var(--font-pixel);font-size:8px;line-height:2;letter-spacing:.13em;color:var(--ink-muted)}
+
+/* Landing: CrtScreen with the terminal button */
+.screen{box-shadow:var(--shadow-screen)}
+.screen::before{opacity:var(--opacity-scanline)}
+.screen::after{opacity:var(--opacity-vignette)}
+.noise{opacity:var(--opacity-noise)}
+#landing h1{text-shadow:2px 0 var(--chroma-red),-2px 0 var(--chroma-blue),0 0 12px #dcefff30}
+#landing .subtitle{color:var(--ink-muted);text-shadow:1px 0 var(--chroma-red),-1px 0 var(--chroma-blue)}
+#landing .divider{background:var(--egoist);box-shadow:0 0 8px var(--egoist)}
+.enter{border-color:var(--ink);color:var(--ink);text-shadow:1px 0 var(--chroma-red),-1px 0 var(--chroma-blue)}
+.enter::before{color:var(--cyan);text-shadow:none}
+.enter:hover,.enter:focus-visible{background:var(--ink);border-color:var(--ink);color:var(--void);box-shadow:var(--shadow-glow);text-shadow:none}
+.enter:focus-visible{box-shadow:var(--focus-ring),var(--shadow-glow)}
+.boot{color:var(--ink)}
+
+/* Database directory: TerminalHeader, DirectoryCard, DossierPanel */
+.database:not([class*="-theme"]){background:radial-gradient(ellipse at 50% 40%,var(--surface),var(--void) 72%);color:var(--ink)}
+.database:not([class*="-theme"]) .db-header{border-bottom-color:var(--line)}
+.database:not([class*="-theme"]) .db-path{color:var(--ink-muted)}
+.database:not([class*="-theme"]) .db-back{border-color:var(--line-strong);background:transparent;color:var(--ink-muted);transition:background .12s,color .12s,border-color .12s,box-shadow .12s}
+.database:not([class*="-theme"]) .db-back:hover{border-color:var(--ink);background:var(--flow-soft);color:var(--ink);outline:none}
+.database:not([class*="-theme"]) .db-back:focus-visible{border-color:var(--ink);background:var(--flow-soft);color:var(--ink);outline:none;box-shadow:var(--focus-ring)}
+.database:not([class*="-theme"]) .db-kicker{color:var(--ink-muted)}
+.database:not([class*="-theme"]) .db-title{color:var(--ink);text-shadow:1px 0 var(--chroma-red),-1px 0 var(--chroma-blue)}
+.database:not([class*="-theme"]) .db-caption{color:var(--ink-muted)}
+.database:not([class*="-theme"]) .db-card{border-color:var(--line);background:var(--surface);color:var(--ink);transition:border-color .12s,background .12s,box-shadow .12s,transform .12s}
+.database:not([class*="-theme"]) .db-card::after{color:var(--cyan);font-family:var(--font-pixel)}
+.database:not([class*="-theme"]) .db-card:hover{background:var(--surface);border-color:var(--egoist);box-shadow:var(--shadow-panel)}
+.database:not([class*="-theme"]) .db-card:focus-visible{background:var(--surface);border-color:var(--egoist);box-shadow:var(--focus-ring);outline:none}
+.database:not([class*="-theme"]) .db-card-top{color:var(--ink-muted);transition:color .12s}
+.database:not([class*="-theme"]) .db-card:hover .db-card-top,.database:not([class*="-theme"]) .db-card:focus-visible .db-card-top{color:var(--cyan)}
+.database:not([class*="-theme"]) .db-card-number{color:var(--ink-faint)}
+.database:not([class*="-theme"]) .db-card-name{text-shadow:1px 0 var(--chroma-red),-1px 0 var(--chroma-blue)}
+.database:not([class*="-theme"]) .db-card-description{font-family:var(--font-body);color:var(--ink-muted)}
+.database:not([class*="-theme"]) .db-card-open{color:var(--ink-muted)}
+.database:not([class*="-theme"]) .db-empty{position:relative;border-color:var(--line);background:var(--surface)}
+.database:not([class*="-theme"]) .db-empty::before,.database:not([class*="-theme"]) .db-empty::after{content:'';position:absolute;width:7px;height:7px;border-color:var(--egoist);border-style:solid;pointer-events:none}
+.database:not([class*="-theme"]) .db-empty::before{top:-1px;left:-1px;border-width:1px 0 0 1px}
+.database:not([class*="-theme"]) .db-empty::after{bottom:-1px;right:-1px;border-width:0 1px 1px 0}
+.database:not([class*="-theme"]) .db-empty-code{color:var(--cyan)}
+.database:not([class*="-theme"]) .db-empty-text{font-family:var(--font-body);color:var(--ink-muted)}
+.database:not([class*="-theme"]) .db-footer{border-top-color:var(--line);color:var(--ink-faint)}
+@media (hover:hover){
+  .database:not([class*="-theme"]) .db-card:hover{transform:translate(-2px,-2px)}
+}
+
+/* Tactics room: mode cards, Tabs, panels and the one egoist action */
+.tactic-mode-card{border-color:var(--line);background:var(--surface);color:var(--ink);transition:border-color .12s,box-shadow .12s,transform .12s}
+.tactic-mode-card:hover{background:var(--surface);border-color:var(--egoist);outline:none;box-shadow:var(--shadow-panel)}
+.tactic-mode-card:focus-visible{background:var(--surface);border-color:var(--egoist);outline:none;box-shadow:var(--focus-ring)}
+.tactic-mode-card svg{stroke:var(--cyan)}
+.tactic-mode-card strong{font-family:var(--font-display);font-style:italic;font-weight:900;font-size:clamp(44px,6vw,64px);line-height:.95;letter-spacing:-.02em}
+.tactic-mode-card p{color:var(--ink-muted)}
+.tactic-mode-card small{font-family:var(--font-pixel);font-size:8px;line-height:2;letter-spacing:.06em;color:var(--ink-muted)}
+@media (hover:hover){
+  .tactic-mode-card:hover{transform:translate(-2px,-2px)}
+}
+@media (max-width:700px){
+  .tactic-mode-card strong{font-size:44px}
+}
+.tactic-mode-tabs button,.tactic-teams button,.tactic-actions button{border-color:var(--line-strong);background:var(--surface-raised);color:var(--ink-muted);transition:background .12s,color .12s,border-color .12s,box-shadow .12s}
+.tactic-mode-tabs button:hover,.tactic-teams button:hover,.tactic-actions button:not(:disabled):hover{border-color:var(--ink);color:var(--ink)}
+.tactic-mode-tabs button.is-active{background:var(--cyan);border-color:var(--cyan);color:var(--on-cyan)}
+.tactic-sidebar button:focus-visible,.tactic-mode-tabs button:focus-visible,.tactic-bench-player:focus-visible,.tactic-actions button:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.tactic-panel{border-color:var(--line);background:var(--surface)}
+.tactic-panel-title,.tactic-selected-label{color:var(--ink-muted)}
+.tactic-selected{color:var(--ink)}
+.tactic-next-panel{border-color:var(--line);background:var(--surface)}
+.tactic-next-panel p{color:var(--ink-muted)}
+.tactic-next-panel button{position:relative;isolation:isolate;border:0;background:transparent;color:var(--on-egoist);font:italic 800 18px/1 var(--font-display);letter-spacing:.02em;padding:14px 30px}
+.tactic-next-panel button::before{content:'';position:absolute;inset:0;z-index:-1;background:var(--egoist);transform:skewX(var(--angle-slash));transition:background .12s,box-shadow .12s}
+.tactic-next-panel button:not(:disabled):hover::before{background:var(--egoist-deep);box-shadow:var(--shadow-glow)}
+.tactic-next-panel button:focus-visible{outline:none}
+.tactic-next-panel button:focus-visible::before{box-shadow:var(--focus-ring)}
+.tactic-next-panel button:disabled{border:0;background:transparent;color:var(--ink-faint)}
+.tactic-next-panel button:disabled::before{background:var(--surface-raised);box-shadow:inset 0 0 0 1px var(--line-strong)}
+
+@media (prefers-reduced-motion:reduce){
+  .database:not([class*="-theme"]) .db-card,.database:not([class*="-theme"]) .db-back,.tactic-mode-card,.tactic-mode-tabs button,.tactic-teams button,.tactic-actions button,.tactic-next-panel button::before{transition:none}
+  .database:not([class*="-theme"]) .db-card:hover,.tactic-mode-card:hover{transform:none}
+}

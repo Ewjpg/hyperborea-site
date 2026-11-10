@@ -1,0 +1,45 @@
+/* Roster portraits sit above their frames; the dossiers keep their own art. */
+.players-roster{position:relative;isolation:isolate;overflow:visible}
+.database .players-roster .fear-player-card,.database .players-roster .wah-player-card{overflow:visible;transform-style:preserve-3d;isolation:isolate;z-index:1}
+.players-roster .fear-thumbnail,.players-roster .wah-card-art{overflow:visible}
+.players-roster .fear-thumbnail{background:#000}
+.players-roster .fear-thumbnail::after{z-index:1}
+.players-roster .fear-thumbnail img,.players-roster .wah-card-art img{position:relative;z-index:3;pointer-events:none;will-change:transform;transform-origin:50% 80%;transition:transform .65s cubic-bezier(.16,.75,.17,1),filter .65s ease}
+.players-roster .fear-card-body,.players-roster .wah-card-body{position:relative;z-index:4}
+.players-roster .wah-card-art::before{z-index:0}
+.players-roster .wah-card-index,.players-roster .wah-card-symbol{z-index:4;pointer-events:none}
+.players-roster .fear-card-eye{position:absolute;inset:8% 0 9%;z-index:0;display:block;pointer-events:none;opacity:.44;transform:scale(.98);transform-origin:50% 45%;transition:opacity .65s ease,transform .8s cubic-bezier(.16,.75,.17,1);background:center / 100% auto no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 410' fill='none'%3E%3Cdefs%3E%3CradialGradient id='iris'%3E%3Cstop offset='0' stop-color='%23000'/%3E%3Cstop offset='.58' stop-color='%23090909'/%3E%3Cstop offset='.9' stop-color='%23484848'/%3E%3Cstop offset='1' stop-color='%23060606'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d='M15 205Q320-65 625 205Q320 475 15 205Z' stroke='%23a9a9a9' stroke-width='2'/%3E%3Cpath d='M15 205Q320-18 625 205M15 205Q320 428 625 205' stroke='%23444444' stroke-width='1'/%3E%3Cpath d='M34 181Q320-126 606 181M52 240Q320 493 588 240' stroke='%23232323' stroke-width='2'/%3E%3Cg transform='translate(-130 0)'%3E%3Ccircle cx='320' cy='205' r='115' fill='url(%23iris)' stroke='%23878787' stroke-width='2'/%3E%3Ccircle cx='320' cy='205' r='103' stroke='%234d4d4d' stroke-width='1'/%3E%3Cpath d='M320 94V128M354 100L343 132M385 115L366 144M411 139L385 159M428 169L397 180M433 204H399M427 239L396 228M411 270L384 251M385 294L365 267M354 310L343 278M320 316V282M286 310L297 278M255 294L274 267M229 270L256 251M212 239L244 228M207 205H241M212 170L244 181M229 139L256 159M255 115L274 144M286 100L297 132' stroke='%23808080' stroke-width='1.5'/%3E%3Ccircle cx='320' cy='205' r='64' fill='%23000' stroke='%23959595' stroke-width='1.5'/%3E%3Cellipse cx='320' cy='205' rx='15' ry='53' fill='%23000000'/%3E%3Ccircle cx='287' cy='171' r='8' fill='%23989898' opacity='.45'/%3E%3C/g%3E%3C/svg%3E")}
+
+@media(hover:hover) and (pointer:fine){
+ .players-roster{padding-top:18px}
+ .database .players-roster .fear-player-card:hover,.database .players-roster .wah-player-card:hover{z-index:6;transform:translateY(-5px);outline-offset:5px}
+ .players-roster .fear-player-card:hover .fear-thumbnail img{transform:translate3d(0,-12px,0) scale(1.22);filter:grayscale(1) drop-shadow(0 0 1px #c3c3c3) drop-shadow(0 18px 19px #000)}
+ .players-roster .wah-player-card:hover .wah-card-art img{transform:translate3d(0,-12px,0) scale(1.22);filter:drop-shadow(8px 19px 10px #0005)}
+ .players-roster .fear-player-card:hover .fear-card-eye{opacity:.83;transform:scale(1.08)}
+}
+.database .players-roster .fear-player-card:focus-visible,.database .players-roster .wah-player-card:focus-visible{z-index:6;outline-offset:5px}
+.players-roster .fear-player-card:focus-visible .fear-thumbnail img{transform:translate3d(0,-12px,0) scale(1.22)}
+.players-roster .wah-player-card:focus-visible .wah-card-art img{transform:translate3d(0,-12px,0) scale(1.22)}
+.players-roster .fear-player-card:focus-visible .fear-card-eye{opacity:.83;transform:scale(1.08)}
+
+/* Small screens have room above the card, without widening the scroll area. */
+@media(max-width:700px){
+ .players-roster .fear-player-card:focus-visible .fear-thumbnail img,.players-roster .wah-player-card:focus-visible .wah-card-art img{transform:translate3d(0,-30px,0) scale(1.10)}
+ .players-roster .fear-player-card:focus-visible .fear-card-eye{transform:none}
+}
+@media(max-width:700px) and (hover:hover) and (pointer:fine){
+ .players-roster .fear-player-card:hover .fear-thumbnail img,.players-roster .wah-player-card:hover .wah-card-art img{transform:translate3d(0,-30px,0) scale(1.10)}
+ .players-roster .fear-player-card:hover .fear-card-eye{transform:none}
+}
+@media(hover:none) and (pointer:coarse){
+ .database .players-roster .fear-player-card:hover,.database .players-roster .wah-player-card:hover{transform:none}
+ .players-roster .fear-player-card:hover .fear-thumbnail img{transform:scale(1.02)}
+ .players-roster .wah-player-card:hover .wah-card-art img{transform:scale(.94) rotate(-4deg)}
+}
+@media(prefers-reduced-motion:reduce){
+ .players-roster .fear-thumbnail img,.players-roster .wah-card-art img,.players-roster .fear-card-eye{transition:none;will-change:auto}
+ .database .players-roster .fear-player-card:hover,.database .players-roster .wah-player-card:hover{transform:none}
+ .players-roster .fear-player-card:is(:hover,:focus-visible) .fear-thumbnail img{transform:scale(1.02)}
+ .players-roster .wah-player-card:is(:hover,:focus-visible) .wah-card-art img{transform:scale(.94) rotate(-4deg)}
+ .players-roster .fear-player-card:is(:hover,:focus-visible) .fear-card-eye{transform:none}
+}

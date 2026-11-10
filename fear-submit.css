@@ -1,0 +1,18 @@
+.fear-send-cell{position:relative;z-index:1;margin-top:24px;padding:28px;border:1px solid #333;background:#030303;color:#aaa;font:14px/1.8 Arial,sans-serif}
+.fear-send-heading{display:flex;align-items:center;gap:14px;margin:0 0 18px;color:#c4c4c4;font:12px/1.8 Arial,sans-serif;letter-spacing:.14em}
+.fear-send-heading span{font:32px/1 FearCreepster,fantasy;color:#777}
+.fear-send-note{max-width:690px;margin:0 0 24px;color:#858585;line-height:1.9}
+.fear-send-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:22px}
+.fear-send-name{display:flex;flex-direction:column;gap:8px;max-width:500px;color:#aaa;font:11px/1.8 Arial,sans-serif;letter-spacing:.06em}
+.fear-send-name>span>span{color:#656565;font-size:10px;letter-spacing:0}
+#fearSender{height:50px;min-width:0;width:100%;border:1px solid #333;border-radius:0;padding:12px 14px;background:#000;color:#ccc;font:16px/1.5 Arial,sans-serif;caret-color:#fff}
+#fearSender::placeholder{color:#555}
+.fear-send-cell button{min-height:50px;padding:14px 23px;border:1px solid #777;border-radius:0;background:#101010;color:#ddd;font:11px/1.8 Arial,sans-serif;letter-spacing:.06em;cursor:pointer;touch-action:manipulation}
+.fear-send-cell button:hover{background:#1a1a1a;border-color:#ccc}
+.fear-send-cell button:disabled{color:#777;border-color:#333;cursor:default;background:#080808}
+#fearSender:focus-visible,.fear-send-cell button:focus-visible{outline:1px solid #bbb;outline-offset:3px}
+.fear-send-status{min-height:24px;margin:18px 0 0;color:#929292;font:12px/1.8 Arial,sans-serif;overflow-wrap:anywhere}
+.fear-send-status[data-state="success"]{color:#ddd}
+.fear-send-status[data-state="error"]{color:#bbb}
+.fear-send-trap{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;pointer-events:none}
+@media(max-width:700px),(pointer:coarse) and (max-width:950px){.fear-send-cell{padding:18px;margin-top:18px;font-size:14px}.fear-send-row{grid-template-columns:1fr;gap:18px}.fear-send-cell button{width:100%;min-height:52px;font-size:12px}.fear-send-name{max-width:none}.fear-send-heading{font-size:11px;letter-spacing:.05em}.fear-send-note{font-size:14px}.fear-send-status{font-size:13px}}
