@@ -628,31 +628,38 @@ import {createProfileRadar} from './player-ratings.mjs?v=36';
   // Keep that callback alive so central navigation can release its running state.
   new MutationObserver(()=>{if((opened||busy)&&phase!=='iris'&&!database.classList.contains('active'))reset();}).observe(database,{attributes:true,attributeFilter:['class']});
 
-  // ── Profile: ratings, position, description and weapon (saved on this device) ──
+  // ── Profile: ratings and position are saved on this device; the description and weapon are canon and read-only ──
   const inputs=STAT_AXES.map(axis=>$('swarggyStat'+axis));
   const position=$('swarggyPosition'),description=$('swarggyDescription'),weapon=$('swarggyWeapon');
   const profileKey='hyperborea_swarggy_profile_v1',updateRadar=createProfileRadar('swarggy');
+  // Older drafts may still hold a description/weapon; they stay in storage untouched but no longer replace the canon text.
+  let stored={};
   function draw(){
     const ratings=inputs.map(input=>parseRating(input.value));updateRadar(ratings);
-    $('swarggyDescriptionCount').textContent=description.value.length+' / 12000';$('swarggyWeaponCount').textContent=weapon.value.length+' / 6000';
     return ratings;
   }
   function save(){
-    const profile={ratings:draw(),position:position.value,description:description.value,weapon:weapon.value};
-    try{localStorage.setItem(profileKey,JSON.stringify(profile));$('swarggySaveState').textContent='Сохранено на этом устройстве';}catch{$('swarggySaveState').textContent='Изменения доступны до закрытия страницы';}
+    stored={...stored,ratings:draw(),position:position.value};
+    try{localStorage.setItem(profileKey,JSON.stringify(stored));$('swarggySaveState').textContent='Сохранено на этом устройстве';}catch{$('swarggySaveState').textContent='Изменения доступны до закрытия страницы';}
   }
   try{
     const saved=JSON.parse(localStorage.getItem(profileKey)||'null');
     if(saved&&typeof saved==='object'&&!Array.isArray(saved)){
+      stored=saved;
       if(Array.isArray(saved.ratings))inputs.forEach((input,i)=>{input.value=parseRating(saved.ratings[i])??'';});
       if(typeof saved.position==='string')position.value=saved.position.slice(0,40);
-      if(typeof saved.description==='string')description.value=saved.description.slice(0,12000);
-      if(typeof saved.weapon==='string')weapon.value=saved.weapon.slice(0,6000);
     }
   }catch{}
   inputs.forEach(input=>input.addEventListener('input',()=>{input.value=parseRating(input.value)??'';save();}));
-  for(const input of [position,description,weapon])input.addEventListener('input',save);
+  position.addEventListener('input',save);
   draw();
+  // The canon texts are read in full, so each read-only box grows to its text instead of scrolling.
+  // Refit only when the width changes: that covers the dossier opening and the window resizing.
+  for(const box of [description,weapon]){
+    let width=0;
+    const fit=()=>{box.style.height='auto';box.style.height=box.scrollHeight+2+'px';};
+    new ResizeObserver(([entry])=>{const next=Math.round(entry.contentRect.width);if(next&&next!==width){width=next;fit();}}).observe(box);
+  }
 
   // Loose petals that drift down; positions are fixed per page so they never jump.
   function scatterPetals(box,count,seed){

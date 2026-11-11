@@ -111,6 +111,10 @@
 .swarggy-editor{display:flex;flex-direction:column}
 .swarggy-editor textarea{flex:1;display:block;width:100%;min-height:340px;resize:vertical;border:1px solid #7a243255;background:#0e0306ab;color:#f1d0d4;padding:18px;font:16px/1.9 Arial,sans-serif;border-radius:0}
 .swarggy-editor textarea::placeholder{color:#93525c}
+.swarggy-editor textarea[readonly]{flex:none;min-height:0;resize:none;overflow:hidden;white-space:pre-wrap}
+/* The canon description is much taller than the ratings: keep the ratings at their own height and, on wide screens, beside the text while it is read. */
+#swarggyStatsCell{align-self:start}
+@media(min-width:951px) and (min-height:720px){#swarggyStatsCell{position:sticky;top:116px}}
 .swarggy-editor-footer{display:flex;justify-content:flex-end;gap:14px;margin-top:14px;color:#9b5862;font:10px/1.8 Arial,sans-serif}
 .swarggy-weapon-cell{display:grid;grid-template-columns:.65fr 2fr;gap:35px;margin-top:24px}
 .swarggy-weapon-heading{align-self:center}

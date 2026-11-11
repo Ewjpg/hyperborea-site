@@ -141,7 +141,7 @@ window.HYPERBOREA_LORE = {
     {term: 'Azure Latch', kind: 'Проект', text: 'Международный проект PIFA, выросший из Blue Lock. Молодые футболисты со всего мира сражаются в беспощадной битве за звание лучшего бомбардира.'},
     {term: 'Blue Lock', kind: 'Проект', text: 'Японский проект, созданный, чтобы вырастить лучшего бомбардира страны. С него начался Azure Latch.'},
     {term: 'HyperBorea', kind: 'Клуб', aliases: ['HYPERBOREA'], text: ''},
-    {term: 'Qiqi', kind: 'Клуб', text: ''},
+    {term: 'Qiqi', kind: 'Клуб', text: 'Один из мировых клубов, существовавших задолго до Azure Latch и вошедших в проект. Базируется в Германии. Минами Син и Клаус Штурм — игроки Qiqi, сейчас по условиям контракта временно играют за HyperBorea.'},
     {term: 'MraX', kind: 'Клуб', text: ''},
     {term: 'Vivi', kind: 'Клуб', text: ''},
     {term: 'Les Bastions', kind: 'Клуб', text: ''}

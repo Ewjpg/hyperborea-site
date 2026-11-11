@@ -176,7 +176,7 @@ h1{font-size:clamp(12px,3.6vw,23px);letter-spacing:clamp(1px,.8vw,3px);padding-l
 <link rel="stylesheet" href="./kle-experience.css?v=58">
 <link rel="stylesheet" href="./roster-popout.css">
 <link rel="stylesheet" href="./frog.css?v=34">
-<link rel="stylesheet" href="./swarggy.css?v=65">
+<link rel="stylesheet" href="./swarggy.css?v=66">
 <link rel="stylesheet" href="./new-players.css?v=52">
 <link rel="stylesheet" href="./player-identity.css?v=53">
 <link rel="stylesheet" href="./players-space.css?v=49">
@@ -360,10 +360,44 @@ h1{font-size:clamp(12px,3.6vw,23px);letter-spacing:clamp(1px,.8vw,3px);padding-l
    <section class="player-overall overall-swarggy" id="swarggyOverall" role="status" aria-live="polite" aria-atomic="true" aria-label="Overall Минами Син" data-rank="unrated"><span class="overall-sigil" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 30C27 21 20 17 11 18M32 30C37 21 44 17 53 18M32 30C24 27 15 29 9 36M32 30C40 27 49 29 55 36M32 30C30 20 30 12 33 5M32 30C29 37 30 47 32 62"/><path d="M32 30C22 33 18 41 19 49M32 30C42 33 46 41 45 49" stroke-opacity=".5"/><circle cx="32" cy="30" r="3.5" fill="currentColor"/><circle cx="11" cy="18" r="1.6" fill="currentColor"/><circle cx="53" cy="18" r="1.6" fill="currentColor"/><circle cx="9" cy="36" r="1.6" fill="currentColor"/><circle cx="55" cy="36" r="1.6" fill="currentColor"/><circle cx="33" cy="5" r="1.6" fill="currentColor"/></svg></span><div class="overall-heading"><span>Overall</span><output class="overall-score" id="swarggyOverallScore">—</output><small>/ 99</small><span class="overall-state" id="swarggyOverallState">Заполнено 0 / 7</span></div><output class="overall-rank" id="swarggyOverallRank" aria-label="Ранг не рассчитан">—</output><div class="overall-meter" aria-hidden="true"><span></span></div></section><details class="overall-scale"><summary>ШКАЛА РАНГОВ</summary><p>Overall — среднее семи характеристик, округлённое до целого. Для расчёта заполни все 7 значений.</p><div class="overall-scale-list"><span><b>S</b> 90–99</span><span><b>A</b> 80–89</span><span><b>B</b> 70–79</span><span><b>C</b> 60–69</span><span><b>D</b> 50–59</span><span><b>E</b> 30–49</span><span><b>F</b> 0–29</span></div></details>
    <div class="swarggy-ratings profile-ratings"><label>PAC<input id="swarggyStatPAC" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAC Swarggy/Ew от 0 до 99"></label><label>SHO<input id="swarggyStatSHO" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="SHO Swarggy/Ew от 0 до 99"></label><label>PAS<input id="swarggyStatPAS" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PAS Swarggy/Ew от 0 до 99"></label><label>DRI<input id="swarggyStatDRI" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DRI Swarggy/Ew от 0 до 99"></label><label>DEF<input id="swarggyStatDEF" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="DEF Swarggy/Ew от 0 до 99"></label><label>PHY<input id="swarggyStatPHY" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="PHY Swarggy/Ew от 0 до 99"></label><label class="offense-label" title="Offense — атака">OFN<input id="swarggyStatOFN" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="—" aria-label="OFN Swarggy/Ew от 0 до 99"></label></div>
   </div>
-  <div class="swarggy-cell swarggy-editor" id="swarggyDescriptionCell" tabindex="-1"><div class="swarggy-cell-heading"><label for="swarggyDescription"><span>02</span>ХАРАКТЕРИСТИКА</label></div><textarea id="swarggyDescription" maxlength="12000" placeholder="Напиши характеристику Минами Сина…" aria-describedby="swarggySaveState"></textarea><div class="swarggy-editor-footer"><span id="swarggyDescriptionCount">0 / 12000</span></div></div>
+  <div class="swarggy-cell swarggy-editor" id="swarggyDescriptionCell" tabindex="-1"><div class="swarggy-cell-heading"><label for="swarggyDescription"><span>02</span>ХАРАКТЕРИСТИКА</label></div><textarea id="swarggyDescription" readonly aria-readonly="true" aria-describedby="swarggySaveState">Минами Син — один из самых талантливых игроков проекта. Он одинаково силён в атаке, в защите и в распасовке и может сыграть на любой позиции. Но в глубине души Син не верит в себя как в нападающего. Поэтому на поле он по привычке берёт на себя распасовку, а в опасный момент резко уходит в защиту.
+
+Детство Минами прошло спокойно: он был немного избалованным, но в основном тихим ребёнком. Всё изменил один матч. Син увидел игру одного из основателей Qiqi, и в нём что-то загорелось. В семь лет он начал играть в футбол, сразу на всех позициях. Его школьный клуб выигрывал все турниры подряд, а школа называла Минами своим новым талантом.
+
+Когда открылся Azure Latch, Минами получил приглашение от самого создателя Qiqi, одного из мировых клубов, вошедших в проект. Он согласился не раздумывая и улетел в Германию, в сердце клуба. Там Минами тоже выделялся… пока в клуб не пришёл Клаус Штурм.
+
+Клаус первым разглядел в Минами нападающего и первым заметил, что тот боится. Помогать он не стал. Он добил этот талант.
+
+Сейчас оба по-прежнему числятся в Qiqi. По условиям контракта их временно отдали в HyperBorea, чтобы закрыть дыру в составе нового клуба.
+
+ДОСЬЕ
+Дата рождения: 11.11.2007 · Скорпион
+Возраст: 19 лет
+Место рождения: Токио, Япония
+Рост: 187 см · размер ноги: 45
+Ведущая нога: правая
+Острота зрения: 1.2
+Группа крови: AB (IV) Rh−
+В футболе: с 7 лет
+Клуб: Qiqi (Германия), в аренде в HyperBorea
+Сильная сторона: игра на любой позиции
+Слабая сторона: низкая самооценка
+Цвет: пурпурно-малиновый
+Любимая еда: спагетти
+Любимая песня: Ghosts — Yung Lean, Bladee
+Любимое животное: собаки, особенно таксы
+Слабость: руки
+Шоколадок на 14 февраля: 9
+Сон: 5 часов
+Счастлив, когда: можно вкусно поесть и как следует отдохнуть
+Грустит, когда: проигрывает</textarea><div class="swarggy-editor-footer"><span id="swarggyDescriptionCount">ЗАКРЕПЛЕНО</span></div></div>
  </section>
- <section class="swarggy-cell swarggy-weapon-cell" id="swarggyWeaponCell" tabindex="-1" aria-labelledby="swarggyWeaponHeading"><div class="swarggy-weapon-heading"><span aria-hidden="true" lang="ja">花</span><h3 id="swarggyWeaponHeading"><label for="swarggyWeapon">ОРУЖИЕ</label></h3></div><div class="swarggy-editor"><textarea id="swarggyWeapon" maxlength="6000" placeholder="Название и описание оружия…" aria-describedby="swarggySaveState"></textarea><div class="swarggy-editor-footer"><span id="swarggyWeaponCount">0 / 6000</span></div></div></section>
- <p class="swarggy-save-state" id="swarggySaveState" role="status" aria-live="polite">Черновик сохраняется на этом устройстве.</p>
+ <section class="swarggy-cell swarggy-weapon-cell" id="swarggyWeaponCell" tabindex="-1" aria-labelledby="swarggyWeaponHeading"><div class="swarggy-weapon-heading"><span aria-hidden="true" lang="ja">花</span><h3 id="swarggyWeaponHeading"><label for="swarggyWeapon">ОРУЖИЕ / АБСОЛЮТНЫЙ ФУТБОЛИСТ</label></h3></div><div class="swarggy-editor"><textarea id="swarggyWeapon" readonly aria-readonly="true" aria-describedby="swarggySaveState">Абсолютный футболист
+
+Главное оружие Минами. Он видит поле целиком и сразу замечает, где в составе дыра: опоздал защитник, некому открыться под пас, в центре освободилась зона. Минами оказывается там раньше, чем соперник успеет этим воспользоваться, и закрывает дыру где угодно — в атаке, в распасовке или в защите. С ним команда играет так, будто на поле на одного игрока больше.
+
+Есть только одна дыра, которую Минами не закрывает никогда: место нападающего перед чужими воротами. Даже когда для удара открыт он сам, Минами отдаёт пас.</textarea><div class="swarggy-editor-footer"><span id="swarggyWeaponCount">ЗАКРЕПЛЕНО</span></div></div></section>
+ <p class="swarggy-save-state" id="swarggySaveState" role="status" aria-live="polite">Характеристика и оружие закреплены. Позиция и параметры сохраняются на этом устройстве.</p>
  <section class="swarggy-cell minami-garden-cell" id="swarggyGardenCell" tabindex="-1" aria-labelledby="swarggyGardenHeading"><div class="minami-garden-side"><span class="minami-garden-kanji" aria-hidden="true" lang="ja">咲</span><h3 id="swarggyGardenHeading"><span>04</span>ХИГАНБАНА</h3><ul class="minami-garden-hints" id="swarggyGardenHints"><li><b>ПОТЯНИ</b>повернуть цветок</li><li><b>ЗАЖМИ</b>бутон сомкнётся</li><li><b>ОТПУСТИ</b>и он расцветёт</li><li><b>НАЖМИ НА ЦВЕТОК</b>лепестки опадут</li></ul></div><div class="minami-garden-stage" id="swarggyGarden" tabindex="0" role="group" aria-label="Хиганбана. Удерживай пробел, чтобы сомкнуть бутон, отпусти — и он расцветёт. Стрелки поворачивают цветок." aria-describedby="swarggyGardenHints"><i class="minami-garden-wave" aria-hidden="true"></i><p class="minami-garden-status" id="swarggyGardenStatus" aria-hidden="true">ЗАЖМИ ЦВЕТОК</p></div></section>
 </article>
 <article class="new-player-dossier np-emiliano" id="emilianoDossier" aria-labelledby="emilianoTitle" hidden>
@@ -827,7 +861,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
 <script src="./frog-audio.js?v=35"></script>
 <script src="./frog-coin.js?v=35"></script>
 <script type="module" src="./frog.js?v=36"></script>
-<script type="module" src="./swarggy.js?v=65"></script>
+<script type="module" src="./swarggy.js?v=66"></script>
 <script src="./emiliano-audio.js?v=55"></script>
 <script type="module" src="./new-players.js?v=52"></script>
 <script type="module" src="./profile-overview.js?v=50"></script>
@@ -838,7 +872,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
 <script src="./terminal-intro.js?v=3"></script>
 <script src="./system-update.js?v=1"></script>
 <script src="./versus.js?v=2"></script>
-<script src="./lore-data.js?v=5"></script>
+<script src="./lore-data.js?v=6"></script>
 <script src="./lore-novel.js?v=5"></script>
 <script src="./lore.js?v=2"></script>
 <script src="./hyper-net-config.js?v=3"></script>
